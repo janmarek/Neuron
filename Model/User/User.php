@@ -41,6 +41,13 @@ class User extends BaseEntity
 
 	/**
 	 * @var string
+	 * @Column(unique=true)
+	 * @Validation({@NotBlank})
+	 */
+	private $username;
+
+	/**
+	 * @var string
 	 * @Column
 	 */
 	private $password;
@@ -93,6 +100,20 @@ class User extends BaseEntity
 	public function setMail($mail)
 	{
 		$this->mail = $mail;
+	}
+
+
+
+	public function getUsername()
+	{
+		return $this->username;
+	}
+
+
+
+	public function setUsername($username)
+	{
+		$this->username = $username;
 	}
 
 

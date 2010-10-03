@@ -11,16 +11,18 @@ class UserService extends Service
 {
 	public function __construct($em)
 	{
-		parent::__construct($em, "Model\User");
+		parent::__construct($em, "Neuron\Model\User");
 	}
 
 
 	
 	public function findOneByUsername($username)
 	{
-		$this->getEntityManager()->getRepository($this->getEntityName())->findBy(array(
+		$user = $this->getEntityManager()->getRepository($this->getEntityName())->findOneBy(array(
 			"username" => $username,
 		));
+
+		return $user;
 	}
 
 

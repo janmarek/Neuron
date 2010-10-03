@@ -1,6 +1,6 @@
 <?php
 
-namespace AdminModule;
+namespace Neuron\Presenter\AdminModule;
 
 use Gridito, Model\Service;
 
@@ -10,7 +10,7 @@ class PagesPresenter extends AdminPresenter
 	{
 		$grid = new Gridito\Grid;
 
-		$grid->setModel(new Gridito\DoctrineModel($this->getEntityManager(), "Model\Page"));
+		$grid->setModel(new Gridito\DoctrineModel($this->getService("Doctrine\ORM\EntityManager"), "Neuron\Model\Page"));
 
 		$grid->addColumn("id", "ID")->setSortable(true);
 		$grid->addColumn("name", "Název")->setSortable(true);

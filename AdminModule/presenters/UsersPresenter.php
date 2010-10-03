@@ -1,6 +1,6 @@
 <?php
 
-namespace AdminModule;
+namespace Neuron\Presenter\AdminModule;
 
 use Gridito, Model, Nette\Debug;
 
@@ -10,7 +10,7 @@ class UsersPresenter extends AdminPresenter
 	{
 		$grid = new Gridito\Grid;
 
-		$grid->setModel(new Gridito\DoctrineModel($this->getEntityManager(), "Model\User"));
+		$grid->setModel(new Gridito\DoctrineModel($this->getService("Doctrine\ORM\EntityManager"), "Neuron\Model\User"));
 
 		$grid->addColumn("name", "Jméno")->setSortable(true);
 		$grid->addColumn("username", "Uživatelské jméno")->setSortable(true);

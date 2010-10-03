@@ -21,46 +21,25 @@ class CssUrlsFilter extends \Nette\Object {
 	 * @param string source path
 	 * @return string
 	 */
-	public static function absolutizeUrl($url, $quote, $file, $sourcePath) {
+	public static function absolutizeUrl($url, $quote, $cssFile, $sourcePath) {
 		// is already absolute
 		if (preg_match("/^([a-z]+:\/)?\//", $url)) return $url;
 
-		$root = realpath(WWW_DIR);
+		$docroot = realpath(WWW_DIR);
 		$basePath = rtrim(Environment::getVariable("baseUri"), '/');
 
-		if (String::startsWith($file, $root)) {
-			// soubor je dohledatelný
-			$fileDirPath = substr(dirname($file), strlen($root));
-			$path = $basePath . $fileDirPath . "/" . $url;
+		// inside document root
+		if (String::startsWith($cssFile, $docroot)) {
+			$path = $basePath . substr(dirname($cssFile), strlen($docroot)) . DIRECTORY_SEPARATOR . $url;
 
+		// outside document root
 		} else {
-			// predpokládá se umístení v sourcePath
-			// todo: tohle by se melo rídit spíš nejak podle $sourceUri
-			$fileDirPath = substr($sourcePath, strlen($root));
-			$path = $basePath . $fileDirPath . "/" . $url;
+			$path = $basePath . substr($sourcePath, strlen($docroot)) . DIRECTORY_SEPARATOR . $url;
 		}
 
-		$path = strtr($path, DIRECTORY_SEPARATOR, "/");
+		//$path = self::cannonicalizePath($path);
 
-		$pathPieces = explode("/", $path);
-		$piecesOut = array();
-
-		foreach ($pathPieces as $piece) {
-			if ($piece === ".") continue;
-
-			if ($piece === "..") {
-				array_pop($piecesOut);
-				continue;
-			}
-
-			$piecesOut[] = $piece;
-		}
-
-		$path = implode("/", $piecesOut);
-
-		if ($quote === '"') $path = addslashes($path);
-
-		return $path;
+		return $quote === '"' ? addslashes($path) : $path;
 	}
 
 

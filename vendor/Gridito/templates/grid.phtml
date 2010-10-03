@@ -38,7 +38,7 @@
 	</tbody>
 </table>
 
-{assign $paginator $control->getPaginator()}
+{var $paginator = $control->getPaginator()}
 {if $paginator->pageCount > 1}
 <div class="gridito-paginator">
 	<a href="{link changePage! page => $paginator->page - 1}" n:if="!$paginator->isFirst()" class="{$control->getAjaxClass()}">Předchozí</a>

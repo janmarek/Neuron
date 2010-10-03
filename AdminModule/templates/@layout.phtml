@@ -14,9 +14,15 @@
 </head>
 
 <body>
-	<div id="header">CNC konstrukce - administrace</div>
+	<div id="header">Neuron administrace</div>
 
-	<div id="menu">{widget menu}</div>
+	<div id="menu">
+		<ul>
+			<li><a href="{link Pages:}">Stránky</a></li>
+			<li><a href="{link Users:}">Uživatelé</a></li>
+			<li><a href="{link :Homepage:}">Zpět na web</a></li>
+		</ul>
+	</div>
 
 	{snippet flashes}
 	<p class="flash {$flash->type}" n:foreach="$flashes as $flash">{$flash->message}</p>

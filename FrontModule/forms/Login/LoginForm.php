@@ -3,11 +3,11 @@
 namespace Neuron\Form;
 
 /**
- * LoginForm
+ * Login form
  *
  * @author Jan Marek
  */
-class Login extends BaseForm
+class LoginForm extends BaseForm
 {
 	protected function addFields()
 	{
@@ -22,10 +22,14 @@ class Login extends BaseForm
 
 	protected function handler($values)
 	{
-		$this->getUser()->login($values['username'], $values['password']);
-		
-		$this->presenter->flashMessage("Přihlášení bylo úspěšné.");
-		$this->presenter->redirect('this');
+		try {
+			$this->getUser()->login($values['username'], $values['password']);
+
+			$this->presenter->flashMessage("Přihlášení bylo úspěšné.");
+			$this->presenter->redirect('this');
+		} catch (\Nette\Security\AuthenticationException $e) {
+			$this->addError($e->getMessage());
+		}
 	}
 
 }
