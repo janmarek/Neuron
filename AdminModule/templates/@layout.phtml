@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>{ifset $title}{$title} :: {/if}CNC konstrukce</title>
+	<link rel="shortcut icon" href="{$baseUri}favicon-admin.png" type="image/x-icon">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" type="text/css">
+
+	{widget css "base.css", "admin.css", "text.css", "components.css", LIBS_DIR . "/Gridito/css/grid.css", WWW_DIR . "/js/texyla/css/style.css"}
+	{widget js}
+</head>
+
+<body>
+	<div id="header">CNC konstrukce - administrace</div>
+
+	<div id="menu">{widget menu}</div>
+
+	{snippet flashes}
+	<p class="flash {$flash->type}" n:foreach="$flashes as $flash">{$flash->message}</p>
+	{/snippet}
+
+	<div id="content">
+	@{include #content}
+	</div>
+</body>
+</html>

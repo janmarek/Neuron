@@ -1,0 +1,7 @@
+{block content}
+
+<h1>{$title}</h1>
+
+<p>{$page->description}</p>
+
+{cache tags => $page->cacheKey}{!$page->text|texy}{/cache}

@@ -1,0 +1,34 @@
+{form $form}
+
+<ul n:if="count($formErrors) > 0">
+	<li n:foreach="$formErrors as $error">{$error}</li>
+</ul>
+
+<fieldset>
+<table>
+	<tr>
+		<th>{label name text => "name"}</th>
+		<td>{input name size => 40}</td>
+	</tr>
+	<tr>
+		<th>{label text text => "text"}</th>
+		<td>{input text rows => 10, cols => 40}</td>
+	</tr>
+	<tr>
+		<th>{label mail text => "mail"}</th>
+		<td>{input mail size => 40}</td>
+	</tr>
+	<tr>
+		<th>{label username text => "username"}</th>
+		<td>{input username size => 40}</td>
+	</tr>
+	<tr>
+		<th>{label password text => "password"}</th>
+		<td>{input password size => 40}</td>
+	</tr>
+</table>
+</fieldset>
+
+<p>{input s value => "Save"}</p>
+
+{/form}

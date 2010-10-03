@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<title>{ifset $title}{$title} - {/if}Neuron</title>
+
+	<meta name="description" content="{$description}" n:ifset="$description">
+	<meta name="keywords" content="{$keywords}" n:ifset="$keywords">
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+	<link rel="shortcut icon" href="{$baseUri}favicon.png" type="image/png">
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+
+	{widget css "reset.css", "base.css", "typography.css", "forms.css"}
+	{widget js "netteForms.js"}
+</head>
+<body>
+<div id="page">
+	<div id="header">
+		<div id="logo">
+			<a href="{plink Homepage:}"><span class="achide">Neuron</span></a>
+		</div>
+	</div>
+
+	<div id="menu">{widget menu}</div>
+
+	<div id="content">
+		{snippet flashes}
+		<p class="flash {$flash->type}" n:foreach="$flashes as $flash">{$flash->message}</p>
+		{/snippet}
+
+		@{include #content}
+	</div>
+
+	<div id="sidebar">
+		{if $user->isLoggedIn()}
+			<h3>Přihlášen</h3>
+			<p>{$user->identity->name}</p>
+			<ul>
+				<li n:if="$user->isInRole('admin')"><a href="{plink :Admin:Pages:}">Administrace</a></li>
+			</ul>
+		{else}
+			<h3>Přihlásit se</h3>
+			{control loginForm}
+		{/if}
+	</div>
+	<div id="footer">
+		<p>&copy; <a href="http://www.janmarek.net/">Jan Marek</a></p>
+	</div>
+</div>
+</body>
+</html>
