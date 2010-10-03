@@ -1,0 +1,57 @@
+{snippet}
+<div class="gridito">
+
+<div class="gridito-flash {= $flash->type == 'error' ? 'ui-state-error' : 'ui-state-highlight'} ui-corner-all" n:foreach="$flashes as $flash">
+	<span class="ui-icon {= $flash->type == 'error' ? 'ui-icon-alert' : 'ui-icon-info'}"></span>
+	{$flash->message}
+</div>
+
+{ifset $windowOutput}
+
+<h2>{$windowLabel}</h2>
+{!$windowOutput}
+
+{else}
+
+<div class="gridito-toolbar" n:if="$control->hasToolbar()">
+	{foreach $control["toolbar"]->getComponents() as $button}{widget $button}{/foreach}
+</div>
+
+<table class="gridito-table ui-widget ui-widget-content">
+	<thead>
+		<tr>
+			<th class="ui-widget-header" n:foreach="$control['columns']->getComponents() as $column">
+				{? $column->renderHeaderCell()}
+			</th>
+			<th class="ui-widget-header" n:if="$control->hasActions()"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr n:foreach="$control->getModel() as $item">
+			<td class="gridito-cell" n:foreach="$control['columns']->getComponents() as $column">
+				{? $column->renderCell($item)}
+			</td>
+			<td class="gridito-actioncell" n:if="$control->hasActions()">
+				{foreach $control["actions"]->getComponents() as $button}{widget $button $item}{/foreach}
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+{assign $paginator $control->getPaginator()}
+{if $paginator->pageCount > 1}
+<div class="gridito-paginator">
+	<a href="{link changePage! page => $paginator->page - 1}" n:if="!$paginator->isFirst()" class="{$control->getAjaxClass()}">Předchozí</a>
+
+	{for $i = 1; $i <= $paginator->pageCount; $i++}
+	<a href="{link changePage! page => $i}" class="{$control->getAjaxClass()}{if $paginator->page === $i} disabled{/if}">{$i}</a>
+	{/for}
+
+	<a href="{link changePage! page => $paginator->page + 1}" n:if="!$paginator->isLast()" class="{$control->getAjaxClass()}">Další</a>
+</div>
+{/if}
+
+{/if}
+
+</div>
+{/snippet}
