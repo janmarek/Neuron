@@ -1,6 +1,6 @@
 <?php
 
-namespace Model;
+namespace Neuron\Model;
 
 use Nette\Environment;
 

@@ -5,7 +5,7 @@ namespace Neuron\Form;
 /**
  * @property-read \Nette\Context $context
  */
-abstract class BaseForm extends Nette\Application\AppForm
+abstract class BaseForm extends \Nette\Application\AppForm
 {
 	private $template;
 
@@ -76,7 +76,7 @@ abstract class BaseForm extends Nette\Application\AppForm
 
 		try {
 			$this->handler($values);
-		} catch (Model\ValidationException $e) {
+		} catch (\Model\ValidationException $e) {
 			if ($e->getPropertyPath()) {
 				$this[$e->getPropertyPath()]->addError($e->getMessage());
 			} else {
@@ -108,7 +108,7 @@ abstract class BaseForm extends Nette\Application\AppForm
 	 */
 	public function getContext()
 	{
-		return $this->getApplication()->getContext();
+		return $this->getPresenter()->getContext();
 	}
 
 
@@ -122,7 +122,7 @@ abstract class BaseForm extends Nette\Application\AppForm
 
 	public function getUser()
 	{
-		return Nette\Environment::getUser();
+		return $this->getContext()->getService("Nette\Web\IUser");
 	}
 
 }

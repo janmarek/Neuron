@@ -4,6 +4,7 @@ namespace Neuron\Form;
 
 use Nette\Forms\Form;
 use Nette\String;
+use Nette\Templates\LatteMacros, Nette\Templates\LatteFilter;
 
 /**
  * Form macros
@@ -11,25 +12,25 @@ use Nette\String;
  * @author Jan Marek
  * @license MIT
  */
-class LatteMacros
+class FormMacros
 {
 	private static $form;
 
 
 
 	public static function register() {
-		LatteMacros::$defaultMacros["form"] = '<?php %Nette\Templates\FormMacros::macroBegin% ?>';
-		LatteMacros::$defaultMacros["input"] = '<?php %Nette\Templates\FormMacros::macroInput% ?>';
-		LatteMacros::$defaultMacros["label"] = '<?php %Nette\Templates\FormMacros::macroLabel% ?>';
+		LatteMacros::$defaultMacros["form"] = '<?php %Neuron\Form\FormMacros::macroBegin% ?>';
+		LatteMacros::$defaultMacros["input"] = '<?php %Neuron\Form\FormMacros::macroInput% ?>';
+		LatteMacros::$defaultMacros["label"] = '<?php %Neuron\Form\FormMacros::macroLabel% ?>';
 		LatteMacros::$defaultMacros["/label"] = '</label>';
-		LatteMacros::$defaultMacros["/form"] = '<?php Nette\Templates\FormMacros::end() ?>';
+		LatteMacros::$defaultMacros["/form"] = '<?php Neuron\Form\FormMacros::end() ?>';
 	}
 
 
 
 	public static function macroBegin($content) {
 		list($name, $modifiers) = self::fetchNameAndModifiers($content);
-		return "\$formErrors = Nette\Templates\FormMacros::begin($name, \$control, $modifiers)->getErrors()";
+		return "\$formErrors = Neuron\Form\FormMacros::begin($name, \$control, $modifiers)->getErrors()";
 	}
 
 
@@ -60,7 +61,7 @@ class LatteMacros
 
 	public static function macroInput($content) {
 		list($name, $modifiers) = self::fetchNameAndModifiers($content);
-		return "Nette\Templates\FormMacros::input($name, $modifiers)";
+		return "Neuron\Form\FormMacros::input($name, $modifiers)";
 	}
 
 
@@ -99,12 +100,12 @@ class LatteMacros
 
 	public static function macroLabel($content) {
 		list($name, $modifiers) = self::fetchNameAndModifiers($content);
-		return "Nette\Templates\FormMacros::label($name, $modifiers)";
+		return "Neuron\Form\FormMacros::label($name, $modifiers)";
 	}
 
 
 
-	public static function label($modifiers = array()) {
+	public static function label($name, $modifiers = array()) {
 		$label = self::$form[$name]->getLabel();
 
 		if (isset($modifiers["class"])) {
