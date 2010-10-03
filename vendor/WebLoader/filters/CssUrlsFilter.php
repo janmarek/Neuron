@@ -1,0 +1,124 @@
+<?php
+
+namespace WebLoader;
+
+use Nette\Environment;
+use Nette\String;
+
+/**
+ * Absolutize urls in CSS
+ *
+ * @author Jan Marek
+ * @license MIT
+ */
+class CssUrlsFilter extends \Nette\Object {
+	
+	/**
+	 * Make relative url absolute
+	 * @param string image url
+	 * @param string single or double quote
+	 * @param string absolute css file path
+	 * @param string source path
+	 * @return string
+	 */
+	public static function absolutizeUrl($url, $quote, $file, $sourcePath) {
+		// is already absolute
+		if (preg_match("/^([a-z]+:\/)?\//", $url)) return $url;
+
+		$root = realpath(WWW_DIR);
+		$basePath = rtrim(Environment::getVariable("baseUri"), '/');
+
+		if (String::startsWith($file, $root)) {
+			// soubor je dohledatelný
+			$fileDirPath = substr(dirname($file), strlen($root));
+			$path = $basePath . $fileDirPath . "/" . $url;
+
+		} else {
+			// predpokládá se umístení v sourcePath
+			// todo: tohle by se melo rídit spíš nejak podle $sourceUri
+			$fileDirPath = substr($sourcePath, strlen($root));
+			$path = $basePath . $fileDirPath . "/" . $url;
+		}
+
+		$path = strtr($path, DIRECTORY_SEPARATOR, "/");
+
+		$pathPieces = explode("/", $path);
+		$piecesOut = array();
+
+		foreach ($pathPieces as $piece) {
+			if ($piece === ".") continue;
+
+			if ($piece === "..") {
+				array_pop($piecesOut);
+				continue;
+			}
+
+			$piecesOut[] = $piece;
+		}
+
+		$path = implode("/", $piecesOut);
+
+		if ($quote === '"') $path = addslashes($path);
+
+		return $path;
+	}
+
+
+	/**
+	 * Cannonicalize path
+	 * @param string path
+	 * @return path
+	 */
+	private static function cannonicalizePath($path) {
+		foreach (explode(DIRECTORY_SEPARATOR, $path) as $name) {
+			if ($name === "." || $name === "") continue;
+
+			if ($name === "..") {
+				array_pop($pathArr);
+				continue;
+			}
+
+			$pathArr[] = $name;
+		}
+
+		return implode("/", $pathArr);
+	}
+
+
+	/**
+	 * Invoke filter
+	 * @param string code
+	 * @param WebLoader loader
+	 * @param string file
+	 * @return string
+	 */
+	public function __invoke($code, WebLoader $loader, $file = null)
+	{
+		// thanks to kravco
+		$regexp = '~
+			(?<![a-z])
+			url\(                                     ## url(
+				\s*                                   ##   optional whitespace
+				([\'"])?                              ##   optional single/double quote
+				(   (?: (?:\\\\.)+                    ##     escape sequences
+					|   [^\'"\\\\,()\s]+              ##     safe characters
+					|   (?(1)   (?!\1)[\'"\\\\,() \t] ##       allowed special characters
+						|       ^                     ##       (none, if not quoted)
+						)
+					)*                                ##     (greedy match)
+				)
+				(?(1)\1)                              ##   optional single/double quote
+				\s*                                   ##   optional whitespace
+			\)                                        ## )
+		~xs';
+
+		return preg_replace_callback(
+			$regexp,
+			function ($matches) use ($loader, $file) {
+				return "url('" . CssUrlsFilter::absolutizeUrl($matches[2], $matches[1], $file, $loader->sourcePath) . "')";
+			},
+			$code
+		);
+	}
+	
+}

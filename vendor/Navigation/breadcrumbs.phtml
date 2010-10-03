@@ -1,0 +1,9 @@
+<div class="control breadcrumbs">
+	{foreach $items as $item}
+	{if $iterator->isLast()}
+	<span class="current">{$item->getLabel()}</span>
+	{else}
+	<a href="{$item->getUrl()}">{$item->getLabel()}</a> &rarr;
+	{/if}
+	{/foreach}
+</div>
