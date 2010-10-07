@@ -1,19 +1,19 @@
 {form $form}
 
-<ul n:if="count($formErrors) > 0">
-	<li n:foreach="$formErrors as $error">{$error}</li>
-</ul>
+<fieldset>
+	<div class="error" n:foreach="$formErrors as $error">{$error}</div>
 
-<table>
-	<tr>
-		<td>{label username}Uživatelské jméno{/label}</td>
-		<td>{input username size => 20}</td>
-	</tr><tr>
-		<td>{label password}Heslo{/label}</td>
-		<td>{input password size => 20}</td>
-	</tr>
-</table>
+	<p>
+		{label username}Uživatelské jméno{/label}<br>
+		{input username}
+	</p>
+	<p>
+		{label password}Heslo{/label}<br>
+		{input password}
+	</p>
 
-<p>{input s value => "Přihlásit se"}</p>
+	<p>{input s value => "Přihlásit se"}</p>
+
+</fieldset>
 
 {/form}

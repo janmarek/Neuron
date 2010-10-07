@@ -8,44 +8,45 @@
 	<meta name="description" content="{$description}" n:ifset="$description">
 	<meta name="keywords" content="{$keywords}" n:ifset="$keywords">
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
-	<link rel="shortcut icon" href="{$baseUri}favicon.png" type="image/png">
 
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 
-	{widget css "reset.css", "base.css", "typography.css", "forms.css"}
+	{control css "base.css", "blueprint/reset.css", "blueprint/ie.css", "blueprint/grid.css", "blueprint/typography.css", "blueprint/forms.css"}
 	{widget js "netteForms.js"}
 </head>
 <body>
-<div id="page">
-	<div id="header">
-		<div id="logo">
-			<a href="{plink Homepage:}"><span class="achide">Neuron</span></a>
+	<div class="container">
+		<div class="span-6">
+			<div class="box">
+				<h2><a href="{plink Homepage:}">Neuron</a></h2>
+
+				{if $user->isLoggedIn()}
+					<h3>Přihlášen {$user->identity->name} {$user->identity->surname}</h3>
+					<ul>
+						<li n:if="$user->isInRole('admin')"><a href="{plink :Admin:Pages:}">Administrace</a></li>
+						<li><a href="{link logout!}">Odhlásit se</a></li>
+					</ul>
+				{else}
+					<h3>Přihlásit se</h3>
+					{control loginForm}
+				{/if}
+			</div>
+		</div>
+
+		<div class="span-18 last">
+			<div class="box" style="background: white">
+				{snippet flashes}
+				<div class="{if $flash->type == 'error'}error{else}success{/if}" n:foreach="$flashes as $flash">{$flash->message}</div>
+				{/snippet}
+
+				@{include #content}
+			</div>
+		</div>
+
+	
+		<div class="span-24">
+			<p>&copy; <a href="http://www.janmarek.net/">Jan Marek</a></p>
 		</div>
 	</div>
-
-	<div id="content">
-		{snippet flashes}
-		<p class="flash {$flash->type}" n:foreach="$flashes as $flash">{$flash->message}</p>
-		{/snippet}
-
-		@{include #content}
-	</div>
-
-	<div id="sidebar">
-		{if $user->isLoggedIn()}
-			<h3>Přihlášen</h3>
-			<p>{$user->identity->name}</p>
-			<ul>
-				<li n:if="$user->isInRole('admin')"><a href="{plink :Admin:Pages:}">Administrace</a></li>
-			</ul>
-		{else}
-			<h3>Přihlásit se</h3>
-			{control loginForm}
-		{/if}
-	</div>
-	<div id="footer">
-		<p>&copy; <a href="http://www.janmarek.net/">Jan Marek</a></p>
-	</div>
-</div>
 </body>
 </html>
