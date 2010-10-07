@@ -62,7 +62,7 @@ abstract class AdminPresenter extends \Neuron\Application\BasePresenter
 			"web.js",
 			"logged.js",
 			"netteForms.js",
-			LIBS_DIR . "/Gridito/js/grid.js"
+			"gridito.js"
 		));
 
 		return $js;

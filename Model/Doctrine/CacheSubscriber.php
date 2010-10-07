@@ -4,6 +4,7 @@ namespace Neuron\Model\Doctrine;
 
 use Doctrine\ORM\Events, Doctrine\ORM\Event;
 use Nette\Environment;
+use Nette\Caching\Cache;
 
 /**
  * Cache subscriber
@@ -35,7 +36,7 @@ class CacheSubscriber implements \Doctrine\Common\EventSubscriber
 		}
 
 		Environment::getCache()->clean(array(
-			Nette\Caching\Cache::TAGS => array_unique($tags)
+			Cache::TAGS => array_unique($tags)
 		));
 	}
 }

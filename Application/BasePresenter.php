@@ -45,7 +45,7 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 	{
 		$this->getUser()->logout();
 		$this->flashMessage("Byl jste úspěšně odhlášen.");
-		$this->redirect(":Homepage:");
+		$this->redirect(":Front:Homepage:");
 	}
 
 
@@ -102,8 +102,11 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 
 	// <editor-fold defaultstate="collapsed" desc="webloader">
 
-	protected function createComponentJs() {
+	protected function createComponentJs()
+	{
 		$js = new WebLoader\JavaScriptLoader;
+
+		$js->setJoinFiles(Environment::isProduction());
 
 		$js->tempUri = Environment::getVariable("baseUri") . "data/webtemp";
 		$js->tempPath = WWW_DIR . "/data/webtemp";

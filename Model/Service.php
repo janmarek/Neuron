@@ -66,8 +66,6 @@ class Service extends \Nette\Object implements IService
 
 
 
-	// <editor-fold defaultstate="collapsed" desc="crud">
-
 	/**
 	 * Find all entities
 	 * @return array
@@ -103,9 +101,7 @@ class Service extends \Nette\Object implements IService
 	public function createBlank()
 	{
 		$class = $this->entityName;
-		$entity = new $class;
-		$this->entityManager->persist($entity);
-		return $entity;
+		return new $class;
 	}
 
 
@@ -130,6 +126,7 @@ class Service extends \Nette\Object implements IService
 	public function update($entity, $values)
 	{
 		$this->setData($entity, $values);
+		$this->entityManager->persist($entity);
 		$this->entityManager->flush();
 	}
 
@@ -154,10 +151,9 @@ class Service extends \Nette\Object implements IService
 	protected function setData($entity, $values)
 	{
 		foreach ($values as $key => $value) {
-			$entity->$key = $value;
+			$method = "set" . ucfirst($key);
+			$entity->$method($value);
 		}
 	}
-
-	// </editor-fold>
 
 }

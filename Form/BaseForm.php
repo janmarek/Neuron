@@ -11,7 +11,7 @@ abstract class BaseForm extends \Nette\Application\AppForm
 
 	private $successFlashMessage;
 
-	private $redirectUri;
+	private $redirect;
 
 
 	public function __construct(\Nette\IComponentContainer $parent = NULL, $name = NULL)
@@ -49,16 +49,9 @@ abstract class BaseForm extends \Nette\Application\AppForm
 
 
 
-	public function getRedirectUri()
+	public function setRedirect()
 	{
-		return $this->redirectUri;
-	}
-
-
-
-	public function setRedirectUri($redirectUri)
-	{
-		$this->redirectUri = $redirectUri;
+		$this->redirect = func_get_args();
 	}
 
 
@@ -122,8 +115,8 @@ abstract class BaseForm extends \Nette\Application\AppForm
 				$presenter->flashMessage($this->successFlashMessage);
 			}
 
-			if ($this->redirectUri) {
-				$presenter->redirect($this->redirectUri);
+			if ($this->redirect) {
+				call_user_func_array(array($presenter, "redirect"), $this->redirect);
 			}
 			
 		} catch (\Model\ValidationException $e) {
@@ -165,7 +158,7 @@ abstract class BaseForm extends \Nette\Application\AppForm
 	
 	public function getService($name)
 	{
-		$this->getContext()->getService($name);
+		return $this->getContext()->getService($name);
 	}
 
 
