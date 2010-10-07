@@ -10,11 +10,48 @@ class UsersPresenter extends AdminPresenter
 	/** @var \Neuron\Model\UserService */
 	private $service;
 
+
+
 	public function startup()
 	{
 		parent::startup();
 		$this->service = $this->getService("UserService");
 	}
+
+
+
+	public function actionDefault()
+	{
+		$this->template->title = "Uživatelé";
+	}
+
+	
+	public function actionAdd()
+	{
+		$this->template->title = "Přidat uživatele";
+		$this["form"]->bindEntity($this->service->createBlank());
+		$this["form"]->setSuccessFlashMessage("Uživatel byl úspěšně založen.");
+	}
+
+	
+	public function actionEdit($id)
+	{
+		$user = $this->service->find($id);
+		$this->template->title = "Upravit uživate $user->name $user->surname";
+		$this["form"]->bindEntity($user);
+		$this["form"]->setSuccessFlashMessage("Uživatel byl úspěšně upraven.");
+	}
+
+
+
+	protected function createComponentForm($name)
+	{
+		$form = new UserForm($this, $name);
+		$form->setEntityService($this->service);
+		$form->setRedirect("default");
+	}
+
+
 
 	protected function createComponentGrid()
 	{
@@ -23,6 +60,7 @@ class UsersPresenter extends AdminPresenter
 		$grid->setModel($this->service->getGriditoModel());
 
 		$grid->addColumn("name", "Jméno")->setSortable(true);
+		$grid->addColumn("surname", "Příjmení")->setSortable(true);
 		$grid->addColumn("username", "Uživatelské jméno")->setSortable(true);
 		$grid->addColumn("mail", "E-mail")->setSortable(true);
 
@@ -47,26 +85,5 @@ class UsersPresenter extends AdminPresenter
 
 		return $grid;
 	}
-
-
-
-	protected function createComponentAddForm($name)
-	{
-		$form = new UserForm($this, $name);
-		$form->bindEntity($this->service->createBlank());
-		$form->setEntityService($this->service);
-		$form->setSuccessFlashMessage("Uživatel byl úspěšně založen.");
-		$form->setRedirectUri($this->link("default"));
-	}
-
-
-
-	protected function createComponentEditForm($name)
-	{
-		$form = new UserForm($this, $name);
-		$form->bindEntity($this->service->find($this->getParam("id")));
-		$form->setEntityService($this->service);
-		$form->setSuccessFlashMessage("Uživatel byl úspěšně založen.");
-		$form->setRedirectUri($this->link("default"));
-	}
+	
 }

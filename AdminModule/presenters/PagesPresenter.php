@@ -10,10 +10,50 @@ class PagesPresenter extends AdminPresenter
 	/** @var \Neuron\Model\Service */
 	private $service;
 
+
+
 	public function startup()
 	{
+		parent::startup();
 		$this->service = $this->getService("PageService");
 	}
+
+
+
+	public function actionDefault()
+	{
+		$this->template->title = "Stránky";
+	}
+
+
+
+	public function actionAdd()
+	{
+		$this->template->title = "Vytvořit stránku";
+		$this["form"]->bindEntity($this->service->createBlank());
+		$this["form"]->setSuccessFlashMessage("Stránka byla úspěšně založena.");
+	}
+
+
+
+	public function actionEdit($id)
+	{
+		$entity = $this->service->find($id);
+		$this->template->title = "Upravit stránku $entity->name";
+		$this["form"]->bindEntity($entity);
+		$this["form"]->setSuccessFlashMessage("Stránka byla úspěšně upravena.");
+	}
+
+
+
+	protected function createComponentForm($name)
+	{
+		$form = new PageForm($this, $name);
+		$form->setEntityService($this->service);
+		$form->setRedirect("default");
+	}
+
+
 
 	protected function createComponentGrid()
 	{
@@ -48,26 +88,5 @@ class PagesPresenter extends AdminPresenter
 
 		return $grid;
 	}
-
-
-
-	protected function createComponentAddForm($name)
-	{
-		$form = new PageForm($this, $name);
-		$form->bindEntity($this->service->createBlank());
-		$form->setEntityService($this->service);
-		$form->setSuccessFlashMessage("Stránka byla úspěšně vložena.");
-		$form->setRedirectUri($this->link("default"));
-	}
-
-
-
-	protected function createComponentEditForm($name)
-	{
-		$form = new PageForm($this, $name);
-		$form->bindEntity($this->service->find($this->getParam("id")));
-		$form->setEntityService($this->service);
-		$form->setSuccessFlashMessage("Stránka byla úspěšně upravena.");
-		$form->setRedirectUri($this->link("default"));
-	}
+	
 }
