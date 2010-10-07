@@ -1,18 +1,18 @@
 <?php
 
-use Neuron\Form;
+namespace Neuron\Form;
 
 /**
  * User form
  *
  * @author Jan Marek
  */
-abstract class UserForm extends BaseForm
+class UserForm extends EntityForm
 {
 	protected function addFields()
 	{
 		$this->addText("name");
-		$this->addTextArea("text");
+		$this->addText("surname");
 		$this->addText("mail");
 		$this->addText("username");
 		$this->addPassword("password");

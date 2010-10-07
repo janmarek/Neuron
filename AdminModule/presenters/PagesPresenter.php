@@ -2,15 +2,24 @@
 
 namespace Neuron\Presenter\AdminModule;
 
-use Gridito, Model\Service;
+use Gridito;
+use Neuron\Form\PageForm;
 
 class PagesPresenter extends AdminPresenter
 {
+	/** @var \Neuron\Model\Service */
+	private $service;
+
+	public function startup()
+	{
+		$this->service = $this->getService("PageService");
+	}
+
 	protected function createComponentGrid()
 	{
 		$grid = new Gridito\Grid;
 
-		$grid->setModel(new Gridito\DoctrineModel($this->getService("Doctrine\ORM\EntityManager"), "Neuron\Model\Page"));
+		$grid->setModel($this->service->getGriditoModel());
 
 		$grid->addColumn("id", "ID")->setSortable(true);
 		$grid->addColumn("name", "Název")->setSortable(true);
@@ -21,17 +30,15 @@ class PagesPresenter extends AdminPresenter
 		$grid->addToolbarButton("Nová stránka", null, "plusthick")->setLink($this->link("add"));
 
 		$presenter = $this;
+		$service = $this->service;
 
 		$grid->addButton("Upravit", null, "pencil")
 			->setLink(function ($page) use ($presenter) {
 				return $presenter->link("edit", array("id" => $page->id));
 			});
 
-		$grid->addButton("Smazat", function ($entity) use ($presenter, $grid) {
-			$em = $presenter->getEntityManager();
-			$em->remove($entity);
-			$em->flush();
-			
+		$grid->addButton("Smazat", function ($entity) use ($service, $presenter, $grid) {
+			$service->delete($entity);			
 			$grid->flashMessage("Stránka byla úspěšně smazána.");
 			$presenter->redirect("default");
 		}, "closethick")
@@ -46,18 +53,21 @@ class PagesPresenter extends AdminPresenter
 
 	protected function createComponentAddForm($name)
 	{
-		$form = new \CreatePageForm($this, $name);
+		$form = new PageForm($this, $name);
+		$form->bindEntity($this->service->createBlank());
+		$form->setEntityService($this->service);
+		$form->setSuccessFlashMessage("Stránka byla úspěšně vložena.");
+		$form->setRedirectUri($this->link("default"));
 	}
 
 
 
 	protected function createComponentEditForm($name)
 	{
-		$form = new \EditPageForm($this, $name);
-
-		if (!$form->submitted) {
-			$page = $this->getService("PageService")->find($this->getParam("id"), Service::MODE_ARRAY);
-			$form->setDefaults($page);
-		}
+		$form = new PageForm($this, $name);
+		$form->bindEntity($this->service->find($this->getParam("id")));
+		$form->setEntityService($this->service);
+		$form->setSuccessFlashMessage("Stránka byla úspěšně upravena.");
+		$form->setRedirectUri($this->link("default"));
 	}
 }

@@ -2,15 +2,25 @@
 
 namespace Neuron\Presenter\AdminModule;
 
-use Gridito, Model, Nette\Debug;
+use Gridito\Grid;
+use Neuron\Form\UserForm;
 
 class UsersPresenter extends AdminPresenter
 {
+	/** @var \Neuron\Model\UserService */
+	private $service;
+
+	public function startup()
+	{
+		parent::startup();
+		$this->service = $this->getService("UserService");
+	}
+
 	protected function createComponentGrid()
 	{
-		$grid = new Gridito\Grid;
+		$grid = new Grid;
 
-		$grid->setModel(new Gridito\DoctrineModel($this->getService("Doctrine\ORM\EntityManager"), "Neuron\Model\User"));
+		$grid->setModel($this->service->getGriditoModel());
 
 		$grid->addColumn("name", "Jméno")->setSortable(true);
 		$grid->addColumn("username", "Uživatelské jméno")->setSortable(true);
@@ -19,17 +29,15 @@ class UsersPresenter extends AdminPresenter
 		$grid->addToolbarButton("Nový uživatel", null, "plusthick")->setLink($this->link("add"));
 
 		$presenter = $this;
+		$service = $this->service;
 
 		$grid->addButton("Upravit", null, "pencil")
 			->setLink(function ($entity) use ($presenter) {
 				return $presenter->link("edit", array("id" => $entity->id));
 			});
 
-		$grid->addButton("Smazat", function ($entity) use ($presenter, $grid) {
-			$em = $presenter->getEntityManager();
-			$em->remove($entity);
-			$em->flush();
-
+		$grid->addButton("Smazat", function ($entity) use ($service, $presenter, $grid) {
+			$service->delete($entity);
 			$grid->flashMessage("Uživatel byl úspěšně smazán.");
 			$presenter->redirect("default");
 		}, "closethick")
@@ -42,105 +50,23 @@ class UsersPresenter extends AdminPresenter
 
 
 
-	private function createFormBase($name, $new)
-	{
-		$form = new BaseForm($this, $name);
-
-		if (!$new) {
-			$form->addHidden("id");
-		}
-
-		$form->addText("name")
-			->setRequired("Vyplňte heslo.");
-		$form->addText("username")
-			->setRequired("Vyplňte heslo.");
-		$form->addText("mail");
-		$form->addText("password");
-
-		if ($new) {
-			$form["password"]->setRequired("Vyplňte heslo.");
-		}
-
-		$form->addTextArea("text")
-			->setAttribute("class", "texyla");
-
-		$form->addSubmit("s");
-
-		return $form;
-	}
-
-
 	protected function createComponentAddForm($name)
 	{
-		$form = $this->createFormBase($name, true);
-		$form->onSubmit[] = array($this, "addForm_submit");
+		$form = new UserForm($this, $name);
+		$form->bindEntity($this->service->createBlank());
+		$form->setEntityService($this->service);
+		$form->setSuccessFlashMessage("Uživatel byl úspěšně založen.");
+		$form->setRedirectUri($this->link("default"));
 	}
 
-
-	public function addForm_submit(BaseForm $form)
-	{
-		try {
-			$values = $form->values;
-
-			$user = new Model\User;
-			$user->setMail($values["mail"]);
-			$user->setName($values["name"]);
-			$user->setPassword($values["password"]);
-			$user->setText($values["text"]);
-			$user->setUsername($values["username"]);
-
-			$this->getEntityManager()->persist($user);
-			$this->getEntityManager()->flush();
-
-			$this->flashMessage("Uživatel byl úspěšně založen.");
-			$this->redirect("default");
-		} catch (\Exception $e) {
-			if ($e instanceof \Nette\Application\AbortException) {
-				throw $e;
-			}
-
-			Debug::log($e);
-			$form->addError("Uživatele se nepodařilo uložit.");
-		}
-	}
 
 
 	protected function createComponentEditForm($name)
 	{
-		$form = $this->createFormBase($name, false);
-		$form->onSubmit[] = array($this, "editForm_submit");
-		
-		if (!$form->submitted) {
-			$form->setDefaults($this->getEntityManager()->find("Model\User", $this->getParam("id"))->toArray());
-		}
-	}
-
-
-	public function editForm_submit(BaseForm $form)
-	{
-		try {
-			$values = $form->values;
-
-			$user = $this->getEntityManager()->find("Model\User", $values["id"]);
-			$user->setMail($values["mail"]);
-			$user->setName($values["name"]);
-			if ($values["password"]) {
-				$user->setPassword($values["password"]);
-			}
-			$user->setText($values["text"]);
-			$user->setUsername($values["username"]);
-
-			$this->getEntityManager()->flush();
-
-			$this->flashMessage("Uživatel byl úspěšně upraven.");
-			$this->redirect("default");
-		} catch (\Exception $e) {
-			if ($e instanceof \Nette\Application\AbortException) {
-				throw $e;
-			}
-
-			Debug::log($e);
-			$form->addError("Uživatele se nepodařilo uložit.");
-		}
+		$form = new UserForm($this, $name);
+		$form->bindEntity($this->service->find($this->getParam("id")));
+		$form->setEntityService($this->service);
+		$form->setSuccessFlashMessage("Uživatel byl úspěšně založen.");
+		$form->setRedirectUri($this->link("default"));
 	}
 }

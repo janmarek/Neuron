@@ -49,6 +49,7 @@ class User extends BaseEntity
 	/**
 	 * @var string
 	 * @Column
+	 * @Validation({@NotBlank})
 	 */
 	private $password;
 

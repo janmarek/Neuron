@@ -11,12 +11,8 @@ use Gridito\DoctrineModel;
  *
  * @author Jan Marek
  */
-class Service extends \Nette\Object
+class Service extends \Nette\Object implements IService
 {
-	const MODE_ENTITY = 1;
-
-	const MODE_ARRAY = 2;
-
 	/** @var \Doctrine\ORM\EntityManager */
 	private $entityManager;
 
@@ -60,8 +56,6 @@ class Service extends \Nette\Object
 
 
 
-	// <editor-fold defaultstate="collapsed" desc="crud">
-
 	/**
 	 * @return string
 	 */
@@ -71,6 +65,8 @@ class Service extends \Nette\Object
 	}
 
 
+
+	// <editor-fold defaultstate="collapsed" desc="crud">
 
 	/**
 	 * Find all entities
@@ -91,10 +87,25 @@ class Service extends \Nette\Object
 	 */
 	public function find($id, $mode = self::MODE_ENTITY)
 	{
-		$entity = $this->entityManager->find($this->entityName, $id);
-		$this->entityManager->createQuery("select e from $this->entityName where e.id = :id")
-			->setParameter(":id", $id)
+		$entity = $this->entityManager
+			->createQuery("select e from $this->entityName e where e.id = :id")
+			->setParameter("id", $id)
 			->getSingleResult($mode === self::MODE_ENTITY ? Query::HYDRATE_OBJECT : Query::HYDRATE_ARRAY);
+
+		return $entity;
+	}
+
+
+
+	/**
+	 * Create blank entity
+	 */
+	public function createBlank()
+	{
+		$class = $this->entityName;
+		$entity = new $class;
+		$this->entityManager->persist($entity);
+		return $entity;
 	}
 
 
@@ -105,11 +116,8 @@ class Service extends \Nette\Object
 	 */
 	public function create($values)
 	{
-		$class = $this->entityName;
-		$entity = new $class;
-		$this->setData($entity, $values);
-		$this->entityManager->persist($entity);
-		$this->entityManager->flush();
+		$entity = $this->createBlank();
+		$this->update($entity, $values);
 	}
 
 
@@ -121,8 +129,6 @@ class Service extends \Nette\Object
 	 */
 	public function update($entity, $values)
 	{
-		unset($values["id"]);
-
 		$this->setData($entity, $values);
 		$this->entityManager->flush();
 	}

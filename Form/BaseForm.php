@@ -9,8 +9,12 @@ abstract class BaseForm extends \Nette\Application\AppForm
 {
 	private $template;
 
+	private $successFlashMessage;
 
-	public function __construct(Nette\IComponentContainer $parent = NULL, $name = NULL)
+	private $redirectUri;
+
+
+	public function __construct(\Nette\IComponentContainer $parent = NULL, $name = NULL)
 	{
 		parent::__construct($parent, $name);
 		$this->addProtection("Prosím odešlete formulář znovu, vypršel bezpečnostní token.");
@@ -19,6 +23,42 @@ abstract class BaseForm extends \Nette\Application\AppForm
 		$this->addSubmitButtons();
 
 		$this->onSubmit[] = array($this, "handleSubmit");
+
+		$this->init();
+	}
+
+
+	
+	protected function init()
+	{
+
+	}
+
+
+	public function getSuccessFlashMessage()
+	{
+		return $this->successFlashMessage;
+	}
+
+
+
+	public function setSuccessFlashMessage($successFlashMessage)
+	{
+		$this->successFlashMessage = $successFlashMessage;
+	}
+
+
+
+	public function getRedirectUri()
+	{
+		return $this->redirectUri;
+	}
+
+
+
+	public function setRedirectUri($redirectUri)
+	{
+		$this->redirectUri = $redirectUri;
 	}
 
 
@@ -73,9 +113,19 @@ abstract class BaseForm extends \Nette\Application\AppForm
 	public function handleSubmit()
 	{
 		$values = $this->getValues();
+		$presenter = $this->getPresenter();
 
 		try {
 			$this->handler($values);
+
+			if ($this->successFlashMessage) {
+				$presenter->flashMessage($this->successFlashMessage);
+			}
+
+			if ($this->redirectUri) {
+				$presenter->redirect($this->redirectUri);
+			}
+			
 		} catch (\Model\ValidationException $e) {
 			if ($e->getPropertyPath()) {
 				$this[$e->getPropertyPath()]->addError($e->getMessage());
@@ -122,7 +172,7 @@ abstract class BaseForm extends \Nette\Application\AppForm
 
 	public function getUser()
 	{
-		return $this->getContext()->getService("Nette\Web\IUser");
+		return $this->getService("Nette\Web\IUser");
 	}
 
 }

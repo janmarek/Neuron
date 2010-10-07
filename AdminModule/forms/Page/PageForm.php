@@ -1,13 +1,13 @@
 <?php
 
-use Neuron\Form;
+namespace Neuron\Form;
 
 /**
  * Page form
  *
  * @author Jan Marek
  */
-abstract class PageForm extends BaseForm
+class PageForm extends EntityForm
 {
 	protected function addFields()
 	{
@@ -23,4 +23,5 @@ abstract class PageForm extends BaseForm
 			->setRequired();
 		$this->addCheckbox("allowed");
 	}
+	
 }

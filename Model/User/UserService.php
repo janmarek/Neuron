@@ -32,16 +32,4 @@ class UserService extends Service
 		if (empty($values["password"])) unset($values["password"]);
 		parent::update($id, $values, $form);
 	}
-
-
-
-	public function toArray($entity)
-	{
-		return array(
-			"id" => $entity->getId(),
-			"name" => $entity->getName(),
-			"mail" => $entity->getMail(),
-			"username" => $entity->getUsername(),
-		);
-	}
 }
