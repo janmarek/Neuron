@@ -1,30 +1,30 @@
 {form $form}
 
-<ul n:if="count($formErrors) > 0">
-	<li n:foreach="$formErrors as $error">{$error}</li>
-</ul>
-
 <fieldset>
-<table>
-	<tr>
-		<th>{label name}Jméno{/label}</th>
-		<td>{input name size => 40}</td>
-	</tr><tr>
-		<th>{label surname}Příjmení{/label}</th>
-		<td>{input surname size => 40}</td>
-	</tr><tr>
-		<th>{label mail}Mail{/label}</th>
-		<td>{input mail size => 40}</td>
-	</tr><tr>
-		<th>{label username}Uživatelské jméno{/label}</th>
-		<td>{input username size => 40}</td>
-	</tr><tr>
-		<th>{label password}Heslo{/label}</th>
-		<td>{input password size => 40}</td>
-	</tr>
-</table>
-</fieldset>
+	<div class="error" n:foreach="$formErrors as $error">{$error}</div>
 
-<p>{input s value => "Save"}</p>
+	<p>
+		{label name}Jméno{/label}<br>
+		{input name}
+	</p>
+	<p>
+		{label surname}Příjmení{/label}<br>
+		{input surname}
+	</p>
+	<p>
+		{label mail}Mail{/label}<br>
+		{input mail}
+	</p>
+	<p>
+		{label username}Uživatelské jméno{/label}<br>
+		{input username}
+	</p>
+	<p>
+		{label password}Heslo{/label}<br>
+		{input password}
+	</p>
+
+	<p>{input s value => "Uložit"}</p>
+</fieldset>
 
 {/form}

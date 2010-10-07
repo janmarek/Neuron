@@ -9,27 +9,42 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" type="text/css">
 
-	{widget css "base.css", "admin.css", "text.css", "components.css", LIBS_DIR . "/Gridito/css/grid.css", WWW_DIR . "/js/texyla/css/style.css"}
-	{widget js}
+	{control css "base.css", "blueprint/reset.css", "blueprint/ie.css", "blueprint/grid.css", "blueprint/typography.css", "blueprint/forms.css", "gridito.css", WWW_DIR . "/js/texyla/css/style.css"}
+	{control js}
 </head>
 
 <body>
-	<div id="header">Neuron administrace</div>
+	<div class="container">
+		<div class="span-6">
+			<div class="box" style="background:white">
+				<h2>Neuron</h2>
 
-	<div id="menu">
-		<ul>
-			<li><a href="{link Pages:}">Stránky</a></li>
-			<li><a href="{link Users:}">Uživatelé</a></li>
-			<li><a href="{link :Homepage:}">Zpět na web</a></li>
-		</ul>
-	</div>
+				<ul>
+					<li><a href="{link Pages:}">Stránky</a></li>
+					<li><a href="{link Users:}">Uživatelé</a></li>
+				</ul>
+			</div>
 
-	{snippet flashes}
-	<p class="flash {$flash->type}" n:foreach="$flashes as $flash">{$flash->message}</p>
-	{/snippet}
+			<div class="box" style="background:white">
+				<h3>Přihlášen {$user->identity->name} {$user->identity->surname}</h3>
+				<ul>
+					<li><a href="{link logout!}">Odhlásit se</a></li>
+					<li><a href="{link :Front:Homepage:}">Zpět na web</a></li>
+				</ul>
+			</div>
+		</div>
 
-	<div id="content">
-	@{include #content}
+		<div class="span-18 last">
+			<div class="box" style="background:white">
+				{snippet flashes}
+				<div class="{if $flash->type == 'error'}error{else}success{/if}" n:foreach="$flashes as $flash">{$flash->message}</div>
+				{/snippet}
+
+				<div id="content">
+				@{include #content}
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

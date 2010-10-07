@@ -1,28 +1,29 @@
 {form $form}
 
-<ul n:if="count($formErrors) > 0">
-	<li n:foreach="$formErrors as $error">{$error}</li>
-</ul>
+<fieldset>
+	<div class="error" n:foreach="$formErrors as $error">{$error}</div>
 
-<table>
-	<tr>
-		<td>{label name}Název{/label}</td>
-		<td>{input name size => 50, style => "font-size: 140%"}</td>
-	</tr><tr>
-		<td>{label url}URL{/label}</td>
-		<td>{input url size => 50}</td>
-	</tr><tr>
-		<td style="max-width: 130px;">{label description}Popis (viditelný ve vyhledávačích u výsledku vyhledávání){/label}</td>
-		<td>{input description size => 90}</td>
-	</tr><tr>
-		<td>{label text}Text{/label}</td>
-		<td>{input text rows => 20, cols => 90}</td>
-	</tr><tr>
-		<td></td>
-		<td>{input allowed} {label allowed}Povolit samostatné zobrazení jako článek{/label}</td>
-	</tr>
-</table>
+	<p>
+		{label name}Název{/label}<br>
+		{input name class => "title"}
+	</p>
+	<p>
+		{label url}URL{/label}<br>
+		{input url}
+	</p>
+	<p>
+		{label description}Popis (viditelný ve vyhledávačích u výsledku vyhledávání){/label}<br>
+		{input description}
+	</p>
+	<p>
+		{label text}Text{/label}<br>
+		{input text}
+	</p>
+	<p>
+		{input allowed} {label allowed}Povolit samostatné zobrazení jako článek{/label}
+	</p>
 
-<p>{input s value => "Uložit"}</p>
+	<p>{input s value => "Uložit"}</p>
+</fieldset>
 
 {/form}
