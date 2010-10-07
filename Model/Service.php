@@ -4,6 +4,7 @@ namespace Neuron\Model;
 
 use Nette\Caching\Cache;
 use Doctrine\ORM\Query;
+use Gridito\DoctrineModel;
 
 /**
  * Simple service
@@ -44,6 +45,17 @@ class Service extends \Nette\Object
 	final protected function getEntityManager()
 	{
 		return $this->entityManager;
+	}
+
+
+
+	/**
+	 * Get gridito model
+	 * @return DoctrineModel
+	 */
+	public function getGriditoModel()
+	{
+		return new DoctrineModel($this->entityManager, $this->entityName);
 	}
 
 
