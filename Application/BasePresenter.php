@@ -86,10 +86,6 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 		return $list;
 	}
 
-	// <editor-fold defaultstate="collapsed" desc="components">
-
-	// <editor-fold defaultstate="collapsed" desc="login form">
-
 	/**
 	 * Login form component factory
 	 */
@@ -98,48 +94,18 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 		return new LoginForm;
 	}
 
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="webloader">
 
 	protected function createComponentJs()
 	{
-		$js = new WebLoader\JavaScriptLoader;
-
-		$js->setJoinFiles(Environment::isProduction());
-
-		$js->tempUri = Environment::getVariable("baseUri") . "data/webtemp";
-		$js->tempPath = WWW_DIR . "/data/webtemp";
-		$js->sourcePath = WWW_DIR . "/js";
-
-		$js->filters[] = new WebLoader\VariablesFilter(array(
-			// texyla
-			"baseUri" => Environment::getVariable("baseUri"),
-			"texylaPreviewPath" => $this->link(":Texyla:preview"),
-			"texylaFilesPath" => $this->link(":Texyla:listFiles"),
-			"texylaFilesUploadPath" => $this->link(":Texyla:upload"),
-		));
-
-		$js->filters[] = "JSMin::minify";
-
-		return $js;
+		return $this->getService("frontJs");
 	}
 
-	protected function createComponentCss() {
-		$css = new WebLoader\CssLoader;
-		$css->sourcePath = WWW_DIR . "/css";
-		$css->tempUri = Environment::getVariable("baseUri") . "data/webtemp";
-		$css->tempPath = WWW_DIR . "/data/webtemp";
 
-		$css->filters[] = function ($code) {
-			return cssmin::minify($code, "remove-last-semicolon");
-		};
 
-		return $css;
+	protected function createComponentCss()
+	{
+		return $this->getService("frontCss");
 	}
-
-	// </editor-fold>
-
-	// </editor-fold>
 
 }
