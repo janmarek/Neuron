@@ -36,6 +36,7 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 	{
 		$template = parent::createTemplate();
 		$template->registerHelper("texy", "Neuron\Texy\TexyHelper::process");
+		$template->registerHelper("thumbnail", "Neuron\Image\ThumbnailHelper::helper");
 		return $template;
 	}
 
