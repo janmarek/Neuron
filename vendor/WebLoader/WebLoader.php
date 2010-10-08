@@ -366,9 +366,13 @@ abstract class WebLoader extends \Nette\Application\Control {
 			$files = $this->files;
 		}
 
-		return $this->generatedFileNamePrefix . md5(
-			implode("|", $files) . "|" . $this->getLastModified($files)
-		) . $this->generatedFileNameSuffix;
+		$name = substr(md5(implode("|", $files)), 0, 12);
+
+		if (count($files) === 1) {
+			$name .= "-" . pathinfo($files[0], PATHINFO_FILENAME);
+		}
+
+		return $this->generatedFileNamePrefix . $name . $this->generatedFileNameSuffix;
 	}
 
 
@@ -404,10 +408,10 @@ abstract class WebLoader extends \Nette\Application\Control {
 	 */
 	protected function generate($files) {
 		$name = $this->getGeneratedFilename($files);
-
 		$path = $this->tempPath . "/" . $name;
+		$lastModified = $this->getLastModified($files);
 
-		if (!file_exists($path)) {
+		if (!file_exists($path) || $lastModified > filemtime($path)) {
 			if (!in_array(SafeStream::PROTOCOL, stream_get_wrappers())) {
 				SafeStream::register();
 			}
@@ -415,7 +419,7 @@ abstract class WebLoader extends \Nette\Application\Control {
 			file_put_contents("safe://" . $path, $this->getContent($files));
 		}
 
-		return $name;
+		return $name . "?" . $lastModified;
 	}
 
 

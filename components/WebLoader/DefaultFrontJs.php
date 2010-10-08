@@ -12,10 +12,10 @@ class DefaultFrontJs extends JsLoader
 	protected function init()
 	{
 		$this->addFiles(array(
-			"jquery.livequery.js",
-			"nette.js",
-			"web.js",
-			"netteForms.js",
+			NEURON_DIR . "/js/jquery.livequery.js",
+			NEURON_DIR . "/js/nette.ajax.js",
+			NEURON_DIR . "/js/neuron.ajaxsetup.js",
+			NEURON_DIR . "/js/nette.forms.js",
 		));
 	}
 }

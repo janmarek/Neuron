@@ -44,12 +44,12 @@ class DefaultAdminJs extends JsLoader
 
 			// other
 
-			"jquery.livequery.js",
-			"nette.js",
-			"web.js",
-			"logged.js",
-			"netteForms.js",
-			"gridito.js",
+			NEURON_DIR . "/js/jquery.livequery.js",
+			NEURON_DIR . "/js/nette.ajax.js",
+			NEURON_DIR . "/js/neuron.ajaxsetup.js",
+			NEURON_DIR . "/js/neuron.logged.js",
+			NEURON_DIR . "/js/nette.forms.js",
+			NEURON_DIR . "/vendor/Gridito/js/gridito.js",
 		));
 	}
 }

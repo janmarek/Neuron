@@ -12,13 +12,13 @@ class DefaultFrontCss extends CssLoader
 	protected function init()
 	{
 		$this->addFiles(array(
-			"base.css",
+			NEURON_DIR . "/css/ajax.css",
 
-			"blueprint/reset.css",
-			"blueprint/ie.css",
-			"blueprint/grid.css",
-			"blueprint/typography.css",
-			"blueprint/forms.css",
+			NEURON_DIR . "/css/blueprint/reset.css",
+			NEURON_DIR . "/css/blueprint/ie.css",
+			NEURON_DIR . "/css/blueprint/grid.css",
+			NEURON_DIR . "/css/blueprint/typography.css",
+			NEURON_DIR . "/css/blueprint/forms.css",
 		));
 	}
 }

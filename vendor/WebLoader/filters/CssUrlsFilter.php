@@ -38,6 +38,7 @@ class CssUrlsFilter extends \Nette\Object {
 		}
 
 		//$path = self::cannonicalizePath($path);
+		$path = strtr($path, "\\", "/");
 
 		return $quote === '"' ? addslashes($path) : $path;
 	}
