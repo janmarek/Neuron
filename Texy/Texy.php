@@ -1,9 +1,9 @@
 <?php
 
-namespace Neuron;
+namespace Neuron\Texy;
 
 use Nette\Environment, Nette\String;
-use Texy, TexyHeadingModule;
+use TexyHeadingModule;
 use Nette\Templates\Template, Nette\Templates\LatteFilter;
 
 /**
@@ -11,7 +11,7 @@ use Nette\Templates\Template, Nette\Templates\LatteFilter;
  *
  * @author Honza
  */
-class Texy extends Texy {
+class Texy extends \Texy {
 
 	public static $advertisingNotice = false;
 
@@ -33,17 +33,17 @@ class Texy extends Texy {
 		$this->imageModule->root = Environment::getVariable("baseUri") . "data/files";
 
 		// align classes
-		$this->alignClasses['left'] = 'left';
-		$this->alignClasses['right'] = 'right';
-		$this->alignClasses['center'] = 'center';
+//		$this->alignClasses['left'] = 'left';
+//		$this->alignClasses['right'] = 'right';
+//		$this->alignClasses['center'] = 'center';
 		// justify, top, bottom, middle
 
-		$this->imageModule->leftClass = "image-left";
-		$this->imageModule->rightClass = "image-right";
+		$this->imageModule->leftClass = "left";
+		$this->imageModule->rightClass = "right";
 
-		$this->figureModule->class = "figure";
-		$this->figureModule->leftClass = "figure-left";
-		$this->figureModule->rightClass = "figure-right";
+		$this->figureModule->class = "box";
+		$this->figureModule->leftClass = "box left";
+		$this->figureModule->rightClass = "box right";
 		$this->figureModule->widthDelta = 0;
 
 
@@ -125,7 +125,7 @@ class Texy extends Texy {
 		if ($image->width) $template->width = $image->width;
 		if ($image->height) $template->height = $image->height;
 
-		return $this->protect((string) $template, Texy::CONTENT_BLOCK);
+		return $this->protect((string) $template, self::CONTENT_BLOCK);
 	}
 
 
@@ -147,12 +147,12 @@ class Texy extends Texy {
 		}
 
 		$template = $this->createTemplate()->setFile(NEURON_DIR . "/templates/flash.phtml");
-		$template->url = Texy::prependRoot($image->URL, $this->imageModule->root);
+		$template->url = self::prependRoot($image->URL, $this->imageModule->root);
 		$template->width = $image->width;
 		$template->height = $image->height;
 		if ($image->modifier->title) $template->title = $image->modifier->title;
 
-		return $this->protect((string) $template, Texy::CONTENT_BLOCK);
+		return $this->protect((string) $template, self::CONTENT_BLOCK);
 	}
 
 

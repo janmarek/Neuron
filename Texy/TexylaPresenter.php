@@ -1,7 +1,9 @@
 <?php
 
-namespace Neuron\Presenter\FrontModule;
+namespace Neuron\Presenter;
 
+
+use DirectoryIterator;
 use Nette\Environment, Nette\String, Nette\Image;
 use Nette\Application\RenderResponse, Nette\Application\JsonResponse;
 
@@ -11,7 +13,7 @@ use Nette\Application\RenderResponse, Nette\Application\JsonResponse;
  * @author Jan Marek
  * @license MIT
  */
-class TexylaPresenter extends BasePresenter
+class TexylaPresenter extends \Nette\Application\Presenter
 {
 	/** @var string */
 	private $baseFolderPath;

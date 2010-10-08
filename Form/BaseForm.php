@@ -163,6 +163,9 @@ abstract class BaseForm extends \Nette\Application\AppForm
 
 
 
+	/**
+	 * @return \Nette\Web\User
+	 */
 	public function getUser()
 	{
 		return $this->getService("Nette\Web\IUser");

@@ -1,6 +1,6 @@
 <?php
 
-namespace Medio\Application;
+namespace Neuron\Application;
 
 use Nette\Application\InvalidPresenterException;
 use Nette\String;
