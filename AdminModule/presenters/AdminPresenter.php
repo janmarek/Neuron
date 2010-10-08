@@ -20,6 +20,13 @@ abstract class AdminPresenter extends \Neuron\Application\BasePresenter
 
 
 
+	protected function createComponentUserBox()
+	{
+		return new \Neuron\AdminUserBox;
+	}
+
+
+
 	protected function createComponentJs()
 	{
 		return $this->getService("adminJs");
@@ -31,4 +38,5 @@ abstract class AdminPresenter extends \Neuron\Application\BasePresenter
 	{
 		return $this->getService("adminCss");
 	}
+	
 }
