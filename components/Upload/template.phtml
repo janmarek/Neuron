@@ -1,7 +1,9 @@
 {control uploadForm begin}
 <fieldset>
-<input type="file" multiple="multiple" id="{$control->getUniqueId()}-uploadfield" name="file" />
-<input type="submit" value="Upload" class="hide" id="{$control->getUniqueId()}-submit">
+	<p>
+		<input type="file" multiple="multiple" id="{$control->getUniqueId()}-uploadfield" name="file">
+		<input type="submit" value="Upload" class="hide" id="{$control->getUniqueId()}-submit">
+	</p>
 
 <div id="{$control->getUniqueId()}-queue">
 
