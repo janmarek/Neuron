@@ -15,6 +15,8 @@ class AdminUserBox extends BaseControl
 		if (!$this->getUser()->isInRole("admin")) {
 			throw new \Nette\Application\ForbiddenRequestException;
 		}
+
+		$this->template->setFile(__DIR__ . "/template.phtml")->render();
 	}
 
 }
