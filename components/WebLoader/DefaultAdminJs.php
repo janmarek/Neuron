@@ -45,6 +45,7 @@ class DefaultAdminJs extends JsLoader
 			// other
 
 			NEURON_DIR . "/js/jquery.livequery.js",
+			NEURON_DIR . "/js/jquery.html5upload.js",
 			NEURON_DIR . "/js/nette.ajax.js",
 			NEURON_DIR . "/js/neuron.ajaxsetup.js",
 			NEURON_DIR . "/js/neuron.logged.js",
