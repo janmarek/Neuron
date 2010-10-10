@@ -109,11 +109,21 @@ class Service extends \Nette\Object implements IService
 	/**
 	 * Create entity and flush
 	 * @param array values
+	 * @return BaseEntity
 	 */
 	public function create($values)
 	{
 		$entity = $this->createBlank();
 		$this->update($entity, $values);
+		return $entity;
+	}
+
+
+	public function save($entity)
+	{
+		$this->entityManager->persist($entity);
+		$this->entityManager->flush();
+		return $entity;
 	}
 
 
@@ -126,8 +136,8 @@ class Service extends \Nette\Object implements IService
 	public function update($entity, $values)
 	{
 		$this->setData($entity, $values);
-		$this->entityManager->persist($entity);
-		$this->entityManager->flush();
+		$this->save($entity);
+		return $entity;
 	}
 
 
@@ -140,6 +150,7 @@ class Service extends \Nette\Object implements IService
 	{
 		$this->entityManager->remove($entity);
 		$this->entityManager->flush();
+		return $entity;
 	}
 
 
