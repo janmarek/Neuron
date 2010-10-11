@@ -16,7 +16,7 @@ class AdminUserBox extends BaseControl
 			throw new \Nette\Application\ForbiddenRequestException;
 		}
 
-		$this->template->setFile(__DIR__ . "/template.phtml")->render();
+		$this->template->render();
 	}
 
 }

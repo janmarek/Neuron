@@ -62,7 +62,7 @@ class UploadControl extends BaseControl
 	public function render()
 	{
 		$this->template->redirectUri = $this->redirectUri;
-		$this->template->setFile(__DIR__ . "/template.phtml")->render();
+		$this->template->render();
 	}
 
 }

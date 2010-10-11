@@ -48,4 +48,25 @@ class BaseControl extends \Nette\Application\Control
 		return $this->getService("Nette\Web\IUser");
 	}
 
+
+
+	public function getTemplateFilePath()
+	{
+		$reflection = $this->getReflection();
+		return dirname($reflection->getFileName()) . "/" . $reflection->getShortName() . ".phtml";
+	}
+
+
+
+	/**
+	 * @return \Nette\Templates\FileTemplate
+	 */
+	protected function createTemplate()
+	{
+		$template = parent::createTemplate();
+		$template->setFile($this->getTemplateFilePath());
+		$template->registerHelperLoader(array($this->getService("TemplateHelperLoader"), "getHelper"));
+		return $template;
+	}
+
 }
