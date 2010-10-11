@@ -13,12 +13,6 @@ namespace Neuron\Model;
 class Photogallery extends BaseEntity
 {
 	/**
-	 * @var string
-	 * @Column(nullable = true)
-	 */
-	private $description;
-
-	/**
 	 * @var \Doctrine\Common\Collections\ArrayCollection
 	 * @OneToMany(targetEntity = "Neuron\Model\Photo", mappedBy = "gallery")
 	 */
@@ -29,20 +23,6 @@ class Photogallery extends BaseEntity
 	public function __construct()
 	{
 		$this->photos = new \Doctrine\Common\Collections\ArrayCollection;
-	}
-
-
-
-	public function getDescription()
-	{
-		return $this->description;
-	}
-
-
-
-	public function setDescription($description)
-	{
-		$this->description = $description;
 	}
 
 
