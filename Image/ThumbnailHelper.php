@@ -13,7 +13,7 @@ class ThumbnailHelper
 {
 	public static $thumbnailDir;
 
-	public static function helper(HtmlImage $image, $width, $height, $flags = Image::FIT)
+	public static function createThumbnail(HtmlImage $image, $width, $height, $flags = Image::FIT)
 	{
 		$root = self::$thumbnailDir ?: TEMP_DIR . "/webtemp";
 
