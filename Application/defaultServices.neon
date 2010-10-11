@@ -16,7 +16,6 @@ Doctrine\ORM\EntityManager:
   factory: Neuron\ServiceFactories::createEntityManager
   arguments: [$$database]
 
-
 Validator:
   factory: Neuron\ServiceFactories::createValidator
 
@@ -38,14 +37,14 @@ PageService:
 
 # webloader
 
-adminCss:
+AdminCss:
   class: Neuron\WebLoader\DefaultAdminCss
 
-adminJs:
+AdminJs:
   class: Neuron\WebLoader\DefaultAdminJs
 
-frontCss:
+FrontCss:
   class: Neuron\WebLoader\DefaultFrontCss
 
-frontJs:
+FrontJs:
   class: Neuron\WebLoader\DefaultFrontJs

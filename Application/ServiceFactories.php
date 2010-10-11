@@ -3,14 +3,14 @@
 namespace Neuron;
 
 use Doctrine;
-use Nette\Environment;
-use Symfony\Component\Validator;
-use Neuron\Model\Symfony\ValidatorCache;
-use Nette\Security\Permission;
-use Nella\NetteDoctrineCache;
 use Nella\Panels\Doctrine2Panel;
-use Neuron\Model\Doctrine\ValidationSubscriber;
+use Nella\NetteDoctrineCache;
+use Nette\Environment;
+use Nette\Security\Permission;
+use Neuron\Model\Symfony\ValidatorCache;
 use Neuron\Model\Doctrine\CacheSubscriber;
+use Neuron\Model\Doctrine\ValidationSubscriber;
+use Symfony\Component\Validator;
 
 /**
  * Default service factories
@@ -32,6 +32,8 @@ class ServiceFactories
 		return $validator;
 	}
 
+
+	
 	public static function createEntityManager($database)
 	{
 		$config = new Doctrine\ORM\Configuration;
@@ -77,4 +79,5 @@ class ServiceFactories
 		$perm->allow("admin");
 		return $perm;
 	}
+
 }

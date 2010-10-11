@@ -98,14 +98,14 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 
 	protected function createComponentJs()
 	{
-		return $this->getService("frontJs");
+		return $this->getService("FrontJs");
 	}
 
 
 
 	protected function createComponentCss()
 	{
-		return $this->getService("frontCss");
+		return $this->getService("FrontCss");
 	}
 
 }

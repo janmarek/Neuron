@@ -29,14 +29,14 @@ abstract class AdminPresenter extends \Neuron\Application\BasePresenter
 
 	protected function createComponentJs()
 	{
-		return $this->getService("adminJs");
+		return $this->getService("AdminJs");
 	}
 
 
 
 	protected function createComponentCss()
 	{
-		return $this->getService("adminCss");
+		return $this->getService("AdminCss");
 	}
 	
 }
