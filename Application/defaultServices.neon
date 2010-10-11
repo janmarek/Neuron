@@ -4,9 +4,6 @@ TemplateHelperLoader:
 Texy:
   class: Neuron\Texy\Texy
 
-Nette\Application\IPresenterLoader:
-  class: Neuron\Application\PresenterLoader
-
 # model
 
 Nette\Security\IAuthorizator:

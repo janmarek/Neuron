@@ -31,7 +31,7 @@ class ServiceLoader
 			$options = null;
 			$singleton = isset($serviceConfig["singleton"]) ? (bool) $serviceConfig["singleton"] : true;
 
-			if (isset($serviceConfig["arguments"])) {
+			if (isset($serviceConfig["arguments"]) || isset($serviceConfig["callMethods"])) {
 				$service = array($this, "universalFactory");
 
 				if (isset($serviceConfig["class"])) {
@@ -41,8 +41,14 @@ class ServiceLoader
 				if (isset($serviceConfig["factory"])) {
 					$options["factory"] = $serviceConfig["factory"];
 				}
-				
-				$options["arguments"] = $serviceConfig["arguments"];
+
+				if (isset($serviceConfig["arguments"])) {
+					$options["arguments"] = $serviceConfig["arguments"];
+				}
+
+				if (isset($serviceConfig["callMethods"])) {
+					$options["callMethods"] = $serviceConfig["callMethods"];
+				}
 
 			} elseif (isset($serviceConfig["factory"])) {
 				$service = $serviceConfig["factory"];
@@ -56,31 +62,49 @@ class ServiceLoader
 	}
 
 
-	
+
+	public function processArguments($args)
+	{
+		return array_map(function ($arg) {
+			if (!is_string($arg)) {
+				return $arg;
+			} elseif (String::startsWith($arg, "%")) {
+				return Environment::getService(substr($arg, 1));
+			} elseif (String::startsWith($arg, "$$")) {
+				return Environment::getConfig(substr($arg, 2));
+			} elseif (String::startsWith($arg, "$")) {
+				return Environment::getVariable(substr($arg, 1));
+			} else {
+				return $arg;
+			}
+		}, $args);
+	}
+
+
+
 	public function universalFactory($options)
 	{
-		if (isset($options["arguments"])) {
-			$arguments = array_map(function ($arg) {
-				if (String::startsWith($arg, "%")) {
-					return Environment::getService(substr($arg, 1));
-				} elseif (String::startsWith($arg, "$$")) {
-					return Environment::getConfig(substr($arg, 2));
-				} elseif (String::startsWith($arg, "$")) {
-					return Environment::getVariable(substr($arg, 1));
-				} else {
-					return $arg;
-				}
-			}, (array) $options["arguments"]);
-		} else {
-			$arguments = array();
-		}
+		$arguments = isset($options["arguments"]) ? $this->processArguments($options["arguments"]) : array();
 
 		if (isset($options["class"])) {
-			return ClassReflection::from($options["class"])->newInstanceArgs($arguments);
+			if (!empty($arguments)) {
+				$object = ClassReflection::from($options["class"])->newInstanceArgs($arguments);
+			} else {
+				$class = $options["class"];
+				$object = new $class;
+			}
 		}
 
 		if (isset($options["factory"])) {
-			return call_user_func_array($options["factory"], $arguments);
+			$object = call_user_func_array($options["factory"], $arguments);
 		}
+
+		if (isset($options["callMethods"])) {
+			foreach ($options["callMethods"] as $method => $args) {
+				call_user_func_array(array($object, $method), $this->processArguments($args));
+			}
+		}
+
+		return $object;
 	}
 }
