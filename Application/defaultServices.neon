@@ -1,0 +1,51 @@
+TemplateHelperLoader:
+  class: Neuron\TemplateHelperLoader
+
+Texy:
+  class: Neuron\Texy\Texy
+
+Nette\Application\IPresenterLoader:
+  class: Neuron\Application\PresenterLoader
+
+# model
+
+Nette\Security\IAuthorizator:
+  factory: Neuron\ServiceFactories::createAuthorizator
+
+Doctrine\ORM\EntityManager:
+  factory: Neuron\ServiceFactories::createEntityManager
+  arguments: [$$database]
+
+
+Validator:
+  factory: Neuron\ServiceFactories::createValidator
+
+Nette\Security\IAuthenticator:
+  class: Neuron\Model\DefaultAuthenticator
+  arguments: [%UserService]
+
+UserService:
+  class: Neuron\Model\UserService
+  arguments: [%Doctrine\ORM\EntityManager]
+
+PhotoService:
+  class: Neuron\Model\PhotoService
+  arguments: [%Doctrine\ORM\EntityManager]
+
+PageService:
+  class: Neuron\Model\Service
+  arguments: [%Doctrine\ORM\EntityManager, Neuron\Model\Page]
+
+# webloader
+
+adminCss:
+  class: Neuron\WebLoader\DefaultAdminCss
+
+adminJs:
+  class: Neuron\WebLoader\DefaultAdminJs
+
+frontCss:
+  class: Neuron\WebLoader\DefaultFrontCss
+
+frontJs:
+  class: Neuron\WebLoader\DefaultFrontJs
