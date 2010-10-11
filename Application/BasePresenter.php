@@ -35,8 +35,7 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 	public function createTemplate()
 	{
 		$template = parent::createTemplate();
-		$template->registerHelper("texy", "Neuron\Texy\TexyHelper::process");
-		$template->registerHelper("thumbnail", "Neuron\Image\ThumbnailHelper::helper");
+		$template->registerHelperLoader(array($this->getService("TemplateHelperLoader"), "getHelper"));
 		return $template;
 	}
 
