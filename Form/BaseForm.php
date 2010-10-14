@@ -119,7 +119,7 @@ abstract class BaseForm extends \Nette\Application\AppForm
 				call_user_func_array(array($presenter, "redirect"), $this->redirect);
 			}
 			
-		} catch (\Model\ValidationException $e) {
+		} catch (\Neuron\Model\ValidationException $e) {
 			if ($e->getPropertyPath()) {
 				$this[$e->getPropertyPath()]->addError($e->getMessage());
 			} else {
