@@ -15,21 +15,11 @@ class UserService extends Service
 	}
 
 
-	
-	public function findOneByUsername($username)
-	{
-		$user = $this->getEntityManager()->getRepository($this->getEntityName())->findOneBy(array(
-			"username" => $username,
-		));
-
-		return $user;
-	}
-
-
 
 	public function update($id, $values, $form = null)
 	{
 		if (empty($values["password"])) unset($values["password"]);
 		parent::update($id, $values, $form);
 	}
+	
 }

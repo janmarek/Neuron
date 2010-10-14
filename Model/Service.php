@@ -10,6 +10,8 @@ use Gridito\DoctrineModel;
  * Simple service
  *
  * @author Jan Marek
+ *
+ * @property-read Neuron\Model\EntityFinder $finder
  */
 class Service extends \Nette\Object implements IService
 {
@@ -46,17 +48,6 @@ class Service extends \Nette\Object implements IService
 
 
 	/**
-	 * Get gridito model
-	 * @return DoctrineModel
-	 */
-	public function getGriditoModel()
-	{
-		return new DoctrineModel($this->entityManager, $this->entityName);
-	}
-
-
-
-	/**
 	 * @return string
 	 */
 	protected function getEntityName()
@@ -65,14 +56,21 @@ class Service extends \Nette\Object implements IService
 	}
 
 
+	
+	protected function createQueryBuilder()
+	{
+		return $this->entityManager->getRepository($this->getEntityName())->createQueryBuilder("e");
+	}
+
+
 
 	/**
 	 * Find all entities
-	 * @return array
+	 * @return Neuron\Model\EntityFinder
 	 */
-	public function findAll()
+	public function getFinder()
 	{
-		return $this->entityManager->getRepository($this->entityName)->findAll();
+		return new EntityFinder($this->createQueryBuilder(), $this->entityManager, $this->entityName);
 	}
 
 
@@ -80,17 +78,11 @@ class Service extends \Nette\Object implements IService
 	/**
 	 * Find entity
 	 * @param int id
-	 * @param int mode
 	 * @return BaseEntity
 	 */
-	public function find($id, $mode = self::MODE_ENTITY)
+	public function find($id)
 	{
-		$entity = $this->entityManager
-			->createQuery("select e from $this->entityName e where e.id = :id")
-			->setParameter("id", $id)
-			->getSingleResult($mode === self::MODE_ENTITY ? Query::HYDRATE_OBJECT : Query::HYDRATE_ARRAY);
-
-		return $entity;
+		return $this->getFinder()->id($id)->one();
 	}
 
 

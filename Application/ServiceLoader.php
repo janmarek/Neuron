@@ -5,6 +5,7 @@ namespace Neuron;
 use Nette\Environment, Nette\String;
 use Nette\NeonParser;
 use Nette\Reflection\ClassReflection;
+use Nette\IContext;
 
 /**
  * Service loader
@@ -13,7 +14,7 @@ use Nette\Reflection\ClassReflection;
  */
 class ServiceLoader
 {
-	public function loadNeonConfigFiles(\Nette\Context $context, array $configFiles)
+	public function loadNeonConfigFiles(IContext $context, array $configFiles)
 	{
 		$parser = new NeonParser;
 
@@ -25,9 +26,13 @@ class ServiceLoader
 
 
 
-	public function loadConfig($context, $config)
+	public function loadConfig(IContext $context, $config)
 	{
 		foreach ($config as $serviceName => $serviceConfig) {
+			if ($context->hasService($serviceName)) {
+				$context->removeService($serviceName);
+			}
+
 			$options = null;
 			$singleton = isset($serviceConfig["singleton"]) ? (bool) $serviceConfig["singleton"] : true;
 
@@ -50,6 +55,8 @@ class ServiceLoader
 					$options["callMethods"] = $serviceConfig["callMethods"];
 				}
 
+				$options["context"] = $context;
+
 			} elseif (isset($serviceConfig["factory"])) {
 				$service = $serviceConfig["factory"];
 
@@ -63,13 +70,13 @@ class ServiceLoader
 
 
 
-	public function processArguments($args)
+	public function processArguments($args, IContext $context)
 	{
-		return array_map(function ($arg) {
+		return array_map(function ($arg) use ($context) {
 			if (!is_string($arg)) {
 				return $arg;
 			} elseif (String::startsWith($arg, "%")) {
-				return Environment::getService(substr($arg, 1));
+				return $context->getService(substr($arg, 1));
 			} elseif (String::startsWith($arg, "$$")) {
 				return Environment::getConfig(substr($arg, 2));
 			} elseif (String::startsWith($arg, "$")) {
@@ -84,7 +91,7 @@ class ServiceLoader
 
 	public function universalFactory($options)
 	{
-		$arguments = isset($options["arguments"]) ? $this->processArguments($options["arguments"]) : array();
+		$arguments = isset($options["arguments"]) ? $this->processArguments($options["arguments"], $options["context"]) : array();
 
 		if (isset($options["class"])) {
 			if (!empty($arguments)) {
@@ -101,7 +108,7 @@ class ServiceLoader
 
 		if (isset($options["callMethods"])) {
 			foreach ($options["callMethods"] as $method => $args) {
-				call_user_func_array(array($object, $method), $this->processArguments($args));
+				call_user_func_array(array($object, $method), $this->processArguments($args, $options["context"]));
 			}
 		}
 
