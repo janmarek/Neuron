@@ -2,7 +2,7 @@
 
 namespace Neuron\Presenter\AdminModule;
 
-use Gridito;
+use Gridito\Grid;
 use Neuron\Form\PageForm;
 
 class PagesPresenter extends AdminPresenter
@@ -55,11 +55,12 @@ class PagesPresenter extends AdminPresenter
 
 
 
-	protected function createComponentGrid()
+	protected function createComponentGrid($name)
 	{
-		$grid = new Gridito\Grid;
+		$grid = new Grid($this, $name);
+		$grid->setModel($this->service->finder);
 
-		$grid->setModel($this->service->getGriditoModel());
+		// columns
 
 		$grid->addColumn("id", "ID")->setSortable(true);
 		$grid->addColumn("name", "Název")->setSortable(true);
@@ -67,26 +68,36 @@ class PagesPresenter extends AdminPresenter
 		$grid->addColumn("description", "Popis")->setSortable(true);
 		$grid->addColumn("allowed", "Samostatný článek")->setSortable(true);
 
-		$grid->addToolbarButton("Nová stránka", null, "plusthick")->setLink($this->link("add"));
+		// buttons
 
 		$presenter = $this;
 		$service = $this->service;
 
-		$grid->addButton("Upravit", null, "pencil")
-			->setLink(function ($page) use ($presenter) {
+		$grid->addButton("edit", "Upravit", array(
+			"icon" => "pencil",
+			"link" => function ($page) use ($presenter) {
 				return $presenter->link("edit", array("id" => $page->id));
-			});
+			},
+		));
 
-		$grid->addButton("Smazat", function ($entity) use ($service, $presenter, $grid) {
-			$service->delete($entity);			
-			$grid->flashMessage("Stránka byla úspěšně smazána.");
-			$presenter->redirect("default");
-		}, "closethick")
-			->setConfirmationQuestion(function ($page) {
+		$grid->addButton("delete", "Smazat", array(
+			"icon" => "closethick",
+			"handler" => function ($entity) use ($service, $presenter) {
+				$service->delete($entity);
+				$presenter->flashMessage("Stránka byla úspěšně smazána.");
+				$presenter->redirect("default");
+			},
+			"confirmationQuestion" => function ($page) {
 				return "Opravdu chcete smazat stránku '$page->name'?";
-			});
+			},
+		));
 
-		return $grid;
+		// toolbar
+
+		$grid->addToolbarButton("new", "Nová stránka", array(
+			"icon" => "plusthick",
+			"link" => $this->link("add"),
+		));
 	}
 	
 }

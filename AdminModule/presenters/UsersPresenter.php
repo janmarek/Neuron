@@ -7,7 +7,7 @@ use Neuron\Form\UserForm;
 
 class UsersPresenter extends AdminPresenter
 {
-	/** @var \Neuron\Model\UserService */
+	/** @var Neuron\Model\UserService */
 	private $service;
 
 
@@ -25,13 +25,15 @@ class UsersPresenter extends AdminPresenter
 		$this->template->title = "Uživatelé";
 	}
 
-	
+
+
 	public function actionAdd()
 	{
 		$this->template->title = "Přidat uživatele";
 		$this["form"]->bindEntity($this->service->createBlank());
 		$this["form"]->setSuccessFlashMessage("Uživatel byl úspěšně založen.");
 	}
+
 
 	
 	public function actionEdit($id)
@@ -53,37 +55,48 @@ class UsersPresenter extends AdminPresenter
 
 
 
-	protected function createComponentGrid()
+	protected function createComponentGrid($name)
 	{
-		$grid = new Grid;
-
-		$grid->setModel($this->service->getGriditoModel());
+		$grid = new Grid($this, $name);
+		$grid->setModel($this->service->finder);
+		
+		// columns
 
 		$grid->addColumn("name", "Jméno")->setSortable(true);
 		$grid->addColumn("surname", "Příjmení")->setSortable(true);
 		$grid->addColumn("username", "Uživatelské jméno")->setSortable(true);
 		$grid->addColumn("mail", "E-mail")->setSortable(true);
 
-		$grid->addToolbarButton("Nový uživatel", null, "plusthick")->setLink($this->link("add"));
+		// buttons
 
 		$presenter = $this;
 		$service = $this->service;
 
-		$grid->addButton("Upravit", null, "pencil")
-			->setLink(function ($entity) use ($presenter) {
+		$grid->addButton("edit", "Upravit", array(
+			"icon" => "pencil",
+			"link" => function ($entity) use ($presenter) {
 				return $presenter->link("edit", array("id" => $entity->id));
-			});
+			},
+		));
 
-		$grid->addButton("Smazat", function ($entity) use ($service, $presenter, $grid) {
-			$service->delete($entity);
-			$grid->flashMessage("Uživatel byl úspěšně smazán.");
-			$presenter->redirect("default");
-		}, "closethick")
-			->setConfirmationQuestion(function ($entity) {
+		$grid->addButton("delete", "Smazat", array(
+			"icon" => "closethick",
+			"handler" => function ($entity) use ($service, $presenter) {
+				$service->delete($entity);
+				$presenter->flashMessage("Uživatel byl úspěšně smazán.");
+				$presenter->redirect("default");
+			},
+			"confirmationQuestion" => function ($entity) {
 				return "Opravdu chcete smazat uživatele '$entity->name'?";
-			});
+			},
+		));
+		
+		// toolbar
 
-		return $grid;
+		$grid->addToolbarButton("newuser", "Nový uživatel", array(
+			"icon" => "plusthick",
+			"link" => $this->link("add"),
+		));
 	}
 	
 }
