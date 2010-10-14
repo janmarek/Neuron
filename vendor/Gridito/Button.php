@@ -8,8 +8,8 @@ namespace Gridito;
  * @author Jan Marek
  * @license MIT
  */
-class Button extends BaseButton {
-
+class Button extends BaseButton
+{
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
 	/** @var bool */
@@ -26,37 +26,44 @@ class Button extends BaseButton {
 	 * Is ajax?
 	 * @return bool
 	 */
-	public function isAjax() {
+	public function isAjax()
+	{
 		return $this->ajax;
 	}
 
 
+
 	/**
 	 * Set ajax mode
-	 * @param bool $ajax
+	 * @param bool ajax
 	 * @return Button
 	 */
-	public function setAjax($ajax) {
+	public function setAjax($ajax)
+	{
 		$this->ajax = (bool) $ajax;
 		return $this;
 	}
+
 
 
 	/**
 	 * Get confirmation question
 	 * @return string|callback|false
 	 */
-	public function getConfirmationQuestion() {
+	public function getConfirmationQuestion()
+	{
 		return $this->confirmationQuestion;
 	}
 
 
+
 	/**
 	 * Set confirmation question
-	 * @param string|callback|false $confirmationQuestion
+	 * @param string|callback|false confirmation question
 	 * @return Button
 	 */
-	public function setConfirmationQuestion($confirmationQuestion) {
+	public function setConfirmationQuestion($confirmationQuestion)
+	{
 		$this->confirmationQuestion = $confirmationQuestion;
 		return $this;
 	}
@@ -67,10 +74,11 @@ class Button extends BaseButton {
 
 	/**
 	 * Handle click signal
-	 * @param string $token security token
-	 * @param mixed $pk
+	 * @param string security token
+	 * @param mixed primary key
 	 */
-	public function handleClick($token, $pk = null) {
+	public function handleClick($token, $pk = null)
+	{
 		parent::handleClick($token, $pk);
 
 		if ($this->getPresenter()->isAjax()) {
@@ -86,10 +94,11 @@ class Button extends BaseButton {
 
 	/**
 	 * Create button element
-	 * @param mixed $row
-	 * @return \Nette\Web\Html
+	 * @param mixed row
+	 * @return Nette\Web\Html
 	 */
-	protected function createButton($row = null) {
+	protected function createButton($row = null)
+	{
 		$el = parent::createButton($row);
 
 		if ($this->ajax) {

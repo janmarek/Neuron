@@ -2,8 +2,6 @@
 
 namespace Gridito;
 
-use Nette\Application\PresenterComponent;
-use Nette\Application\ForbiddenRequestException;
 use Nette\Web\Html;
 
 /**
@@ -12,8 +10,8 @@ use Nette\Web\Html;
  * @author Jan Marek
  * @license MIT
  */
-abstract class BaseButton extends PresenterComponent {
-
+abstract class BaseButton extends \Nette\Application\PresenterComponent
+{
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
 	/** @var string */
@@ -39,87 +37,104 @@ abstract class BaseButton extends PresenterComponent {
 	 * Get label
 	 * @return string
 	 */
-	public function getLabel() {
+	public function getLabel()
+	{
 		return $this->label;
 	}
 
 
+
 	/**
 	 * Set label
-	 * @param string $label
+	 * @param string label
 	 * @return BaseButton
 	 */
-	public function setLabel($label) {
+	public function setLabel($label)
+	{
 		$this->label = $label;
 		return $this;
 	}
+
 
 
 	/**
 	 * Get handler
 	 * @return callback
 	 */
-	public function getHandler() {
+	public function getHandler()
+	{
 		return $this->handler;
 	}
 
 
+
 	/**
 	 * Set handler
-	 * @param callback $handler
+	 * @param callback handler
 	 * @return BaseButton
 	 */
-	public function setHandler($handler) {
+	public function setHandler($handler)
+	{
 		$this->handler = $handler;
 		return $this;
 	}
+
 
 
 	/**
 	 * Get jQuery UI icon
 	 * @return string
 	 */
-	public function getIcon() {
+	public function getIcon()
+	{
 		return $this->icon;
 	}
 
 
+
 	/**
 	 * Set jQuery UI icon
-	 * @param string $icon
+	 * @param string icon
 	 * @return BaseButton
 	 */
-	public function setIcon($icon) {
+	public function setIcon($icon)
+	{
 		$this->icon = $icon;
 		return $this;
 	}
+
 
 
 	/**
 	 * Get visible
 	 * @return bool|callback
 	 */
-	public function getVisible() {
+	public function getVisible()
+	{
 		return $this->visible;
 	}
-	
+
+
 
 	/**
 	 * Is button visible
-	 * @param mixed $row
+	 * @param mixed row
 	 * @return bool
 	 */
-	public function isVisible($row = null) {
+	public function isVisible($row = null)
+	{
 		return is_bool($this->visible) ? $this->visible : call_user_func($this->visible, $row);
 	}
 
 
+
 	/**
 	 * Set visible
-	 * @param bool|callback $visible
+	 * @param bool|callback visible
 	 * @return BaseButton
 	 */
-	public function setVisible($visible) {
+	public function setVisible($visible)
+	{
 		if (!is_bool($visible) && !is_callable($visible)) {
 			throw new \InvalidArgumentException("Argument should be callable or boolean.");
 		}
@@ -128,11 +143,13 @@ abstract class BaseButton extends PresenterComponent {
 		return $this;
 	}
 
+
 	
 	/**
 	 * @return Grid
 	 */
-	public function getGrid() {
+	public function getGrid()
+	{
 		return $this->getParent()->getParent();
 	}
 
@@ -166,14 +183,15 @@ abstract class BaseButton extends PresenterComponent {
 
 	/**
 	 * Handle click signal
-	 * @param string $token security token
-	 * @param mixed $pk
+	 * @param string security token
+	 * @param mixed primary key
 	 */
-	public function handleClick($token, $pk = null) {
+	public function handleClick($token, $pk = null)
+	{
 		$grid = $this->getGrid();
 
 		if ($token !== $this->getGrid()->getSecurityToken()) {
-			throw new ForbiddenRequestException("Security token does not match. Possible CSRF attack.");
+			throw new \Nette\Application\ForbiddenRequestException("Security token does not match. Possible CSRF attack.");
 		}
 
 		call_user_func($this->handler, $grid->getModel()->processActionParam($pk));
@@ -185,10 +203,11 @@ abstract class BaseButton extends PresenterComponent {
 
 	/**
 	 * Get button link
-	 * @param mixed $row
+	 * @param mixed row
 	 * @return string
 	 */
-	protected function getButtonLink($row) {
+	protected function getButtonLink($row)
+	{
 		if ($this->link) {
 			if (is_callable($this->link)) {
 				return call_user_func($this->link, $row);
@@ -209,12 +228,14 @@ abstract class BaseButton extends PresenterComponent {
 	}
 
 
+
 	/**
 	 * Create button element
-	 * @param mixed $row
+	 * @param mixed row
 	 * @return Html
 	 */
-	protected function createButton($row = null) {
+	protected function createButton($row = null)
+	{
 		$el = Html::el("a")
 			->href($this->getButtonLink($row))
 			->setText($this->label);
@@ -226,12 +247,14 @@ abstract class BaseButton extends PresenterComponent {
 		return $el;
 	}
 
+	
 
 	/**
 	 * Render button
-	 * @param mixed $row
+	 * @param mixed row
 	 */
-	public function render($row = null) {		
+	public function render($row = null)
+	{
 		if ($this->isVisible($row)) {
 			echo $this->createButton($row);
 		}

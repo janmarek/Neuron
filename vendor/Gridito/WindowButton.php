@@ -8,12 +8,12 @@ namespace Gridito;
  * @author Jan Marek
  * @license MIT
  */
-class WindowButton extends BaseButton {
-
+class WindowButton extends BaseButton
+{
 	/**
 	 * Handle click signal
-	 * @param string $token security token
-	 * @param mixed $pk primary key
+	 * @param string security token
+	 * @param mixed primary key
 	 */
 	public function handleClick($token, $pk = null) {
 		ob_start();
@@ -30,9 +30,10 @@ class WindowButton extends BaseButton {
 	}
 
 
+
 	/**
 	 * Create button element
-	 * @param mixed $row
+	 * @param mixed row
 	 * @return \Nette\Web\Html
 	 */
 	protected function createButton($row = null) {

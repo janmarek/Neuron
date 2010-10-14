@@ -2,10 +2,7 @@
 
 namespace Gridito;
 
-use Nette\Application\Control;
-use Nette\ComponentContainer;
-use Nette\Environment;
-use Nette\Paginator;
+use Nette\ComponentContainer, Nette\Environment, Nette\Paginator;
 
 /**
  * Grid
@@ -13,8 +10,8 @@ use Nette\Paginator;
  * @author Jan Marek
  * @license MIT
  */
-class Grid extends Control {
-
+class Grid extends \Nette\Application\Control
+{
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
 	/** @var IModel */
@@ -27,7 +24,7 @@ class Grid extends Control {
 	private $paginator;
 
 	/** @var int */
-	protected $defaultItemsPerPage = 20;
+	private $defaultItemsPerPage = 20;
 
 	/**
 	 * @var int
@@ -35,26 +32,35 @@ class Grid extends Control {
 	 */
 	public $page = 1;
 
+	/**
+	 * @var string
+	 * @persistent
+	 */
+	public $sortColumn = null;
+
+	/**
+	 * @var string
+	 * @persistent
+	 */
+	public $sortType = null;
+
 	/** @var string */
 	private $ajaxClass = "ajax";
-
-	/** @var int */
-	private $toolbarButtonId = 0;
-
-	/** @var int */
-	private $actionButtonId = 0;
 
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="constructor">
 
-	public function __construct() {
-		// intentionally without parameters
-		parent::__construct();
+	public function __construct(\Nette\IComponentContainer $parent = null, $name = null)
+	{
+		parent::__construct($parent, $name);
+
 		$this->addComponent(new ComponentContainer, "toolbar");
 		$this->addComponent(new ComponentContainer, "actions");
 		$this->addComponent(new ComponentContainer, "columns");
-
+		
+		$this->paginator = new Paginator;
+		$this->paginator->setItemsPerPage($this->defaultItemsPerPage);
 	}
 
 	// </editor-fold>
@@ -65,17 +71,20 @@ class Grid extends Control {
 	 * Get model
 	 * @return IModel
 	 */
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->model;
 	}
 
 
+	
 	/**
 	 * Set model
-	 * @param IModel $model
+	 * @param IModel model
 	 * @return Grid
 	 */
-	public function setModel(IModel $model) {
+	public function setModel(IModel $model)
+	{
 		$model->setupGrid($this);
 		$this->getPaginator()->setItemCount(count($model));
 		$this->model = $model;
@@ -83,86 +92,97 @@ class Grid extends Control {
 	}
 
 
+
 	/**
 	 * Get primary key name
 	 * @return string
 	 */
-	public function getPrimaryKey() {
+	public function getPrimaryKey()
+	{
 		return $this->primaryKey;
 	}
 
 
+
 	/**
 	 * Set primary key name
-	 * @param string $primaryKey
+	 * @param string primary key name
 	 * @return Grid
 	 */
-	public function setPrimaryKey($primaryKey) {
+	public function setPrimaryKey($primaryKey)
+	{
 		$this->primaryKey = $primaryKey;
 		return $this;
 	}
+
 
 
 	/**
 	 * Get items per page
 	 * @return int
 	 */
-	public function getItemsPerPage() {
+	public function getItemsPerPage()
+	{
 		return $this->getPaginator()->getItemsPerPage();
 		return $this;
 	}
 
 
+
 	/**
 	 * Set items per page
-	 * @param int $itemsPerPage
+	 * @param int items per page
 	 * @return Grid
 	 */
-	public function setItemsPerPage($itemsPerPage) {
+	public function setItemsPerPage($itemsPerPage)
+	{
 		$this->getPaginator()->setItemsPerPage($itemsPerPage);
 		return $this;
 	}
+
 
 
 	/**
 	 * Get ajax class
 	 * @return string
 	 */
-	public function getAjaxClass() {
+	public function getAjaxClass()
+	{
 		return $this->ajaxClass;
 	}
 
 
+
 	/**
 	 * Set ajax class
-	 * @param string $ajaxClass
+	 * @param string ajax class
 	 * @return Grid
 	 */
-	public function setAjaxClass($ajaxClass) {
+	public function setAjaxClass($ajaxClass)
+	{
 		$this->ajaxClass = $ajaxClass;
 		return $this;
 	}
 
 
+
 	/**
 	 * Get paginator
-	 * @return \Nette\Paginator
+	 * @return Nette\Paginator
 	 */
-	public function getPaginator() {
-		if (!$this->paginator) {
-			$this->paginator = new Paginator;
-			$this->paginator->setItemsPerPage($this->defaultItemsPerPage);
-		}
-
+	public function getPaginator()
+	{
 		return $this->paginator;
 	}
+
 
 
 	/**
 	 * Get security token
 	 * @return string
 	 */
-	public function getSecurityToken() {
+	public function getSecurityToken()
+	{
 		$session = Environment::getSession(__CLASS__ . "-" . __METHOD__);
 
 		if (empty($session->securityToken)) {
@@ -173,49 +193,49 @@ class Grid extends Control {
 	}
 
 
+
 	/**
 	 * Has toolbar
 	 * @return bool
 	 */
-	public function hasToolbar() {
+	public function hasToolbar()
+	{
 		return count($this["toolbar"]->getComponents()) > 0;
 	}
+
 
 
 	/**
 	 * Has actions
 	 * @return bool
 	 */
-	public function hasActions() {
+	public function hasActions()
+	{
 		return count($this["actions"]->getComponents()) > 0;
 	}
 
 	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="signals & loadState">
+	// <editor-fold defaultstate="collapsed" desc="signals">
 
 	/**
 	 * Handle change page signal
-	 * @param int $page
+	 * @param int page
 	 */
-	public function handleChangePage($page) {
-		$this->setPage($page);
-
+	public function handleChangePage($page)
+	{
 		if ($this->presenter->isAjax()) {
 			$this->invalidateControl();
-		} else {
-			$this->redirect("this");
 		}
 	}
 
 
-	/**
-	 * Load state
-	 * @param array $params
-	 */
-	public function loadState(array $params) {
-		parent::loadState($params);
-		$this->setPage(isset($params["page"]) ? $params["page"] : 1);
+
+	public function handleSort($sortColumn, $sortType)
+	{
+		if ($this->presenter->isAjax()) {
+			$this->invalidateControl();
+		}
 	}
 
 	// </editor-fold>
@@ -223,126 +243,141 @@ class Grid extends Control {
 	// <editor-fold defaultstate="collapsed" desc="rendering">
 
 	/**
+	 * Create template
+	 * @return Template
+	 */
+	protected function createTemplate()
+	{
+		return parent::createTemplate()->setFile(__DIR__ . "/templates/grid.phtml");
+	}
+
+
+
+	/**
 	 * Render grid
 	 */
-	public function render() {
+	public function render()
+	{
+		$this->paginator->setPage($this->page);
+		$this->model->setLimit($this->paginator->getLength());
+		$this->model->setOffset($this->paginator->getOffset());
+
+		if ($this->sortColumn && $this["columns"]->getComponent($this->sortColumn)->isSortable()) {
+			$this->model->setSorting($this->sortColumn, $this->sortType);
+		}
+
 		$this->template->render();
 	}
 	
 	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="component factories">
 
 	/**
 	 * Add column
-	 * @param string $name
-	 * @param string $label
-	 * @param callback $renderer
+	 * @param string name
+	 * @param string label
+	 * @param array options
 	 * @return Column
 	 */
-	public function addColumn($name, $label, $renderer = null) {
+	public function addColumn($name, $label = null, array $options = array())
+	{
 		$column = new Column($this["columns"], $name);
 		$column->setLabel($label);
-		if ($renderer) $column->setCellRenderer($renderer);
+		$this->setOptions($column, $options);
 		return $column;
 	}
 
 
+
 	/**
 	 * Add action button
-	 * @param string $label button name
-	 * @param callback $handler
-	 * @param string $icon jQuery UI icon
+	 * @param string button name
+	 * @param string label
+	 * @param array options
 	 * @return Button
 	 */
-	public function addButton($label, $handler, $icon = null) {
-		$button = $this->createButton("\Gridito\Button", $label, $handler, $icon);
-		$this["actions"]->addComponent($button, ++$this->actionButtonId);
+	public function addButton($name, $label = null, array $options = array())
+	{
+		$button = new Button($this["actions"], $name);
+		$button->setLabel($label);
+		$this->setOptions($button, $options);
 		return $button;
 	}
+
 
 
 	/**
-	 * Add action window button
-	 * @param string $label button name
-	 * @param callback $handler
-	 * @param string $icon jQuery UI icon
+	 * Add window button
+	 * @param string button name
+	 * @param string label
+	 * @param array options
 	 * @return WindowButton
 	 */
-	public function addWindowButton($label, $handler, $icon = null) {
-		$button = $this->createButton("\Gridito\WindowButton", $label, $handler, $icon);
-		$this["actions"]->addComponent($button, ++$this->actionButtonId);
+	public function addWindowButton($name, $label = null, array $options = array())
+	{
+		$button = new WindowButton($this["actions"], $name);
+		$button->setLabel($label);
+		$this->setOptions($button, $options);
 		return $button;
 	}
+
 
 
 	/**
 	 * Add action button to toolbar
-	 * @param string $label button name
-	 * @param callback $handler
-	 * @param string $icon jQuery UI icon
+	 * @param string button name
+	 * @param string label
+	 * @param array options
 	 * @return Button
 	 */
-	public function addToolbarButton($label, $handler, $icon = null) {
-		$button = $this->createButton("\Gridito\Button", $label, $handler, $icon);
-		$this["toolbar"]->addComponent($button, ++$this->toolbarButtonId);
+	public function addToolbarButton($name, $label = null, array $options = array())
+	{
+		$button = new Button($this["toolbar"], $name);
+		$button->setLabel($label);
+		$this->setOptions($button, $options);
 		return $button;
 	}
+
 
 
 	/**
 	 * Add window button to toolbar
-	 * @param string $label button name
-	 * @param callback $handler
-	 * @param string $icon jQuery UI icon
+	 * @param string button name
+	 * @param string label
+	 * @param array options
 	 * @return WindowButton
 	 */
-	public function addToolbarWindowButton($label, $handler, $icon = null) {
-		$button = $this->createButton("\Gridito\WindowButton", $label, $handler, $icon);
-		$this["toolbar"]->addComponent($button, ++$this->toolbarButtonId);
+	public function addToolbarWindowButton($name, $label = null, array $options = array())
+	{
+		$button = new WindowButton($this["toolbar"], $name);
+		$button->setLabel($label);
+		$this->setOptions($button, $options);
 		return $button;
 	}
 
-	// </editor-fold>
-	
-	// <editor-fold defaultstate="collapsed" desc="helpers">
-
-	/**
-	 * Create template
-	 * @return Template
-	 */
-	protected function createTemplate() {
-		return parent::createTemplate()->setFile(__DIR__ . "/templates/grid.phtml");
-	}
 
 
 	/**
 	 * Set page
-	 * @param int $page
+	 * @param int page
 	 */
-	private function setPage($page) {
-		$paginator = $this->getPaginator();
-		$paginator->setPage($page);
-		$this->model->setLimit($paginator->getOffset(), $paginator->getLength());
+	private function setPage($page)
+	{
+		$this->getPaginator()->setPage($page);
 	}
 
 
-	/**
-	 * Create button
-	 * @param string $class button class name
-	 * @param string $label
-	 * @param callback $handler
-	 * @param string $icon
-	 * @return BaseButton
-	 */
-	private function createButton($class, $label, $handler, $icon = null) {
-		$button = new $class;
-		$button->setLabel($label);
-		$button->setHandler($handler);
-		if ($icon) $button->setIcon($icon);
-		return $button;
-	}
 
-	// </editor-fold>
+	protected function setOptions($object, $options)
+	{
+		foreach	($options as $option => $value) {
+			$method = "set" . ucfirst($option);
+			if (method_exists($object, $method)) {
+				$object->$method($value);
+			} else {
+				throw new \InvalidArgumentException("Option with name $option does not exist.");
+			}
+		}
+	}
 	
 }

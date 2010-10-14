@@ -10,7 +10,7 @@ use DibiFluent;
  * @author Jan Marek
  * @license MIT
  */
-class DibiFluentModel extends \Nette\Object implements IModel
+class DibiFluentModel extends AbstractModel
 {
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
@@ -42,42 +42,19 @@ class DibiFluentModel extends \Nette\Object implements IModel
 	 */
 	public function getIterator()
 	{
-		return $this->fluent->execute()->setRowClass($this->rowClass)->getIterator();
-	}
+		$fluent = clone $this->fluent;
 
+		$fluent->limit($this->getLimit());
+		$fluent->offset($this->getOffset());
 
+		list($sortColumn, $sortType) = $this->getSorting();
+		if ($sortColumn) {
+			$fluent->orderBy("[$sortColumn] $sortType");
+		}
 
-	/**
-	 * Process action parameter
-	 * @param mixed param
-	 * @return mixed
-	 */
-	public function processActionParam($param)
-	{
-		return $param;
-	}
+		$res = $fluent->execute();
 
-
-
-	/**
-	 * Setup grid after model connect
-	 * @param Grid grid
-	 */
-	public function setupGrid(Grid $grid)
-	{
-		
-	}
-
-
-
-	/**
-	 * Set sorting
-	 * @param string column
-	 * @param string asc or desc
-	 */
-	public function setSorting($column, $type)
-	{
-		$this->fluent->removeClause("orderBy")->orderBy("[$column] $type");
+		return $res->setRowClass($this->rowClass)->getIterator();
 	}
 
 
@@ -89,19 +66,6 @@ class DibiFluentModel extends \Nette\Object implements IModel
 	public function count()
 	{
 		return $this->fluent->count();
-	}
-
-
-
-	/**
-	 * Set limit
-	 * @param int offset
-	 * @param int limit
-	 */
-	public function setLimit($offset, $limit)
-	{
-		$this->fluent->removeClause("offset")->offset($offset);
-		$this->fluent->removeClause("limit")->limit($limit);
 	}
 
 }

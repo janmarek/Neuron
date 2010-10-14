@@ -1,11 +1,11 @@
 {if $control->isSortable()}
 <span class="sorting">
-	{if $control->sorting === null}
-	<a href="{link sort! type => 'asc'}" class="{$control->getGrid()->getAjaxClass()}"><span class="ui-icon ui-icon-carat-2-n-s"></span></a>
+	{if $control->getSorting() === null}
+	<a href="{$control->getGrid()->link("sort!", $control->getName(), "asc")}" class="{$control->getGrid()->getAjaxClass()}"><span class="ui-icon ui-icon-carat-2-n-s"></span></a>
 	{elseif $control->sorting === "asc"}
-	<a href="{link sort! type => 'desc'}" class="{$control->getGrid()->getAjaxClass()}"><span class="ui-icon ui-icon-triangle-1-n"></span></a>
+	<a href="{$control->getGrid()->link("sort!", $control->getName(), "desc")}" class="{$control->getGrid()->getAjaxClass()}"><span class="ui-icon ui-icon-triangle-1-n"></span></a>
 	{elseif $control->sorting === "desc"}
-	<a href="{link sort! type => null}" class="{$control->getGrid()->getAjaxClass()}"><span class="ui-icon ui-icon-triangle-1-s"></span></a>
+	<a href="{$control->getGrid()->link("sort!", null, null)}" class="{$control->getGrid()->getAjaxClass()}"><span class="ui-icon ui-icon-triangle-1-s"></span></a>
 	{/if}
 </span>
 {/if}

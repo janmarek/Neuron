@@ -2,161 +2,78 @@
 
 namespace Gridito;
 
-use Nette\Object;
+use Doctrine\ORM\EntityManager, Doctrine\ORM\Query;
+use ArrayIterator;
 
-class DoctrineModel extends Object implements IModel
+/**
+ * Doctrine model
+ *
+ * @author Jan Marek, Martin Sadový
+ * @license MIT
+ */
+class DoctrineModel extends AbstractModel
 {
+	// <editor-fold defaultstate="collapsed" desc="variables">
 
-	/**
-	 * @var string or null
-	 */
-	protected $primaryKey;
-	/**
-	 * @var Doctrine\ORM\QueryBuilder
-	 */
-	protected $query;
-	/**
-	 * @var Doctrine\ORM\EntityManager
-	 */
-	protected $em;
+	private $em;
 
+	private $qb;
+
+	private $entity;
+
+	// </editor-fold>
 
 
 	/**
-	 * @param Doctrine\ORM\EntityManager Entity manager
-	 * @param string $entity
+	 * Construct
+	 * @param Doctrine\ORM\EntityManager em
+	 * @param string entity class name
 	 */
-	public function __construct(\Doctrine\ORM\EntityManager $em, $entity)
+	public function __construct(EntityManager $em, $entity)
 	{
-		if (!is_string($entity)) {
-			throw new \InvalidArgumentException("Argument must be string, " . gettype($entity) . " given.");
-		} elseif (!class_exists($entity)) {
-			throw new \InvalidArgumentException("Class (Entity) not found!");
-		}
-
-		$this->query = $em->createQueryBuilder()->from($entity, 'e');
-		try {
-			$this->primaryKey = $em->getClassMetadata($entity)->getSingleIdentifierFieldName();
-		} catch (MappingException $e) {
-
-		}
+		$this->em = $em;
+		$this->entity = $entity;
+		$this->qb = $em->createQueryBuilder()->from($entity, "e");
+		$this->setPrimaryKey($em->getClassMetadata($entity)->getSingleIdentifierFieldName());
 	}
 
 
-
 	/**
-	 * @return string
-	 * @throws
-	 */
-	public function getPrimaryKey()
-	{
-		if ($this->primaryKey === NULL) {
-			throw new \InvalidStateException("Set first primary key!");
-		}
-		return $this->primaryKey;
-	}
-
-
-
-	/**
-	 * @param string
-	 */
-	public function setPrimaryKey($key)
-	{
-		if (!is_string($key)) {
-			throw new \InvalidArgumentException("Argument must be string, " . gettype($entity) . " given.");
-		}
-		$this->primaryKey = $key;
-	}
-
-
-
-	/**
+	 * Get query builder
 	 * @return Doctrine\ORM\QueryBuilder
 	 */
-	public function getQuery()
+	public function getQueryBuilder()
 	{
-		return $this->query;
+		return $this->qb;
 	}
 
 
 
-	/**
-	 * @param int Offset
-	 * @param int Limit
-	 */
-	public function setLimit($offset, $limit)
-	{
-		if ($limit !== NULL)
-			$this->query->setMaxResults($limit);
-		if ($offset !== NULL)
-			$this->query->setFirstResult($offset);
-	}
-
-
-
-	/**
-	 * @param string Column name
-	 * @param string ASC or DESC
-	 */
-	public function setSorting($column, $type)
-	{
-		$this->query->addOrderBy('e.' . $column, $type);
-	}
-
-
-
-	/**
-	 * @param mixed primary value
-	 * @return (Entity)
-	 */
 	public function processActionParam($param)
 	{
-		if ($param === null) {
-			return null;
-		}
-		try {
-			return $this->query->select('e')
-				->where('e.' . $this->getPrimaryKey() . ' = :primaryValue')
-				->setMaxResults(1)
-				->setFirstResult(0)
-				->setParameter('primaryValue', $param)->getQuery()
-				->getSingleResult();
-		} catch (\Doctrine\ORM\NoResultException $e) {
-			return false;
-			Debug::processException($e);
-		}
+		return $this->em->find($this->entity, $param);
 	}
 
 
 
-	/**
-	 * Setup grid
-	 * @param Gridito\Grid
-	 */
-	public function setupGrid(Grid $grid)
-	{
-		$grid->setPrimaryKey($this->getPrimaryKey());
-	}
-
-
-
-	/**
-	 * @return ArrayIterator
-	 */
-	public function getIterator()
-	{
-		return new \ArrayIterator($this->query->select('e')->getQuery()->getResult());
-	}
-
-
-
-	/**
-	 * @return int
-	 */
 	public function count()
 	{
-		return $this->query->select('count(e) fullcount')->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_SINGLE_SCALAR);
+		return $this->qb->select('count(e) fullcount')->getQuery()->getSingleResult(Query::HYDRATE_SINGLE_SCALAR);
 	}
 
+
+
+	public function getIterator()
+	{
+		$this->qb->setMaxResults($this->getLimit());
+		$this->qb->setFirstResult($this->getOffset());
+
+		list($sortColumn, $sortType) = $this->getSorting();
+		if ($sortColumn) {
+			$this->qb->orderBy($sortColumn, $sortType);
+		}
+
+		return new ArrayIterator($this->qb->select("e")->getQuery()->getResult());
+	}
+	
 }

@@ -2,32 +2,24 @@
 
 namespace Gridito;
 
-use Nette\Application\Control;
-
 /**
  * Grid column
  *
  * @author Jan Marek
  * @license MIT
  */
-class Column extends Control {
-
+class Column extends \Nette\Application\Control
+{
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
 	/** @var string */
 	private $label;
 
 	/** @var callback */
-	private $cellRenderer = null;
+	private $renderer = null;
 
 	/** @var bool */
 	private $sortable = false;
-
-	/**
-	 * @var string|null
-	 * @persistent
-	 */
-	public $sorting = null;
 
 	/** @var string */
 	private $dateTimeFormat = "j.n.Y G:i";
@@ -40,40 +32,48 @@ class Column extends Control {
 	 * Get label
 	 * @return string
 	 */
-	public function getLabel() {
+	public function getLabel()
+	{
 		return $this->label;
 	}
 
 
+
 	/**
 	 * Set label
-	 * @param string $label
+	 * @param string label
 	 * @return Column
 	 */
-	public function setLabel($label) {
+	public function setLabel($label)
+	{
 		$this->label = $label;
 		return $this;
 	}
+
 
 
 	/**
 	 * Get cell renderer
 	 * @return callback
 	 */
-	public function getCellRenderer() {
-		return $this->cellRenderer;
+	public function getRenderer()
+	{
+		return $this->renderer;
 	}
+
 
 
 	/**
 	 * Set cell renderer
-	 * @param callback $cellRenderer
+	 * @param callback cell renderer
 	 * @return Column
 	 */
-	public function setCellRenderer($cellRenderer) {
-		$this->cellRenderer = $cellRenderer;
+	public function setRenderer($cellRenderer)
+	{
+		$this->renderer = $cellRenderer;
 		return $this;
 	}
+
 
 
 	/**
@@ -85,15 +85,33 @@ class Column extends Control {
 	}
 
 
+
 	/**
 	 * Set sortable
-	 * @param bool $sortable
+	 * @param bool sortable
 	 * @return Column
 	 */
 	public function setSortable($sortable) {
 		$this->sortable = $sortable;
 		return $this;
 	}
+
+
+
+	/**
+	 * Get sorting
+	 * @return string|null asc, desc or null
+	 */
+	public function getSorting()
+	{
+		$grid = $this->getGrid();
+		if ($grid->sortColumn === $this->getName()) {
+			return $grid->sortType;
+		} else {
+			return null;
+		}
+	}
+
 
 
 	/**
@@ -105,15 +123,18 @@ class Column extends Control {
 	}
 
 
+
 	/**
 	 * Set date/time format
-	 * @param string $dateTimeFormat
+	 * @param string datetime format
 	 * @return Column
 	 */
 	public function setDateTimeFormat($dateTimeFormat) {
 		$this->dateTimeFormat = $dateTimeFormat;
 		return $this;
 	}
+
+
 
 	/**
 	 * Get grid
@@ -125,36 +146,29 @@ class Column extends Control {
 	
 	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="signals & loadState">
+	/**
+	 * Render boolean
+	 * @param bool value
+	 */
+	public static function renderBoolean($value)
+	{
+		$icon = $value ? "check" : "closethick";
+		echo '<span class="ui-icon ui-icon-' . $icon . '"></span>';
+	}
+
+	
 
 	/**
-	 * Handle sort
-	 * @param string $type
+	 * Render datetime
+	 * @param Datetime value
+	 * @param string datetime format
 	 */
-	public function handleSort($type) {
-		$this->sorting = $type;
-
-		if ($this->presenter->isAjax()) {
-			$this->loadSorting();
-			$this->getGrid()->invalidateControl();
-		} else {
-			$this->redirect("this");
-		}
+	public static function renderDateTime($value, $format)
+	{
+		echo $value->format($this->dateTimeFormat);
 	}
 
 
-	/**
-	 * Load state
-	 * @param array $params
-	 */
-	public function loadState(array $params) {
-		parent::loadState($params);
-		$this->loadSorting();
-	}
-
-	// </editor-fold>
-
-	// <editor-fold defaultstate="collapsed" desc="rendering">
 
 	/**
 	 * Default cell renderer
@@ -165,14 +179,13 @@ class Column extends Control {
 		$name = $column->getName();
 		$value = $record->$name;
 
-		// true/false
+		// boolean
 		if (is_bool($value)) {
-			$icon = $value ? "check" : "closethick";
-			echo '<span class="ui-icon ui-icon-' . $icon . '"></span>';
+			self::renderBoolean($value);
 			
 		// date
 		} elseif ($value instanceof \DateTime) {
-			echo $value->format($this->dateTimeFormat);
+			self::renderDateTime($value, $this->dateTimeFormat);
 
 		// other
 		} else {
@@ -181,40 +194,22 @@ class Column extends Control {
 	}
 
 
+
 	/**
 	 * Render cell
-	 * @param mixed $record
+	 * @param mixed record
 	 */
 	public function renderCell($record) {
-		call_user_func($this->cellRenderer ?: array($this, "defaultCellRenderer"), $record, $this);
-
+		call_user_func($this->renderer ?: array($this, "defaultCellRenderer"), $record, $this);
 	}
 
 
+	
 	/**
 	 * Render header cell
 	 */
 	public function renderHeaderCell() {
 		$this->template->setFile(__DIR__ . "/templates/th.phtml")->render();
 	}
-	
-	// </editor-fold>
-
-	// <editor-fold defaultstate="collapsed" desc="helpers">
-
-	/**
-	 * Load sorting
-	 */
-	private function loadSorting() {
-		if (!$this->sortable || !in_array($this->sorting, array("asc", "desc"))) return;
-
-		foreach ($this->getParent()->getComponents() as $column) {
-			if ($column !== $this) $column->sorting = null;
-		}
-
-		$this->getGrid()->getModel()->setSorting($this->getName(), $this->sorting);
-	}
-
-    // </editor-fold>
 
 }

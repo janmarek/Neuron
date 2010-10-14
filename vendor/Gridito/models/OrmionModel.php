@@ -10,8 +10,8 @@ use Ormion\Collection;
  * @author Jan Marek
  * @license MIT
  */
-class OrmionModel extends \Nette\Object implements IModel {
-
+class OrmionModel extends \Nette\Object implements IModel
+{
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
 	/** @var Collection */
@@ -24,28 +24,33 @@ class OrmionModel extends \Nette\Object implements IModel {
 
 	/**
 	 * Constructor
-	 * @param Collection $collection data
+	 * @param Collection data
 	 */
-	public function __construct(Collection $collection) {
+	public function __construct(Collection $collection)
+	{
 		$this->collection = $collection;
 		$this->rowClass = $collection->getItemType();
 	}
 
 
+
 	/**
 	 * Get iterator
 	 */
-	public function getIterator() {
+	public function getIterator()
+	{
 		return $this->collection->getIterator();
 	}
 
 
+
 	/**
 	 * Process action parameter
-	 * @param mixed $param
+	 * @param mixed
 	 * @return mixed
 	 */
-	public function processActionParam($param) {
+	public function processActionParam($param)
+	{
 		if ($param === null) {
 			return null;
 		}
@@ -55,43 +60,61 @@ class OrmionModel extends \Nette\Object implements IModel {
 	}
 
 
+
 	/**
 	 * Setup grid after model connect
-	 * @param Grid $grid
+	 * @param Grid
 	 */
-	public function setupGrid(Grid $grid) {
+	public function setupGrid(Grid $grid)
+	{
 		$class = $this->rowClass;
 		$grid->setPrimaryKey($class::getConfig()->getPrimaryColumn());
 	}
 
 
+
 	/**
 	 * Set sorting
-	 * @param string $column
-	 * @param string $type asc or desc
+	 * @param string column
+	 * @param string asc or desc
 	 */
-	public function setSorting($column, $type) {
+	public function setSorting($column, $type)
+	{
 		$this->collection->removeClause("orderBy")->orderBy("[$column] $type");
 	}
+
 
 
 	/**
 	 * Item count
 	 * @return int
 	 */
-	public function count() {
+	public function count()
+	{
 		return $this->collection->count();
 	}
 
 
+
 	/**
 	 * Set limit
-	 * @param int $offset
-	 * @param int $limit
+	 * @param int limit
 	 */
-	public function setLimit($offset, $limit) {
-		$this->collection->removeClause("offset")->offset($offset);
+	public function setLimit($offset, $limit)
+	{
+		
 		$this->collection->removeClause("limit")->limit($limit);
+	}
+
+
+
+	/**
+	 * Set offset
+	 * @param int offset
+	 */
+	public function setOffset($offset)
+	{
+		$this->collection->removeClause("offset")->offset($offset);
 	}
 
 }
