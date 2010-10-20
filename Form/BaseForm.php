@@ -65,7 +65,8 @@ abstract class BaseForm extends \Nette\Application\AppForm
 
 	protected function getTemplateFile()
 	{
-		return dirname($this->getReflection()->getFileName()) . "/formTemplate.phtml";
+		$reflection = $this->getReflection();
+		return dirname($reflection->getFileName()) . "/" . $reflection->getShortName() . ".phtml";
 	}
 
 

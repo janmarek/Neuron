@@ -2,8 +2,11 @@
 
 namespace Neuron\Form;
 
+use Doctrine\Common\Collections\ArrayCollection, Doctrine\ORM\PersistentCollection;
+use Neuron\Model\BaseEntity;
+
 /**
- * EntityForm
+ * Entity form
  *
  * @author Jan Marek
  */
@@ -25,8 +28,12 @@ abstract class EntityForm extends BaseForm
 			if (method_exists($entity, $method)) {
 				$value = $entity->$method();
 
-				if ($value instanceof \Neuron\Model\BaseEntity) {
+				if ($value instanceof BaseEntity) {
 					$value = $value->getId();
+				} elseif ($value instanceof ArrayCollection || $value instanceof PersistentCollection) {
+					$value = array_map(function (BaseEntity $entity) {
+						return $value->getId();
+					}, $value->toArray());
 				}
 
 				$input->setDefaultValue($value);
