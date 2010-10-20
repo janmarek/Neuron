@@ -28,7 +28,7 @@ class DefaultAuthenticator implements \Nette\Security\IAuthenticator
 	{
 		list($username, $password) = $credentials;
 
-		$user = $this->userService->finder->username($username)->one();
+		$user = $this->userService->findOneByUsername($username);
 
 		if ($user) {
 			if ($user->verifyPassword($password)) {

@@ -15,6 +15,14 @@ class UserService extends Service
 	}
 
 
+	public function findOneByUsername($username)
+	{
+		return $this->getEntityManager()->getRepository($this->getEntityName())->findOneBy(array(
+			"username" => $username,
+		));
+	}
+
+
 
 	public function update($id, $values, $form = null)
 	{

@@ -70,7 +70,7 @@ class Service extends \Nette\Object implements IService
 	 */
 	public function getFinder()
 	{
-		return new EntityFinder($this->createQueryBuilder(), $this->entityManager, $this->entityName);
+		return new EntityFinder($this->createQueryBuilder());
 	}
 
 
@@ -82,7 +82,18 @@ class Service extends \Nette\Object implements IService
 	 */
 	public function find($id)
 	{
-		return $this->getFinder()->id($id)->one();
+		return $this->entityManager->getRepository($this->entityName)->find($id);
+	}
+
+
+
+	/**
+	 * Find all entities
+	 * @return array
+	 */
+	public function findAll()
+	{
+		return $this->entityManager->getRepository($this->entityName)->findAll();
 	}
 
 

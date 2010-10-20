@@ -10,24 +10,16 @@ use Doctrine\ORM\Query;
  *
  * @author Jan Marek
  */
-class EntityFinder extends \Nette\Object implements \Countable, \IteratorAggregate, \Gridito\IModel
+class EntityFinder extends \Nette\Object implements \Gridito\IModel
 {
 	/** @var Doctrine\ORM\QueryBuilder */
 	protected $qb;
 
-	/** @var Doctrine\ORM\EntityManager */
-	private $em;
-
-	/** @var string */
-	private $entityName;
 
 
-
-	public function __construct($qb, $em, $entityName)
+	public function __construct($qb)
 	{
 		$this->qb = $qb;
-		$this->em = $em;
-		$this->entityName = $entityName;
 	}
 
 
@@ -35,7 +27,7 @@ class EntityFinder extends \Nette\Object implements \Countable, \IteratorAggrega
 	/**
 	 * @return Neuron\Model\BaseEntity
 	 */
-	public function one()
+	public function getOne()
 	{
 		return $this->qb->getQuery()->getSingleResult();
 	}
@@ -45,13 +37,16 @@ class EntityFinder extends \Nette\Object implements \Countable, \IteratorAggrega
 	/**
 	 * @return array
 	 */
-	public function all()
+	public function getAll()
 	{
 		return $this->qb->getQuery()->getResult();
 	}
 
 
 
+	/**
+	 * @return int
+	 */
 	public function count()
 	{
 		$qb = clone $this->qb;
@@ -66,7 +61,7 @@ class EntityFinder extends \Nette\Object implements \Countable, \IteratorAggrega
 	 */
 	public function id($id)
 	{
-		$this->qb->where("e.id = " . (int) $id);
+		$this->qb->andWhere("e.id = " . (int) $id);
 		return $this;
 	}
 
@@ -89,7 +84,7 @@ class EntityFinder extends \Nette\Object implements \Countable, \IteratorAggrega
 	 * @param int limit
 	 * @return EntityFinder
 	 */
-	public function limit($limit)
+	public function setLimit($limit)
 	{
 		$this->qb->setMaxResults($limit);
 		return $this;
@@ -101,7 +96,7 @@ class EntityFinder extends \Nette\Object implements \Countable, \IteratorAggrega
 	 * @param int offset
 	 * @return EntityFinder
 	 */
-	public function offset($offset)
+	public function setOffset($offset)
 	{
 		$this->qb->setFirstResult($offset);
 		return $this;
@@ -109,40 +104,17 @@ class EntityFinder extends \Nette\Object implements \Countable, \IteratorAggrega
 
 
 
-	public function __call($name, $args)
-	{
-		$arg = count($args) ? $args[0] : true;
-		$this->qb->where("e.$name = :$name");
-		$this->qb->setParameter($name, $arg);
-		return $this;
-	}
-
-
-
 	public function getIterator()
 	{
-		return new \ArrayIterator($this->all());
+		return new \ArrayIterator($this->getAll());
 	}
 
 
 
 	public function processActionParam($param)
 	{
-		return $this->em->find($this->entityName, $param);
-	}
-
-
-
-	public function setLimit($limit)
-	{
-		$this->limit($limit);
-	}
-
-	
-
-	public function setOffset($offset)
-	{
-		$this->offset($offset);
+		$qb = clone $this->qb;
+		return $qb->where($qb->getRootAlias() . ".id = " . (int) $param)->getQuery()->getSingleResult();
 	}
 
 
