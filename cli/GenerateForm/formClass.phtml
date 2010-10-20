@@ -1,0 +1,18 @@
+{!='<?php'}
+
+namespace Neuron\Form;
+
+/**
+ * {$name} form
+ *
+ * @author Jan Marek
+ */
+class {$name}Form extends EntityForm
+{
+	protected function addFields()
+	{
+		{foreach $fields as $field}
+		$this->add{$field->inputName}("{$field->name}");
+		{/foreach}
+	}
+}

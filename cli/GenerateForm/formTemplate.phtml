@@ -1,0 +1,20 @@
+{l}form $form{r}
+
+<fieldset>
+	{!='<div class="error" n:foreach="$formErrors as $error">'}{l}$error{r}{!='</div>'}
+
+	{foreach $fields as $field}
+	<p>
+	{if $field->inputName === "Checkbox"}
+		{l}input {$field->name}{r} {l}label {$field->name}{r}{$field->name}{l}/label{r}
+	{else}
+		{l}label {$field->name}{r}{$field->name}{l}/label{r}<br>
+		{l}input {$field->name}{r}
+	{/if}
+	</p>
+	{/foreach}
+
+	<p>{l}input s value => "Save"{r}</p>
+</fieldset>
+
+{l}/form{r}
