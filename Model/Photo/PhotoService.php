@@ -25,7 +25,7 @@ class PhotoService extends Service
 		if (!$file->isImage()) {
 			throw new ValidationException("Soubor není obrázek.");
 		}
-		
+
 		$photo = $this->createBlank();
 		$this->update($photo, $values);
 		$gallery->addPhoto($photo);
@@ -34,16 +34,16 @@ class PhotoService extends Service
 		$this->save($gallery);
 	}
 
-	
-	
+
+
 	protected function createQueryBuilder()
 	{
-		$repository = $this->getEntityManager()->getRepository($entityName);
+		$repository = $this->getEntityManager()->getRepository($this->getEntityName());
 		return $repository->createQueryBuilder("e")->leftJoin("e.gallery", "g");
 	}
-	
-	
-	
+
+
+
 	/**
 	 * @return PhotoFinder
 	 */

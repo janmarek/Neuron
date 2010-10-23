@@ -12,14 +12,38 @@ use Neuron\Image\ThumbnailHelper;
  */
 class PhotogalleryAdmin extends BaseControl
 {
-	/** @var \Neuron\Model\PhotoService */
+	/** @var \Neuron\Model\PhotogalleryService */
 	private $service;
 
+	/** @var \Neuron\Model\Photogallery */
+	private $gallery;
 
 
-	public function init()
+
+	public function setPhotogalleryService($service)
 	{
-		$this->service = $this->getService("PhotoService");
+		$this->service = $service;
+	}
+
+
+
+	public function getPhotogalleryService()
+	{
+		return $this->service;
+	}
+
+
+
+	public function setGallery($gallery)
+	{
+		$this->gallery = $gallery;
+	}
+
+
+
+	public function getGallery()
+	{
+		return $this->gallery;
 	}
 
 
@@ -38,8 +62,8 @@ class PhotogalleryAdmin extends BaseControl
 	{
 		$upload = new UploadControl($this, $name);
 
-		$gallery = $this->service->find($this->getParam("id"));
-		$service = $this->service;
+		$gallery = $this->getGallery();
+		$service = $this->getPhotogalleryService()->getPhotoService();
 
 		$upload->setHandler(function (HttpUploadedFile $file) use ($gallery, $service) {
 			try {
@@ -54,9 +78,11 @@ class PhotogalleryAdmin extends BaseControl
 
 
 
-	protected function createComponentPhotosGrid($this, $name)
+	protected function createComponentGrid($name)
 	{
 		$grid = new Grid($this, $name);
+
+		$grid->setModel($this->getPhotogalleryService()->getPhotoService()->getFinder()->restrictByGallery($this->getGallery()));
 
 		// columns
 

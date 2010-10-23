@@ -24,8 +24,8 @@ UserService:
   class: Neuron\Model\UserService
   arguments: [%Doctrine\ORM\EntityManager]
 
-PhotoService:
-  class: Neuron\Model\PhotoService
+PhotogalleryService:
+  class: Neuron\Model\PhotogalleryService
   arguments: [%Doctrine\ORM\EntityManager]
 
 PageService:
