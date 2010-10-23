@@ -15,6 +15,7 @@ class UserForm extends EntityForm
 		$this->addText("surname");
 		$this->addText("mail");
 		$this->addText("username");
-		$this->addPassword("password");
+		$this->addText("password");
+		$this->addText("phone");
 	}
 }

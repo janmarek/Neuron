@@ -48,6 +48,12 @@ class User extends BaseEntity
 
 	/**
 	 * @var string
+	 * @Column(nullable=true)
+	 */
+	private $phone;
+
+	/**
+	 * @var string
 	 * @Column
 	 * @Validation({@NotBlank})
 	 */
@@ -130,6 +136,20 @@ class User extends BaseEntity
 	{
 		$this->salt = md5(uniqid("", true));
 		$this->password = sha1($this->salt . $password);
+	}
+
+
+
+	public function setPhone($phone)
+	{
+		$this->phone = $phone ?: null;
+	}
+
+
+
+	public function getPhone()
+	{
+		return $this->phone;
 	}
 
 	// </editor-fold>
