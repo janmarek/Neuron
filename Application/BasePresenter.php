@@ -29,6 +29,15 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 
 
 
+	public function afterRender()
+	{
+		if (!$this->getSession()->isStarted()) {
+			$this->getSession()->start();
+		}
+	}
+
+
+
 	/**
 	 * @return Nette\Templates\Template
 	 */

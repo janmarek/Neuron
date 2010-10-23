@@ -20,7 +20,7 @@ use Nette\Debug,
  * @author     John Doe
  * @package    MyApplication
  */
-class ErrorPresenter extends BasePresenter
+class ErrorPresenter extends \Neuron\Application\BasePresenter
 {
 
 	/**
