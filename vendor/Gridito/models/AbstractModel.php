@@ -2,6 +2,8 @@
 
 namespace Gridito;
 
+use ArrayIterator;
+
 /**
  * Abstract Gridito model
  *
@@ -20,19 +22,14 @@ abstract class AbstractModel implements IModel
 	private $sorting = array(null, null);
 
 	/** @var string */
-	private $primaryKey;
+	private $primaryKey = "id";
+
+	/** @var int */
+	private $count = null;
 
 
 
-	/**
-	 * Process action parameter
-	 * @param mixed param
-	 * @return mixed
-	 */
-	public function processActionParam($param)
-	{
-		return $param;
-	}
+	abstract protected function _count();
 
 
 
@@ -97,10 +94,34 @@ abstract class AbstractModel implements IModel
 
 
 
-	public function setupGrid(Grid $grid)
+	public function getIterator()
 	{
-		if (isset($this->primaryKey)) {
-			$grid->setPrimaryKey($this->primaryKey);
-		}
+		return new ArrayIterator($this->getItems());
 	}
+
+
+
+	public function getUniqueId($item)
+	{
+		return $item->{$this->getPrimaryKey()};
+	}
+
+
+
+	public function getItemsByUniqueIds(array $uniqueIds)
+	{
+		return array_map(array($this, "getItemByUniqueId"), $uniqueIds);
+	}
+
+
+
+	public function count()
+	{
+		if ($this->count === null) {
+			$this->count = $this->_count();
+		}
+
+		return $this->count;
+	}
+
 }

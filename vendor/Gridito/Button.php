@@ -10,17 +10,13 @@ namespace Gridito;
  */
 class Button extends BaseButton
 {
-	// <editor-fold defaultstate="collapsed" desc="variables">
-
 	/** @var bool */
 	private $ajax = false;
 
-	/** @var string|callback|false */
-	private $confirmationQuestion = false;
-
-	// </editor-fold>
+	/** @var string|callback|null */
+	private $confirmationQuestion = null;
 	
-	// <editor-fold defaultstate="collapsed" desc="getters & setters">
+	
 
 	/**
 	 * Is ajax?
@@ -48,18 +44,23 @@ class Button extends BaseButton
 
 	/**
 	 * Get confirmation question
-	 * @return string|callback|false
+	 * @param mixed row
+	 * @return string|callback|null
 	 */
-	public function getConfirmationQuestion()
+	public function getConfirmationQuestion($row)
 	{
-		return $this->confirmationQuestion;
+		if (is_callable($this->confirmationQuestion)) {
+			return call_user_func($this->confirmationQuestion, $row);
+		} else {
+			return $this->confirmationQuestion;
+		}
 	}
 
 
 
 	/**
 	 * Set confirmation question
-	 * @param string|callback|false confirmation question
+	 * @param string|callback|null confirmation question
 	 * @return Button
 	 */
 	public function setConfirmationQuestion($confirmationQuestion)
@@ -67,19 +68,17 @@ class Button extends BaseButton
 		$this->confirmationQuestion = $confirmationQuestion;
 		return $this;
 	}
-	
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="signal">
+	
 
 	/**
 	 * Handle click signal
 	 * @param string security token
 	 * @param mixed primary key
 	 */
-	public function handleClick($token, $pk = null)
+	public function handleClick($token, $uniqueId = null)
 	{
-		parent::handleClick($token, $pk);
+		parent::handleClick($token, $uniqueId);
 
 		if ($this->getPresenter()->isAjax()) {
 			$this->getGrid()->invalidateControl();
@@ -88,9 +87,7 @@ class Button extends BaseButton
 		}
 	}
 
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="helpers">
 
 	/**
 	 * Create button element
@@ -100,19 +97,10 @@ class Button extends BaseButton
 	protected function createButton($row = null)
 	{
 		$el = parent::createButton($row);
-
-		if ($this->ajax) {
-			$el->class($this->getGrid()->getAjaxClass());
-		}
-
-		if ($this->confirmationQuestion) {
-			$question = is_callable($this->confirmationQuestion) ? call_user_func($this->confirmationQuestion, $row) : $this->confirmationQuestion;
-			$el->onClick = "gridito.confirmationQuestion(event, " . json_encode($question) . ")";
-		}
+		$el->class[] = $this->isAjax() ? $this->getGrid()->getAjaxClass() : null;
+		$el->data("gridito-question", $this->getConfirmationQuestion($row));
 		
 		return $el;
 	}
-
-	// </editor-fold>
 
 }

@@ -12,8 +12,6 @@ use Nette\Web\Html;
  */
 abstract class BaseButton extends \Nette\Application\PresenterComponent
 {
-	// <editor-fold defaultstate="collapsed" desc="variables">
-
 	/** @var string */
 	private $label;
 
@@ -21,7 +19,7 @@ abstract class BaseButton extends \Nette\Application\PresenterComponent
 	private $handler;
 
 	/** @var string */
-	private $icon;
+	private $icon = null;
 
 	/** @var bool|callback */
 	private $visible = true;
@@ -29,9 +27,7 @@ abstract class BaseButton extends \Nette\Application\PresenterComponent
 	/** @var string|callback */
 	private $link = null;
 	
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="getters & setters">
 
 	/**
 	 * Get label
@@ -52,30 +48,6 @@ abstract class BaseButton extends \Nette\Application\PresenterComponent
 	public function setLabel($label)
 	{
 		$this->label = $label;
-		return $this;
-	}
-
-
-
-	/**
-	 * Get handler
-	 * @return callback
-	 */
-	public function getHandler()
-	{
-		return $this->handler;
-	}
-
-
-
-	/**
-	 * Set handler
-	 * @param callback handler
-	 * @return BaseButton
-	 */
-	public function setHandler($handler)
-	{
-		$this->handler = $handler;
 		return $this;
 	}
 
@@ -106,12 +78,69 @@ abstract class BaseButton extends \Nette\Application\PresenterComponent
 
 
 	/**
-	 * Get visible
-	 * @return bool|callback
+	 * Get handler
+	 * @return callback
 	 */
-	public function getVisible()
+	public function getHandler()
 	{
-		return $this->visible;
+		return $this->handler;
+	}
+
+
+
+	/**
+	 * Set handler
+	 * @param callback handler
+	 * @return BaseButton
+	 */
+	public function setHandler($handler)
+	{
+		if (!is_callable($handler)) {
+			throw new \InvalidArgumentException("Handler is not callable.");
+		}
+		
+		$this->handler = $handler;
+		return $this;
+	}
+
+
+
+	/**
+	 * Set link URL
+	 * @param string|callback link
+	 * @return BaseButton
+	 */
+	public function setLink($link)
+	{
+		$this->link = $link;
+		return $this;
+	}
+
+
+
+	/**
+	 * Get button link
+	 * @param mixed row
+	 * @return string
+	 */
+	protected function getLink($row = null)
+	{
+		// custom link
+		if (isset($this->link)) {
+			if (is_callable($this->link)) {
+				return call_user_func($this->link, $row);
+			} else {
+				return $this->link;
+			}
+		}
+
+		// link to click signal
+		$grid = $this->getGrid();
+
+		return $this->link('click!', array(
+			'token' => $grid->getSecurityToken(),
+			'uniqueId' => $row === null ? null : $grid->getModel()->getUniqueId($row),
+		));
 	}
 
 
@@ -156,37 +185,11 @@ abstract class BaseButton extends \Nette\Application\PresenterComponent
 
 
 	/**
-	 * Get link URL
-	 * @return string|callback
-	 */
-	public function getLink()
-	{
-		return $this->link;
-	}
-
-
-
-	/**
-	 * Set link URL
-	 * @param string|callback link
-	 * @return BaseButton
-	 */
-	public function setLink($link)
-	{
-		$this->link = $link;
-		return $this;
-	}
-
-	// </editor-fold>
-
-	// <editor-fold defaultstate="collapsed" desc="signals">
-
-	/**
 	 * Handle click signal
 	 * @param string security token
 	 * @param mixed primary key
 	 */
-	public function handleClick($token, $pk = null)
+	public function handleClick($token, $uniqueId = null)
 	{
 		$grid = $this->getGrid();
 
@@ -194,37 +197,11 @@ abstract class BaseButton extends \Nette\Application\PresenterComponent
 			throw new \Nette\Application\ForbiddenRequestException("Security token does not match. Possible CSRF attack.");
 		}
 
-		call_user_func($this->handler, $grid->getModel()->processActionParam($pk));
-	}
-
-	// </editor-fold>
-
-	// <editor-fold defaultstate="collapsed" desc="rendering">
-
-	/**
-	 * Get button link
-	 * @param mixed row
-	 * @return string
-	 */
-	protected function getButtonLink($row)
-	{
-		if ($this->link) {
-			if (is_callable($this->link)) {
-				return call_user_func($this->link, $row);
-			}
-
-			return $this->link;
+		if ($uniqueId === null) {
+			call_user_func($this->handler);
+		} else {
+			call_user_func($this->handler, $grid->getModel()->getItemByUniqueId($uniqueId));
 		}
-
-		$grid = $this->getGrid();
-
-		$params["token"] = $grid->getSecurityToken();
-
-		if ($row) {
-			$params["pk"] = $row->{$grid->getPrimaryKey()};
-		}
-
-		return $this->link("click!", $params);
 	}
 
 
@@ -232,19 +209,15 @@ abstract class BaseButton extends \Nette\Application\PresenterComponent
 	/**
 	 * Create button element
 	 * @param mixed row
-	 * @return Html
+	 * @return Nette\Web\Html
 	 */
 	protected function createButton($row = null)
 	{
-		$el = Html::el("a")
-			->href($this->getButtonLink($row))
+		return Html::el("a")
+			->href($this->getLink($row))
+			->data("gridito-icon", $this->icon)
+			->class(array("gridito-button"))
 			->setText($this->label);
-
-		if ($this->icon) {
-			$el->icon("ui-icon-" . $this->icon);
-		}
-
-		return $el;
 	}
 
 	
@@ -259,7 +232,5 @@ abstract class BaseButton extends \Nette\Application\PresenterComponent
 			echo $this->createButton($row);
 		}
 	}
-
-	// </editor-fold>
 
 }

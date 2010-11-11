@@ -13,9 +13,13 @@ interface IModel extends \IteratorAggregate, \Countable
 	const ASC = "asc";
 	const DESC = "desc";
 
-	public function setupGrid(Grid $grid);
+	public function getUniqueId($item);
+	
+	public function getItemByUniqueId($uniqueId);
 
-	public function processActionParam($param);
+	public function getItemsByUniqueIds(array $uniqueIds);
+	
+	public function getItems();
 
 	public function setSorting($column, $type);
 

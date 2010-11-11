@@ -12,15 +12,11 @@ use DibiFluent;
  */
 class DibiFluentModel extends AbstractModel
 {
-	// <editor-fold defaultstate="collapsed" desc="variables">
-
 	/** @var DibiFluent */
-	private $fluent;
+	protected $fluent;
 
 	/** @var string */
-	private $rowClass;
-
-	// </editor-fold>
+	protected $rowClass;
 
 
 
@@ -37,10 +33,16 @@ class DibiFluentModel extends AbstractModel
 
 
 
-	/**
-	 * Get iterator
-	 */
-	public function getIterator()
+	public function getItemByUniqueId($uniqueId)
+	{
+		$fluent = clone $this->fluent;
+		$fluent->where("%n = %i", $this->getPrimaryKey(), $uniqueId);
+		return $fluent->execute()->setRowClass($this->rowClass)->fetch();
+	}
+
+
+
+	public function getItems()
 	{
 		$fluent = clone $this->fluent;
 
@@ -52,9 +54,7 @@ class DibiFluentModel extends AbstractModel
 			$fluent->orderBy("[$sortColumn] $sortType");
 		}
 
-		$res = $fluent->execute();
-
-		return $res->setRowClass($this->rowClass)->getIterator();
+		return $fluent->execute()->setRowClass($this->rowClass)->fetchAll();
 	}
 
 
@@ -63,7 +63,7 @@ class DibiFluentModel extends AbstractModel
 	 * Item count
 	 * @return int
 	 */
-	public function count()
+	protected function _count()
 	{
 		return $this->fluent->count();
 	}
