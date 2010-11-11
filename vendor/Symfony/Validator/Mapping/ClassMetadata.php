@@ -2,6 +2,15 @@
 
 namespace Symfony\Component\Validator\Mapping;
 
+/*
+ * This file is part of the Symfony framework.
+ *
+ * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
@@ -38,7 +47,7 @@ class ClassMetadata extends ElementMetadata
             'groupSequence',
             'members',
             'name',
-           	'properties',
+            'properties',
             'shortName'
         ));
     }
@@ -74,10 +83,11 @@ class ClassMetadata extends ElementMetadata
     }
 
     /**
-     * Adds a constraint to the given property
+     * Adds a constraint to the given property.
      *
-     * @param  string     $property    The name of the property
-     * @param  Constraint $constraint  The constraint
+     * @param string     $property   The name of the property
+     * @param Constraint $constraint The constraint
+     *
      * @return ClassMetadata           This object
      */
     public function addPropertyConstraint($property, Constraint $constraint)
@@ -96,14 +106,15 @@ class ClassMetadata extends ElementMetadata
     }
 
     /**
-     * Adds a constraint to the getter of the given property
+     * Adds a constraint to the getter of the given property.
      *
      * The name of the getter is assumed to be the name of the property with an
      * uppercased first letter and either the prefix "get" or "is".
      *
-     * @param  string     $property    The name of the property
-     * @param  Constraint $constraint  The constraint
-     * @return ClassMetadata           This object
+     * @param string     $property   The name of the property
+     * @param Constraint $constraint The constraint
+     *
+     * @return ClassMetadata This object
      */
     public function addGetterConstraint($property, Constraint $constraint)
     {
@@ -121,9 +132,9 @@ class ClassMetadata extends ElementMetadata
     }
 
     /**
-     * Merges the constraints of the given metadata into this object
+     * Merges the constraints of the given metadata into this object.
      *
-     * @param ClassMetadata $source  The source metadata
+     * @param ClassMetadata $source The source metadata
      */
     public function mergeConstraints(ClassMetadata $source)
     {
@@ -173,7 +184,7 @@ class ClassMetadata extends ElementMetadata
     /**
      * Returns all metadatas of members describing the given property
      *
-     * @param string $property  The name of the property
+     * @param string $property The name of the property
      */
     public function getMemberMetadatas($property)
     {
@@ -181,9 +192,9 @@ class ClassMetadata extends ElementMetadata
     }
 
     /**
-     * Returns all properties for which constraints are defined
+     * Returns all properties for which constraints are defined.
      *
-     * @return array  An array of property names
+     * @return array An array of property names
      */
     public function getConstrainedProperties()
     {
@@ -191,9 +202,9 @@ class ClassMetadata extends ElementMetadata
     }
 
     /**
-     * Sets the default group sequence for this class
+     * Sets the default group sequence for this class.
      *
-     * @param array $groups  An array of group names
+     * @param array $groups An array of group names
      */
     public function setGroupSequence(array $groups)
     {
@@ -203,7 +214,7 @@ class ClassMetadata extends ElementMetadata
     }
 
     /**
-     * Returns whether this class has an overridden default group sequence
+     * Returns whether this class has an overridden default group sequence.
      *
      * @return boolean
      */
@@ -213,9 +224,9 @@ class ClassMetadata extends ElementMetadata
     }
 
     /**
-     * Returns the default group sequence for this class
+     * Returns the default group sequence for this class.
      *
-     * @return array  An array of group names
+     * @return array An array of group names
      */
     public function getGroupSequence()
     {
@@ -223,7 +234,7 @@ class ClassMetadata extends ElementMetadata
     }
 
     /**
-     * Returns a ReflectionClass instance for this class
+     * Returns a ReflectionClass instance for this class.
      *
      * @return ReflectionClass
      */

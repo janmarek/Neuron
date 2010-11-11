@@ -2,6 +2,15 @@
 
 namespace Symfony\Component\Validator\Mapping;
 
+/*
+ * This file is part of the Symfony framework.
+ *
+ * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 abstract class MemberMetadata extends ElementMetadata
@@ -14,9 +23,9 @@ abstract class MemberMetadata extends ElementMetadata
     /**
      * Constructor.
      *
-     * @param string $class     The name of the class this member is defined on
-     * @param string $name      The name of the member
-     * @param string $property  The property the member belongs to
+     * @param string $class    The name of the class this member is defined on
+     * @param string $name     The name of the member
+     * @param string $property The property the member belongs to
      */
     public function __construct($class, $name, $property)
     {
@@ -62,7 +71,7 @@ abstract class MemberMetadata extends ElementMetadata
     /**
      * Returns the name of the property this member belongs to
      *
-     * @return string  The property name
+     * @return string The property name
      */
     public function getPropertyName()
     {
@@ -102,8 +111,9 @@ abstract class MemberMetadata extends ElementMetadata
     /**
      * Returns the value of this property in the given object
      *
-     * @param  object $object  The object
-     * @return mixed           The property value
+     * @param object $object The object
+     *
+     * @return mixed The property value
      */
     abstract public function getValue($object);
 
