@@ -58,7 +58,7 @@ class PagesPresenter extends AdminPresenter
 	protected function createComponentGrid($name)
 	{
 		$grid = new Grid($this, $name);
-		$grid->setModel($this->service->finder);
+		$grid->setModel($this->service->getFinder()->getGriditoModel());
 
 		// columns
 

@@ -1,16 +1,16 @@
 <?php
 
 namespace Neuron\Model;
-// namespace Neuron\Bullshit;
 
 use Doctrine\ORM\Query;
+use Gridito\DoctrineQueryBuilderModel;
 
 /**
  * Entity finder
  *
  * @author Jan Marek
  */
-class EntityFinder extends \Nette\Object implements \Gridito\IModel
+class EntityFinder extends \Nette\Object implements \Countable
 {
 	/** @var Doctrine\ORM\QueryBuilder */
 	protected $qb;
@@ -27,7 +27,7 @@ class EntityFinder extends \Nette\Object implements \Gridito\IModel
 	/**
 	 * @return Neuron\Model\BaseEntity
 	 */
-	public function getOne()
+	public function getSingleResult()
 	{
 		return $this->qb->getQuery()->getSingleResult();
 	}
@@ -37,7 +37,7 @@ class EntityFinder extends \Nette\Object implements \Gridito\IModel
 	/**
 	 * @return array
 	 */
-	public function getAll()
+	public function getResult()
 	{
 		return $this->qb->getQuery()->getResult();
 	}
@@ -59,7 +59,7 @@ class EntityFinder extends \Nette\Object implements \Gridito\IModel
 	 * @param int id
 	 * @return EntityFinder
 	 */
-	public function id($id)
+	public function whereId($id)
 	{
 		$this->qb->andWhere("e.id = " . (int) $id);
 		return $this;
@@ -104,31 +104,13 @@ class EntityFinder extends \Nette\Object implements \Gridito\IModel
 
 
 
-	public function getIterator()
+	/**
+	 * Get Gridito model
+	 * @return Gridito\IModel
+	 */
+	public function getGriditoModel()
 	{
-		return new \ArrayIterator($this->getAll());
-	}
-
-
-
-	public function processActionParam($param)
-	{
-		$qb = clone $this->qb;
-		return $qb->where($qb->getRootAlias() . ".id = " . (int) $param)->getQuery()->getSingleResult();
-	}
-
-
-
-	public function setSorting($column, $type)
-	{
-		$this->orderBy($column, $type);
-	}
-
-
-
-	public function setupGrid(\Gridito\Grid $grid)
-	{
-
+		return new DoctrineQueryBuilderModel($this->qb);
 	}
 
 }

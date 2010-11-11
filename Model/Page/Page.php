@@ -2,18 +2,19 @@
 
 namespace Neuron\Model;
 
+use Nette\String;
+
 /**
  * Page entity
  *
- * @Entity
- * @Table(name="page")
+ * @MappedSuperClass
  *
  * @property string $name
  * @property string $url
  * @property string $description
  * @property string $text
  */
-class Page extends BaseEntity
+abstract class Page extends BaseEntity
 {
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
@@ -78,7 +79,7 @@ class Page extends BaseEntity
 
 	public function setUrl($url)
 	{
-		$this->url = \Nette\String::webalize($url);
+		$this->url = String::webalize($url);
 	}
 
 

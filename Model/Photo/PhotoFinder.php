@@ -9,7 +9,7 @@ namespace Neuron\Model;
  */
 class PhotoFinder extends EntityFinder
 {
-	public function restrictByGallery(Photogallery $gallery)
+	public function whereGallery(Photogallery $gallery)
 	{
 		$this->qb->andWhere("g.id = " . $gallery->getId());
 		return $this;

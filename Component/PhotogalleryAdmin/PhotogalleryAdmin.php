@@ -82,7 +82,10 @@ class PhotogalleryAdmin extends BaseControl
 	{
 		$grid = new Grid($this, $name);
 
-		$grid->setModel($this->getPhotogalleryService()->getPhotoService()->getFinder()->restrictByGallery($this->getGallery()));
+		$photoService = $this->getPhotogalleryService()->getPhotoService();
+		$model = $photoService->getFinder()->whereGallery($this->getGallery())->getGriditoModel();
+
+		$grid->setModel($model);
 
 		// columns
 
