@@ -4,13 +4,14 @@ namespace Neuron\Webloader;
 
 use Nette\Environment;
 use cssmin;
+use WebLoader;
 
 /**
  * CssLoader
  *
  * @author Jan Marek
  */
-class CssLoader extends \WebLoader\CssLoader
+class CssLoader extends WebLoader\CssLoader
 {
 	public function __construct(\Nette\IComponentContainer $parent = null, $name = null)
 	{
@@ -20,6 +21,8 @@ class CssLoader extends \WebLoader\CssLoader
 		$this->setTempUri(Environment::getVariable("baseUri") . "data/webtemp");
 		$this->setTempPath(WWW_DIR . "/data/webtemp");
 		$this->setJoinFiles(Environment::isProduction());
+
+		$this->fileFilters[] = new Webloader\LessFilter;
 
 		if (Environment::isProduction()) {
 			$this->filters[] = function ($code) {
