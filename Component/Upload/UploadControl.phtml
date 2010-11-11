@@ -33,7 +33,7 @@ $(function() {
 		onFinishOne: function(event, response, name, number, total) {
 			$("#" + {$control->getUniqueId()} + "-queue .upload" + number + " .progress").progressbar("value", 100);
 		},
-		{ifset $redirectUri}
+		{if isset($redirectUri)}
 		onFinish: function(event, total) {
 			window.location = {$redirectUri};
 		},

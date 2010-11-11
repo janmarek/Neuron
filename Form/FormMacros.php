@@ -14,11 +14,14 @@ use Nette\Templates\LatteMacros, Nette\Templates\LatteFilter;
  */
 class FormMacros
 {
+	private static $latte;
+
 	private static $form;
 
 
 
 	public static function register() {
+		self::$latte = new LatteMacros;
 		LatteMacros::$defaultMacros["form"] = '<?php %Neuron\Form\FormMacros::macroBegin% ?>';
 		LatteMacros::$defaultMacros["input"] = '<?php %Neuron\Form\FormMacros::macroInput% ?>';
 		LatteMacros::$defaultMacros["label"] = '<?php %Neuron\Form\FormMacros::macroLabel% ?>';
@@ -122,8 +125,8 @@ class FormMacros
 	
 
 	private static function fetchNameAndModifiers($code) {
-		$name = LatteFilter::fetchToken($code);
-		$modifiers = LatteMacros::formatArray($code);
+		$name = self::$latte->fetchToken($code);
+		$modifiers = self::$latte->formatArray($code);
 
 		$name = String::startsWith($name, '$') ? $name : "'$name'";
 		$modifiers = $modifiers ?: "array()";

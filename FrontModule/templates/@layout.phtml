@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-	<title>{ifset $title}{$title} - {/if}Neuron</title>
+	<title>{if isset($title)}{$title} - {/if}Neuron</title>
 
 	<meta name="description" content="{$description}" n:ifset="$description">
 	<meta name="keywords" content="{$keywords}" n:ifset="$keywords">
@@ -39,7 +39,7 @@
 				<div class="{if $flash->type == 'error'}error{else}success{/if}" n:foreach="$flashes as $flash">{$flash->message}</div>
 				{/snippet}
 
-				@{include #content}
+				{include #content}
 			</div>
 		</div>
 
