@@ -14,9 +14,13 @@ class LessFilter
 {
 	private $lc;
 		
-	public function __construct()
+	private function getLessC()
 	{
-		$this->lc = new lessc;
+		if (empty($this->lc)) {
+			$this->lc = new lessc;
+		}
+
+		return $this->lc;
 	}
 	
 	/**
@@ -26,10 +30,10 @@ class LessFilter
 	 * @param string file
 	 * @return string
 	 */
-	public function __invoke($code, WebLoader $loader, $file = null)
+	public function __invoke($code, WebLoader $loader, $file)
 	{
 		if (String::endsWith($file, ".less")) {
-			return $this->lc->parse($code);
+			return $this->getLessC()->parse($code);
 		}
 		
 		return $code;
