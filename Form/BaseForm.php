@@ -13,6 +13,8 @@ abstract class BaseForm extends \Nette\Application\AppForm
 
 	private $redirect;
 
+	private $handler;
+
 
 	public function __construct(\Nette\IComponentContainer $parent = NULL, $name = NULL)
 	{
@@ -131,7 +133,25 @@ abstract class BaseForm extends \Nette\Application\AppForm
 
 
 
-	abstract protected function handler($values);
+	public function setHandler($handler)
+	{
+		if (!is_callable($handler)) {
+			throw new \InvalidArgumentException;
+		}
+
+		$this->handler = $handler;
+	}
+
+
+	
+	protected function handler($values)
+	{
+		if (!$this->handler) {
+			throw new \InvalidStateException;
+		}
+
+		call_user_func($this->handler, $values);
+	}
 
 
 

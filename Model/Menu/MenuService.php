@@ -40,6 +40,26 @@ class MenuService extends \Nette\Object
 
 
 
+	public function fetchTreeAsArray()
+	{
+		return $this->nestedSetManager->fetchTreeAsArray();
+	}
+
+
+	public function getGriditoModel()
+	{
+		return new MenuGriditoModel($this);
+	}
+
+
+
+	public function count()
+	{
+		return $this->em->createQuery("select count(e) fullcount from $this->entityName e")->getSingleScalarResult();
+	}
+
+
+
 	/**
 	 * Find entity
 	 * @param int id

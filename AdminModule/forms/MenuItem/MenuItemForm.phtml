@@ -1,0 +1,18 @@
+{form $form}
+
+<fieldset>
+	<div class="error" n:foreach="$formErrors as $error">{$error}</div>
+
+	<p>
+		{label name}Popis{/label}<br>
+		{input name}
+	</p>
+	<p>
+		{label url}URL{/label}<br>
+		{input url}
+	</p>
+
+	<p>{input s value => "Uložit"}</p>
+</fieldset>
+
+{/form}

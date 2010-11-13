@@ -32,6 +32,10 @@ PageService:
   class: Neuron\Model\Service
   arguments: [%Doctrine\ORM\EntityManager, Neuron\Model\Page]
 
+MenuService:
+  class: Neuron\Model\MenuService
+  arguments: [%Doctrine\ORM\EntityManager]
+
 # webloader
 
 AdminCss:

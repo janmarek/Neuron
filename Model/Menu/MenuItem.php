@@ -4,6 +4,7 @@ namespace Neuron\Model;
 
 use Nette\Environment;
 use Nette\Web\HttpRequest, Nette\Web\UriScript;
+use Nette\String;
 
 /**
  * Menu item
@@ -52,7 +53,7 @@ class MenuItem extends BaseEntity implements \DoctrineExtensions\NestedSet\Node
 	public function getUrl()
 	{
 		if (isset($this->destination)) {
-			return Environment::getApplication()->getPresenter()->link($this->destination, $this->params);
+			return Environment::getApplication()->getPresenter()->link("//:$this->destination", $this->params);
 		} else {
 			return $this->url;
 		}
@@ -62,20 +63,27 @@ class MenuItem extends BaseEntity implements \DoctrineExtensions\NestedSet\Node
 
 	public function setUrl($url)
 	{
-		$httpRequest = new HttpRequest(new UriScript($url));
+		$uriScript = new UriScript($url);
+		$uriScript->setScriptPath(Environment::getHttpRequest()->getUri()->getScriptPath());
+
+		$httpRequest = new HttpRequest($uriScript);
 		$presenterRequest = Environment::getApplication()->getRouter()->match($httpRequest);
 
-		if ($presenterRequest === null) {
+		if ($presenterRequest === null || !String::startsWith($url, Environment::getVariable("baseUri"))) {
 			$this->url = $url;
+			$this->destination = null;
+			$this->params = array();
 			
 		} else {
 			$presenter = $presenterRequest->getPresenterName();
 			$params = $presenterRequest->getParams();
 			$action = isset($params["action"]) ? $params["action"] : "default";
+			$module = isset($params["module"]) ? $params["module"] . ":" : "";
 			unset($params["action"]);
 			
-			$this->destination = "$presenter:$action";
+			$this->destination = "$module$presenter:$action";
 			$this->params = $params;
+			$this->url = null;
 		}
 	}
 
