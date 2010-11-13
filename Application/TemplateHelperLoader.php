@@ -10,7 +10,7 @@ namespace Neuron;
 class TemplateHelperLoader
 {
 	protected $helpers = array(
-		"texy" => "Neuron\Texy\TexyHelper::process",
+		"texy" => "Neuron\Texy\TemplateHelper::process",
 		"thumbnail" => "Neuron\Image\ThumbnailHelper::createThumbnail",
 	);
 
