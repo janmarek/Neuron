@@ -90,13 +90,6 @@ class MenuItem extends BaseEntity implements \DoctrineExtensions\NestedSet\Node
 
 
 
-//	public function getId()
-//	{
-//		return parent::getId();
-//	}
-
-
-
 	public function getLeftValue()
 	{
 		return $this->lft;
