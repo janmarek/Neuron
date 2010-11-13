@@ -39,6 +39,7 @@ $.widget("ui.gridito", {
 				icons: {
 					primary: el.attr("data-gridito-icon")
 				},
+				text: !el.hasClass("gridito-hide-text"),
 				disabled: el.hasClass("disabled")
 			});
 			
