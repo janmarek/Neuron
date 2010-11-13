@@ -13,7 +13,7 @@ use Gridito\DoctrineModel;
  *
  * @property-read Neuron\Model\EntityFinder $finder
  */
-class Service extends \Nette\Object implements IService
+class Service extends \Nette\Object
 {
 	/** @var \Doctrine\ORM\EntityManager */
 	private $entityManager;
