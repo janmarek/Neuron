@@ -92,3 +92,8 @@ jQuery(function($){
 		isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['cs']);
 });
+
+// grid
+$("div.gridito").livequery(function () {
+	$(this).gridito();
+});
