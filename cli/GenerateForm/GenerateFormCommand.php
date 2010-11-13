@@ -103,11 +103,11 @@ class GenerateFormCommand extends \Symfony\Component\Console\Command\Command
 			
 			if (!file_exists($dir)) {
 				mkdir($dir);
-				$output->write("Directory $dir created.");
+				$output->write("Directory $dir created." . PHP_EOL);
 			}
 
 			file_put_contents($path, (string) $content);
-			$output->write("File $path created.");
+			$output->write("File $path created." . PHP_EOL);
 		}
 	}
 
