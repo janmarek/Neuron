@@ -21,28 +21,31 @@ class User extends BaseEntity
 	/**
 	 * @var string
 	 * @Column
-	 * @Validation({@NotBlank})
+	 * @validation:NotBlank
 	 */
 	private $name;
 
 	/**
 	 * @var string
 	 * @Column
-	 * @Validation({@NotBlank})
+	 * @validation:NotBlank
 	 */
 	private $surname;
 
 	/**
 	 * @var string
 	 * @Column(unique=true)
-	 * @Validation({@NotBlank, @Email})
+	 * @validation:Validation({
+	 *   @validation:NotBlank,
+	 *   @validation:Email
+	 * })
 	 */
 	private $mail;
 
 	/**
 	 * @var string
 	 * @Column(unique=true)
-	 * @Validation({@NotBlank})
+	 * @validation:NotBlank
 	 */
 	private $username;
 
@@ -55,7 +58,7 @@ class User extends BaseEntity
 	/**
 	 * @var string
 	 * @Column
-	 * @Validation({@NotBlank})
+	 * @validation:NotBlank
 	 */
 	private $password;
 

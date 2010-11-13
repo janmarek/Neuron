@@ -21,28 +21,28 @@ abstract class Page extends BaseEntity
 	/**
 	 * @var string
 	 * @Column(unique=true)
-	 * @Validation({@NotBlank})
+	 * @validation:NotBlank
 	 */
 	private $name;
 
 	/**
 	 * @var string
 	 * @Column(unique=true)
-	 * @Validation({@NotBlank})
+	 * @validation:NotBlank
 	 */
 	private $url;
 
 	/**
 	 * @var string
 	 * @Column
-	 * @Validation({@NotBlank})
+	 * @validation:NotBlank
 	 */
 	private $description;
 
 	/**
 	 * @var string
 	 * @Column(type="text")
-	 * @Validation({@NotBlank})
+	 * @validation:NotBlank
 	 */
 	private $text;
 

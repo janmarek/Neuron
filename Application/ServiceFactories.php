@@ -21,13 +21,11 @@ class ServiceFactories
 {
 	public static function createValidator()
 	{
-		$file = NEURON_DIR . '/vendor/Symfony/Validator/Resources/i18n/messages.en.xml';
 		$loader = new Validator\Mapping\Loader\AnnotationLoader;
 		$cache = Environment::isProduction() ? new ValidatorCache(Environment::getCache("SymfonyValidator")) : null;
 		$metadataFactory = new Validator\Mapping\ClassMetadataFactory($loader, $cache);
 		$validatorFactory = new Validator\ConstraintValidatorFactory;
-		$messageInterpolator = new Validator\MessageInterpolator\XliffMessageInterpolator($file);
-		$validator = new Validator\Validator($metadataFactory, $validatorFactory, $messageInterpolator);
+		$validator = new Validator\Validator($metadataFactory, $validatorFactory);
 
 		return $validator;
 	}
