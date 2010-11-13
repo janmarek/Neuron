@@ -1,0 +1,29 @@
+<ul class="control menu">
+	{if $useHomepage}
+	<li>
+		{if $homepage->isCurrent()}
+		<span class="active"><strong>{$homepage->getLabel()}</strong></span>
+		{else}
+		<a href="{$homepage->getUrl()}"{if $homepage->getOpenInNewWindow()} target="_blank"{/if}>{$homepage->getLabel()}</a>
+		{/if}
+	</li>
+	{/if}
+
+	{block #menu}
+	{foreach $children as $item}
+	<li>
+		{if $item->isCurrent()}
+		<span class="active"><strong>{$item->getLabel()}</strong></span>
+		{else}
+		<a href="{$item->getUrl()}"{if $item->getOpenInNewWindow()} target="_blank"{/if}>{$item->getLabel()}</a>
+		{/if}
+		
+		{if $renderChildren && count($item->getComponents()) > 0}
+		<ul>
+			{include #menu, children => $item->getComponents()}
+		</ul>
+		{/if}
+	</li>
+	{/foreach}
+	{/block}
+</ul>
