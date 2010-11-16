@@ -1,0 +1,93 @@
+{!='<?php'}
+
+namespace {$application}\Presenter\AdminModule;
+
+use Gridito\Grid;
+use Neuron\Form\{$name}Form;
+
+/**
+ * {$name} presenter
+ *
+ * @author Jan Marek
+ */
+class {$name}Presenter extends \Neuron\Presenter\AdminModule\AdminPresenter
+{
+	/** @var \Neuron\Model\{$name}\Service */
+	private $service;
+
+
+	
+	public function startup()
+	{
+		parent::startup();
+		$this->service = $this->getService("{$name}Service");
+	}
+
+
+
+	public function renderDefault()
+	{
+		$this->template->title = "";
+	}
+
+
+
+	public function actionAdd()
+	{
+		$this->template->title = "Přidat";
+		$this["form"]->bindEntity($this->service->createBlank());
+		$this["form"]->setSuccessFlashMessage("");
+	}
+
+
+
+	public function actionEdit($id)
+	{
+		$entity = $this->service->find($id);
+		$this->template->title = "Upravit $entity->name";
+		$this["form"]->bindEntity($entity);
+		$this["form"]->setSuccessFlashMessage("");
+	}
+
+
+
+	protected function createComponentForm($name)
+	{
+		$form = new {$name}Form($this, $name);
+		$form->setEntityService($this->service);
+		$form->setRedirect("default");
+	}
+
+
+
+	protected function createComponentGrid($name)
+	{
+		$grid = new Grid($this, $name);
+		$grid->setModel($this->service->getFinder()->getGriditoModel());
+
+		$presenter = $this;
+
+		$grid->addButton("edit", "Upravit", array(
+			"icon" => "ui-icon-pencil",
+			"link" => function ($entity) use ($presenter) {
+				return $presenter->link("edit", $entity->getId());
+			},
+		));
+
+		$service = $this->service;
+
+		$grid->addButton("delete", "Smazat", array(
+			"icon" => "ui-icon-closethick",
+			"handler" => function ($entity) use ($presenter, $service) {
+				$service->delete($entity);
+				$presenter->flashMessage("");
+				$presenter->redirect("this");
+			},
+		));
+
+		$grid->addToolbarButton("add", "Přidat", array(
+			"icon" => "ui-icon-plusthick",
+			"link" => $this->link("add"),
+		));
+	}
+}

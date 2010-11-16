@@ -24,7 +24,7 @@ class GenerateForm extends \Symfony\Component\Console\Command\Command
 			->setDescription("Generate Neuron\Form\EntityForm class and latte template.")
 			->setHelp("Generate Neuron\Form\EntityForm class and latte template.")
 			->setDefinition(array(
-				new InputOption("output", "o", InputOption::PARAMETER_REQUIRED, "Output directory"),
+				new InputOption("output", "o", InputOption::PARAMETER_OPTIONAL, "Output directory"),
 				new InputOption("entity", "e", InputOption::PARAMETER_REQUIRED, "Entity name"),
 			));
 	}
@@ -33,8 +33,8 @@ class GenerateForm extends \Symfony\Component\Console\Command\Command
 	
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$dir = $input->getOption("output");
 		$name = ClassReflection::from($input->getOption("entity"))->getShortName();
+		$dir = $input->getOption("output") ?: APP_DIR . "/AdminModule/forms/$name";
 
 		$em = $this->getHelper("em")->getEntityManager();
 		/* @var $em \Doctrine\ORM\EntityManager */

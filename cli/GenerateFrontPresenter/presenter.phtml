@@ -1,0 +1,30 @@
+{!='<?php'}
+
+namespace {$application}\Presenter\FrontModule;
+
+/**
+ * {$name} presenter
+ *
+ * @author Jan Marek
+ */
+class {$name}Presenter extends \Neuron\Presenter\FrontModule\FrontPresenter
+{
+	/** @var \Digitovarna\Model\{$name}\Service */
+	private $service;
+
+	
+
+	protected function startup()
+	{
+		parent::startup();
+		$this->service = $this->getService("{$name}Service");
+	}
+
+
+
+	public function actionDefault()
+	{
+
+	}
+
+}
