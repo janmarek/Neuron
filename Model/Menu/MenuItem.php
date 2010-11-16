@@ -50,6 +50,19 @@ class MenuItem extends BaseEntity implements \DoctrineExtensions\NestedSet\Node
 
 
 
+	public function isCurrent()
+	{
+		if (empty($this->destination)) {
+			return false;
+		}
+
+		$presenter = Environment::getApplication()->getPresenter();
+		$presenter->link(":$this->destination", $this->params);
+		return $presenter->getLastCreatedRequestFlag("current");
+	}
+
+
+
 	public function getUrl()
 	{
 		if (isset($this->destination)) {

@@ -95,26 +95,4 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 		return $list;
 	}
 
-	/**
-	 * Login form component factory
-	 */
-	protected function createComponentLoginForm()
-	{
-		return new LoginForm;
-	}
-
-
-
-	protected function createComponentJs()
-	{
-		return $this->getService("FrontJs");
-	}
-
-
-
-	protected function createComponentCss()
-	{
-		return $this->getService("FrontCss");
-	}
-
 }

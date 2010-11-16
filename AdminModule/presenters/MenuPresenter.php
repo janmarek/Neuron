@@ -107,6 +107,7 @@ class MenuPresenter extends AdminPresenter
 	{
 		$grid = new Grid($this, $name);
 		$grid->setModel($this->service->getGriditoModel());
+		$grid->setItemsPerPage($this->service->count());
 
 		$grid->addColumn("name", "Popis", array(
 			"renderer" => function ($node) {

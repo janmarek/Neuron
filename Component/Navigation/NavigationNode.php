@@ -1,5 +1,7 @@
 <?php
 
+namespace Neuron;
+
 /**
  * Navigation node
  *
@@ -11,7 +13,7 @@
  * @property-read bool $current
  * @property bool $openInNewWindow
  */
-class NavigationNode extends Nette\ComponentContainer
+class NavigationNode extends \Nette\ComponentContainer
 {
 	/** @var string */
 	private $label;
@@ -151,7 +153,7 @@ class NavigationNode extends Nette\ComponentContainer
 	public function setAsCurrent($setAsCurrent)
 	{
 		if ($setAsCurrent) {
-			$this->lookup("Navigation")->setCurrent($this);
+			$this->lookup("Neuron\NavigationControl")->setCurrent($this);
 		}
 
 		return $this;

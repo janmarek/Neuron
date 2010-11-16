@@ -1,12 +1,14 @@
 <?php
 
+namespace Neuron;
+
 /**
  * Navigation
  *
  * @author Jan Marek
  * @license MIT
  */
-class Navigation extends Nette\Application\Control
+class NavigationControl extends BaseControl
 {
 	/** @var NavigationNode */
 	private $current;
@@ -92,6 +94,13 @@ class Navigation extends Nette\Application\Control
 	public function render()
 	{
 		$this->renderMenu();
+	}
+
+	
+
+	public function getTemplateFilePath()
+	{
+		return __DIR__ . "/menu.phtml";
 	}
 
 
