@@ -2,7 +2,7 @@
 
 namespace Neuron\Presenter\FrontModule;
 
-class HomepagePresenter extends \Neuron\Application\BasePresenter
+class HomepagePresenter extends FrontPresenter
 {
 
 }

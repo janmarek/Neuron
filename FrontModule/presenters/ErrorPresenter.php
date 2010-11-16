@@ -2,25 +2,12 @@
 
 namespace Neuron\Presenter\FrontModule;
 
-/**
- * My Application
- *
- * @copyright  Copyright (c) 2010 John Doe
- * @package    MyApplication
- */
-
-use Nette\Debug,
-	Nette\Application\BadRequestException;
-
-
+use Nette\Debug, Nette\Application\BadRequestException;
 
 /**
- * Error presenter.
- *
- * @author     John Doe
- * @package    MyApplication
+ * Error presenter
  */
-class ErrorPresenter extends \Neuron\Application\BasePresenter
+class ErrorPresenter extends FrontPresenter
 {
 
 	/**
