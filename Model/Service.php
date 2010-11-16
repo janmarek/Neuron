@@ -56,10 +56,13 @@ class Service extends \Nette\Object
 	}
 
 
-	
-	protected function createQueryBuilder()
+
+	/**
+	 * @return \Doctrine\ORM\QueryBuilder
+	 */
+	protected function createQueryBuilder($alias = "e")
 	{
-		return $this->entityManager->getRepository($this->getEntityName())->createQueryBuilder("e");
+		return $this->entityManager->getRepository($this->getEntityName())->createQueryBuilder($alias);
 	}
 
 

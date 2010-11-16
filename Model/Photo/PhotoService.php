@@ -36,10 +36,10 @@ class PhotoService extends Service
 
 
 
-	protected function createQueryBuilder()
+	protected function createQueryBuilder($alias = "e")
 	{
 		$repository = $this->getEntityManager()->getRepository($this->getEntityName());
-		return $repository->createQueryBuilder("e")->leftJoin("e.gallery", "g");
+		return $repository->createQueryBuilder($alias)->leftJoin("e.gallery", "g");
 	}
 
 

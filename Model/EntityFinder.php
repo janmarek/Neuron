@@ -16,7 +16,8 @@ class EntityFinder extends \Nette\Object implements \Countable
 	protected $qb;
 
 
-
+	
+	// TODO $qb should be constructed here from $em
 	public function __construct($qb)
 	{
 		$this->qb = $qb;
@@ -61,7 +62,9 @@ class EntityFinder extends \Nette\Object implements \Countable
 	 */
 	public function whereId($id)
 	{
-		$this->qb->andWhere("e.id = " . (int) $id);
+		$alias = $this->qb->getRootAlias();
+		$this->qb->andWhere("$alias.id = :id");
+		$this->qb->setParameter("id", $id);
 		return $this;
 	}
 
