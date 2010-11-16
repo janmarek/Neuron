@@ -131,7 +131,7 @@ class NavigationNode extends \Nette\ComponentContainer
 	 * @param string url
 	 * @return NavigationNode added node
 	 */
-	public function add($label, $url)
+	public function add($label, $url = null)
 	{
 		$navigationNode = new self;
 		$navigationNode->label = $label;

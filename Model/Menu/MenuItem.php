@@ -83,24 +83,24 @@ class MenuItem extends BaseEntity implements \DoctrineExtensions\NestedSet\Node
 		$presenterRequest = Environment::getApplication()->getRouter()->match($httpRequest);
 
 		if ($presenterRequest === null || !String::startsWith($url, Environment::getVariable("baseUri"))) {
-			$this->url = $url;
+			$this->url = $url ?: null;
 			$this->destination = null;
 			$this->params = array();
-			
+
 		} else {
 			$presenter = $presenterRequest->getPresenterName();
 			$params = $presenterRequest->getParams();
 			$action = isset($params["action"]) ? $params["action"] : "default";
 			$module = isset($params["module"]) ? $params["module"] . ":" : "";
 			unset($params["action"]);
-			
+
 			$this->destination = "$module$presenter:$action";
 			$this->params = $params;
 			$this->url = null;
 		}
 	}
 
-	
+
 	// Node interface
 
 

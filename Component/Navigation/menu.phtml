@@ -3,8 +3,10 @@
 	<li>
 		{if $homepage->isCurrent()}
 		<span class="active"><strong>{$homepage->getLabel()}</strong></span>
-		{else}
+		{elseif $homepage->getUrl() !== null}
 		<a href="{$homepage->getUrl()}"{if $homepage->getOpenInNewWindow()} target="_blank"{/if}>{$homepage->getLabel()}</a>
+		{else}
+		<span>{$item->getLabel()}</span>
 		{/if}
 	</li>
 	{/if}
@@ -14,10 +16,12 @@
 	<li>
 		{if $item->isCurrent()}
 		<span class="active"><strong>{$item->getLabel()}</strong></span>
-		{else}
+		{elseif $item->getUrl() !== null}
 		<a href="{$item->getUrl()}"{if $item->getOpenInNewWindow()} target="_blank"{/if}>{$item->getLabel()}</a>
+		{else}
+		<span>{$item->getLabel()}</span>
 		{/if}
-		
+
 		{if $renderChildren && count($item->getComponents()) > 0}
 		<ul>
 			{include #menu, children => $item->getComponents()}

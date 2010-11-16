@@ -12,7 +12,7 @@ class NavigationControl extends BaseControl
 {
 	/** @var NavigationNode */
 	private $current;
-	
+
 	/** @var bool */
 	private $useHomepage = false;
 
@@ -38,7 +38,7 @@ class NavigationControl extends BaseControl
 	 * @param string url
 	 * @return NavigationNode added node
 	 */
-	public function add($label, $url)
+	public function add($label, $url = null)
 	{
 		return $this->getComponent("homepage")->add($label, $url);
 	}
@@ -96,7 +96,7 @@ class NavigationControl extends BaseControl
 		$this->renderMenu();
 	}
 
-	
+
 
 	public function getTemplateFilePath()
 	{
@@ -141,5 +141,5 @@ class NavigationControl extends BaseControl
 		$template->items = $items;
 		$template->render();
 	}
-	
+
 }
