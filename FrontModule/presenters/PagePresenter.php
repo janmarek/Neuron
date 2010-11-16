@@ -7,7 +7,7 @@ namespace Neuron\Presenter\FrontModule;
  *
  * @author Jan Marek
  */
-class PagePresenter extends \Neuron\Application\BasePresenter
+class PagePresenter extends FrontPresenter
 {
 	public function actionDefault($id)
 	{
