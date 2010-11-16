@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuron\Console;
+namespace Neuron\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface, Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  *
  * @author Jan Marek
  */
-class GenerateFormCommand extends \Symfony\Component\Console\Command\Command
+class GenerateForm extends \Symfony\Component\Console\Command\Command
 {
 	protected function configure()
 	{

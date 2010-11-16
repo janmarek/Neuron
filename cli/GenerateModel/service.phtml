@@ -1,0 +1,17 @@
+{!='<?php'}
+
+namespace {$namespace};
+
+/**
+ * {$name} service
+ *
+ * @author Jan Marek
+ */
+class Service extends \Neuron\Model\Service
+{
+	public function __construct($em)
+	{
+		parent::__construct($em, __NAMESPACE__ . "\{$name}");
+	}
+
+}
