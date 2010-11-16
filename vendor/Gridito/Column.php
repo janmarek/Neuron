@@ -189,7 +189,7 @@ class Column extends \Nette\Application\Control
 	 */
 	public static function renderDateTime($value, $format)
 	{
-		echo $value->format($this->dateTimeFormat);
+		echo $value->format($format);
 	}
 
 

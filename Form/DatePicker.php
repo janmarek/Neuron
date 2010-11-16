@@ -3,8 +3,9 @@
 namespace Neuron\Form;
 
 use DateTime;
+use Nette\Forms\IFormControl;
 
-class DatePicker extends TextInput
+class DatePicker extends \Nette\Forms\TextInput
 {
 	/** @var string */
 	private $format = "j.n.Y";

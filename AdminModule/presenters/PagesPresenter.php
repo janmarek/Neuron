@@ -66,7 +66,7 @@ class PagesPresenter extends AdminPresenter
 		$grid->addColumn("name", "Název")->setSortable(true);
 		$grid->addColumn("url", "URL")->setSortable(true);
 		$grid->addColumn("description", "Popis")->setSortable(true);
-		$grid->addColumn("allowed", "Samostatný článek")->setSortable(true);
+		$grid->addColumn("allowed", "Samostatný")->setSortable(true);
 
 		// buttons
 
@@ -74,14 +74,15 @@ class PagesPresenter extends AdminPresenter
 		$service = $this->service;
 
 		$grid->addButton("edit", "Upravit", array(
-			"icon" => "pencil",
+			"icon" => "ui-icon-pencil",
 			"link" => function ($page) use ($presenter) {
 				return $presenter->link("edit", array("id" => $page->id));
 			},
+			"showText" => false,
 		));
 
 		$grid->addButton("delete", "Smazat", array(
-			"icon" => "closethick",
+			"icon" => "ui-icon-closethick",
 			"handler" => function ($entity) use ($service, $presenter) {
 				$service->delete($entity);
 				$presenter->flashMessage("Stránka byla úspěšně smazána.");
@@ -90,12 +91,13 @@ class PagesPresenter extends AdminPresenter
 			"confirmationQuestion" => function ($page) {
 				return "Opravdu chcete smazat stránku '$page->name'?";
 			},
+			"showText" => false,
 		));
 
 		// toolbar
 
 		$grid->addToolbarButton("new", "Nová stránka", array(
-			"icon" => "plusthick",
+			"icon" => "ui-icon-plusthick",
 			"link" => $this->link("add"),
 		));
 	}
