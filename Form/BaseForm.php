@@ -64,6 +64,12 @@ abstract class BaseForm extends \Nette\Application\AppForm
 	}
 
 
+	public function addTexyla($name, $label = null, $cols = 40, $rows = 10)
+	{
+		return $this->addTextArea($name, $label, $cols, $rows)->setAttribute("class", "texyla");
+	}
+
+
 
 	protected function getTemplateFile()
 	{
