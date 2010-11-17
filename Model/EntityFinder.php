@@ -4,6 +4,7 @@ namespace Neuron\Model;
 
 use Doctrine\ORM\Query;
 use Gridito\DoctrineQueryBuilderModel;
+use Nette\Paginator;
 
 /**
  * Entity finder
@@ -46,12 +47,26 @@ class EntityFinder extends \Nette\Object implements \Countable
 
 
 	/**
+	 * @return array
+	 */
+	public function getPaginatedResult(\Nette\Paginator $paginator)
+	{
+		return $this->qb->getQuery()
+			->setFirstResult($paginator->getOffset())
+			->setMaxResults($paginator->getItemsPerPage())
+			->getResult();
+	}
+
+
+
+	/**
 	 * @return int
 	 */
 	public function count()
 	{
 		$qb = clone $this->qb;
-		return $qb->select('count(e) fullcount')->getQuery()->getSingleResult(Query::HYDRATE_SINGLE_SCALAR);
+		$alias = $qb->getRootAlias();
+		return $qb->select("count($alias) fullcount")->getQuery()->getSingleResult(Query::HYDRATE_SINGLE_SCALAR);
 	}
 
 
@@ -78,30 +93,6 @@ class EntityFinder extends \Nette\Object implements \Countable
 	public function orderBy($field, $type = self::ASC)
 	{
 		$this->qb->orderBy($field, $type);
-		return $this;
-	}
-
-
-
-	/**
-	 * @param int limit
-	 * @return EntityFinder
-	 */
-	public function setLimit($limit)
-	{
-		$this->qb->setMaxResults($limit);
-		return $this;
-	}
-
-
-
-	/**
-	 * @param int offset
-	 * @return EntityFinder
-	 */
-	public function setOffset($offset)
-	{
-		$this->qb->setFirstResult($offset);
 		return $this;
 	}
 
