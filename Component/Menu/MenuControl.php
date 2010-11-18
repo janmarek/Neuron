@@ -31,6 +31,7 @@ class MenuControl extends NavigationControl
 		}
 
 		$newNode->setAsCurrent($menuItem->isCurrent());
+		$newNode->setOpenInNewWindow($menuItem->isExternal());
 
 		foreach ($node->getChildren() as $child) {
 			$this->addMenuNode($newNode, $child, false);

@@ -63,6 +63,13 @@ class MenuItem extends BaseEntity implements \DoctrineExtensions\NestedSet\Node
 
 
 
+	public function isExternal()
+	{
+		return isset($this->url) && empty($this->destination);
+	}
+
+
+
 	public function getUrl()
 	{
 		if (isset($this->destination)) {
