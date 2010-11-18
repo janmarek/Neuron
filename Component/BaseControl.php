@@ -53,7 +53,8 @@ class BaseControl extends \Nette\Application\Control
 	public function getTemplateFilePath()
 	{
 		$reflection = $this->getReflection();
-		return dirname($reflection->getFileName()) . "/" . $reflection->getShortName() . ".phtml";
+		$path = dirname($reflection->getFileName()) . "/" . $reflection->getShortName() . ".phtml";
+		return file_exists($path) ? $path : null;
 	}
 
 

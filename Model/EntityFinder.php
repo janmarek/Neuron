@@ -60,6 +60,16 @@ class EntityFinder extends \Nette\Object implements \Countable
 
 
 	/**
+	 * @return array
+	 */
+	public function getLimitedResult($limit)
+	{
+		return $this->qb->getQuery()->setMaxResults($limit)->getResult();
+	}
+
+
+
+	/**
 	 * @return int
 	 */
 	public function count()

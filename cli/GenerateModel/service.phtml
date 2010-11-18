@@ -14,4 +14,11 @@ class Service extends \Neuron\Model\Service
 		parent::__construct($em, __NAMESPACE__ . "\{$name}");
 	}
 
+
+
+	public function getFinder()
+	{
+		return new Finder($this->createQueryBuilder());
+	}
+
 }
