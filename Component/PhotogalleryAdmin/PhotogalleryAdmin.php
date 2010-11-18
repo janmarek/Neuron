@@ -107,7 +107,7 @@ class PhotogalleryAdmin extends BaseControl
 				$presenter->flashMessage("Fotografie byl úspěšně smazána.");
 				$grid->redirect("this");
 			},
-			"icon" => "closethick",
+			"icon" => "ui-icon-closethick",
 			"confirmationQuestion" => "Opravdu chcete smazat fotografii?"
 		));
 	}
