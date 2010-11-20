@@ -2,7 +2,6 @@
 
 namespace Neuron\Model;
 
-use Doctrine\ORM\Query;
 use Gridito\DoctrineQueryBuilderModel;
 use Nette\Paginator;
 
@@ -31,7 +30,11 @@ class EntityFinder extends \Nette\Object implements \Countable
 	 */
 	public function getSingleResult()
 	{
-		return $this->qb->getQuery()->getSingleResult();
+		try {
+			return $this->qb->getQuery()->getSingleResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return null;
+		}
 	}
 
 
@@ -76,7 +79,7 @@ class EntityFinder extends \Nette\Object implements \Countable
 	{
 		$qb = clone $this->qb;
 		$alias = $qb->getRootAlias();
-		return $qb->select("count($alias) fullcount")->getQuery()->getSingleResult(Query::HYDRATE_SINGLE_SCALAR);
+		return $qb->select("count($alias) fullcount")->getQuery()->getSingleScalarResult();
 	}
 
 
@@ -100,9 +103,9 @@ class EntityFinder extends \Nette\Object implements \Countable
 	 * @param string type
 	 * @return EntityFinder
 	 */
-	public function orderBy($field, $type = self::ASC)
+	public function orderBy($field, $type = "asc")
 	{
-		$this->qb->orderBy($field, $type);
+		$this->qb->orderBy($this->qb->getRootAlias() . "." . $field, $type);
 		return $this;
 	}
 
