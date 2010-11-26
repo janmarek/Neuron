@@ -2,14 +2,17 @@
 
 namespace Neuron\Application;
 
-use Nette;
+use Nette\Application\PresenterRequest;
+use Nette\Environment;
+use Nette\Web\Uri;
+use Nette\Web\IHttpRequest;
 
 /**
  * Seo router
  *
  * @author Jan Marek
  */
-class SeoRouter extends Nette\Object implements Nette\Application\IRouter
+class SeoRouter extends \Nette\Object implements \Nette\Application\IRouter
 {
 	private $presenter;
 
@@ -44,7 +47,7 @@ class SeoRouter extends Nette\Object implements Nette\Application\IRouter
 
 
 
-	public function constructUrl(Nette\Application\PresenterRequest $appRequest, Nette\Web\IHttpRequest $httpRequest)
+	public function constructUrl(PresenterRequest $appRequest, Uri $uri)
 	{
 		if ($appRequest->getPresenterName() !== $this->presenter) {
 			return null;
@@ -62,7 +65,7 @@ class SeoRouter extends Nette\Object implements Nette\Application\IRouter
 			return null;
 		}
 
-		$uri = $httpRequest->getUri()->baseUri . $this->prefix . $data[$params["id"]];
+		$uri = $uri->baseUri . $this->prefix . $data[$params["id"]];
 
 		unset($params["id"], $params["action"], $params["language"]);
 
@@ -74,9 +77,9 @@ class SeoRouter extends Nette\Object implements Nette\Application\IRouter
 
 
 	
-	public function match(Nette\Web\IHttpRequest $httpRequest)
+	public function match(IHttpRequest $httpRequest)
 	{
-		$path = substr($httpRequest->uri->path, strlen(Nette\Environment::getVariable("baseUri")));
+		$path = substr($httpRequest->getUri()->getAbsoluteUri(), strlen(Environment::getVariable("baseUri")));
 
 		foreach ($this->getData() as $id => $url) {
 			if ($this->prefix . $url == $path || $this->prefix . $url . "/" == $path) {
@@ -84,7 +87,7 @@ class SeoRouter extends Nette\Object implements Nette\Application\IRouter
 				$params["id"] = $id;
 				$params["action"] = $this->action;
 
-				return new Nette\Application\PresenterRequest(
+				return new PresenterRequest(
 					$this->presenter,
 					$httpRequest->getMethod(),
 					$params,
