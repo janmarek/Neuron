@@ -1,9 +1,12 @@
-<div class="control breadcrumbs">
-	{foreach $items as $item}
+<div class="control breadcrumbs" n:inner-foreach="$items as $item">
 	{if $iterator->isLast()}
-	<span class="current">{$item->getLabel()}</span>
+		<span class="current">{$item->getLabel()}</span>
 	{else}
-	<a href="{$item->getUrl()}">{$item->getLabel()}</a> &rarr;
+		{if $item->getUrl() === null}
+			<span>{$item->getLabel()}</span>
+		{else}
+			<a href="{$item->getUrl()}">{$item->getLabel()}</a>
+		{/if}
+		&rarr;
 	{/if}
-	{/foreach}
 </div>

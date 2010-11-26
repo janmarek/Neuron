@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\Page;
 
 use Nette\String;
 
@@ -14,7 +14,7 @@ use Nette\String;
  * @property string $description
  * @property string $text
  */
-abstract class Page extends BaseEntity
+abstract class Page extends \Neuron\Model\BaseEntity
 {
 	// <editor-fold defaultstate="collapsed" desc="variables">
 

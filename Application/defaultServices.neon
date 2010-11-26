@@ -25,15 +25,15 @@ UserService:
   arguments: [%Doctrine\ORM\EntityManager]
 
 PhotogalleryService:
-  class: Neuron\Model\PhotogalleryService
+  class: Neuron\Model\Photo\GalleryService
   arguments: [%Doctrine\ORM\EntityManager]
 
 PageService:
-  class: Neuron\Model\Service
-  arguments: [%Doctrine\ORM\EntityManager, Neuron\Model\Page]
+  class: Neuron\Model\Page\Service
+  arguments: [%Doctrine\ORM\EntityManager]
 
 MenuService:
-  class: Neuron\Model\MenuService
+  class: Neuron\Model\Menu\Service
   arguments: [%Doctrine\ORM\EntityManager]
 
 # webloader

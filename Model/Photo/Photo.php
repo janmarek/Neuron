@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\Photo;
 
 /**
  * Photo
@@ -10,17 +10,15 @@ namespace Neuron\Model;
  * @Entity
  * @Table(name = "photo")
  */
-class Photo extends BaseEntity
+class Photo extends \Neuron\Model\BaseEntity
 {
 	/**
-	 * @var string
 	 * @Column(nullable = true)
 	 */
 	private $description;
 
 	/**
-	 * @var \Neuron\Model\PhotoGallery
-	 * @ManyToOne(targetEntity = "Neuron\Model\Photogallery", inversedBy = "photos")
+	 * @ManyToOne(targetEntity = "Neuron\Model\Photo\Gallery", inversedBy = "photos")
 	 */
 	private $gallery;
 
@@ -40,7 +38,7 @@ class Photo extends BaseEntity
 
 
 
-	public function setGallery(Photogallery $gallery)
+	public function setGallery(Gallery $gallery)
 	{
 		$this->gallery = $gallery;
 	}

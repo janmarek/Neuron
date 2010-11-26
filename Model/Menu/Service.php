@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\Menu;
 
 use Doctrine\ORM\Query;
 use DoctrineExtensions\NestedSet;
@@ -10,13 +10,13 @@ use DoctrineExtensions\NestedSet;
  *
  * @author Jan Marek
  */
-class MenuService extends \Nette\Object
+class Service extends \Nette\Object
 {
 	/** @var \DoctrineExtensions\NestedSet\Manager */
 	private $nestedSetManager;
 
 	/** @var string */
-	private $entityName = "Neuron\Model\MenuItem";
+	private $entityName = "Neuron\Model\Menu\MenuItem";
 
 	/** @var \Doctrine\ORM\EntityManager */
 	private $em;
@@ -48,7 +48,7 @@ class MenuService extends \Nette\Object
 
 	public function getGriditoModel()
 	{
-		return new MenuGriditoModel($this);
+		return new GriditoModel($this);
 	}
 
 

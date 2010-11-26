@@ -10,17 +10,19 @@ use Nette\Paginator;
  *
  * @author Jan Marek
  */
-class EntityFinder extends \Nette\Object implements \Countable
+abstract class EntityFinder extends \Nette\Object implements \Countable
 {
 	/** @var Doctrine\ORM\QueryBuilder */
 	protected $qb;
 
+	/** @var string */
+	protected $alias = "e";
+
 
 	
-	// TODO $qb should be constructed here from $em
-	public function __construct($qb)
+	public function __construct($service)
 	{
-		$this->qb = $qb;
+		$this->qb = $service->getEntityManager()->getRepository($service->getEntityName())->createQueryBuilder($this->alias);
 	}
 
 
@@ -52,7 +54,7 @@ class EntityFinder extends \Nette\Object implements \Countable
 	/**
 	 * @return array
 	 */
-	public function getPaginatedResult(\Nette\Paginator $paginator)
+	public function getPaginatedResult(Paginator $paginator)
 	{
 		return $this->qb->getQuery()
 			->setFirstResult($paginator->getOffset())
@@ -78,8 +80,7 @@ class EntityFinder extends \Nette\Object implements \Countable
 	public function count()
 	{
 		$qb = clone $this->qb;
-		$alias = $qb->getRootAlias();
-		return $qb->select("count($alias) fullcount")->getQuery()->getSingleScalarResult();
+		return $qb->select("count($this->alias) fullcount")->getQuery()->getSingleScalarResult();
 	}
 
 
@@ -90,8 +91,7 @@ class EntityFinder extends \Nette\Object implements \Countable
 	 */
 	public function whereId($id)
 	{
-		$alias = $this->qb->getRootAlias();
-		$this->qb->andWhere("$alias.id = :id");
+		$this->qb->andWhere("$this->alias.id = :id");
 		$this->qb->setParameter("id", $id);
 		return $this;
 	}
@@ -105,7 +105,7 @@ class EntityFinder extends \Nette\Object implements \Countable
 	 */
 	public function orderBy($field, $type = "asc")
 	{
-		$this->qb->orderBy($this->qb->getRootAlias() . "." . $field, $type);
+		$this->qb->orderBy($this->alias . "." . $field, $type);
 		return $this;
 	}
 

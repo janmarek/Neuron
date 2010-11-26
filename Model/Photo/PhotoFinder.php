@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\Photo;
 
 /**
  * PhotoFinder
@@ -9,7 +9,15 @@ namespace Neuron\Model;
  */
 class PhotoFinder extends EntityFinder
 {
-	public function whereGallery(Photogallery $gallery)
+	protected $alias = "p";
+
+	public function __construct($service)
+	{
+		parent::__construct($service);
+		$this->qb->leftJoin("p.gallery", "g");
+	}
+
+	public function whereGallery(Gallery $gallery)
 	{
 		$this->qb->andWhere("g.id = " . $gallery->getId());
 		return $this;

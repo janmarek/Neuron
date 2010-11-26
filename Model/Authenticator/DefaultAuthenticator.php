@@ -6,7 +6,7 @@ use Nette\Security\Identity, Nette\Security\AuthenticationException;
 
 class DefaultAuthenticator implements \Nette\Security\IAuthenticator
 {
-	/** @var \Model\UserService */
+	/** @var \Model\User\Service */
 	private $userService;
 
 

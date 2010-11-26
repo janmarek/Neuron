@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\Menu;
 
 use Nette\Environment;
 use Nette\Web\HttpRequest, Nette\Web\UriScript;
@@ -14,7 +14,7 @@ use Nette\String;
  * @Entity
  * @Table(name="menuitem")
  */
-class MenuItem extends BaseEntity implements \DoctrineExtensions\NestedSet\Node
+class MenuItem extends \Neuron\Model\BaseEntity implements \DoctrineExtensions\NestedSet\Node
 {
 	/** @Column(nullable=true) */
 	private $name;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\Photo;
 
 /**
  * Photogallery
@@ -10,11 +10,11 @@ namespace Neuron\Model;
  * @Entity
  * @Table(name = "photogallery")
  */
-class Photogallery extends BaseEntity
+class Gallery extends \Neuron\Model\BaseEntity
 {
 	/**
 	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 * @OneToMany(targetEntity = "Neuron\Model\Photo", mappedBy = "gallery")
+	 * @OneToMany(targetEntity = "Neuron\Model\Photo\Photo", mappedBy = "gallery")
 	 */
 	private $photos;
 

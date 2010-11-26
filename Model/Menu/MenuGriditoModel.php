@@ -1,13 +1,13 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\Menu;
 
 /**
  * Menu Gridito model
  *
  * @author Jan Marek
  */
-class MenuGriditoModel extends \Gridito\AbstractModel
+class GriditoModel extends \Gridito\AbstractModel
 {
 	/** @var MenuService */
 	private $service;

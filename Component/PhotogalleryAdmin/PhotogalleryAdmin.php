@@ -12,10 +12,10 @@ use Neuron\Image\ThumbnailHelper;
  */
 class PhotogalleryAdmin extends BaseControl
 {
-	/** @var \Neuron\Model\PhotogalleryService */
+	/** @var \Neuron\Model\Photo\GalleryService */
 	private $service;
 
-	/** @var \Neuron\Model\Photogallery */
+	/** @var \Neuron\Model\Photo\Gallery */
 	private $gallery;
 
 

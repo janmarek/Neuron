@@ -1,25 +1,24 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\User;
 
 /**
- * UserService
+ * User service
  *
  * @author Jan Marek
  */
-class UserService extends Service
+class Service extends \Neuron\Model\Service
 {
 	public function __construct($em)
 	{
-		parent::__construct($em, "Neuron\Model\User");
+		parent::__construct($em, __NAMESPACE__ . "\User");
 	}
+
 
 
 	public function findOneByUsername($username)
 	{
-		return $this->getEntityManager()->getRepository($this->getEntityName())->findOneBy(array(
-			"username" => $username,
-		));
+		return $this->getFinder()->whereUsername($username)->getSingleResult();
 	}
 
 
@@ -28,6 +27,13 @@ class UserService extends Service
 	{
 		if (empty($values["password"])) unset($values["password"]);
 		parent::update($id, $values, $form);
+	}
+
+
+	
+	public function getFinder()
+	{
+		return new Finder($this);
 	}
 	
 }

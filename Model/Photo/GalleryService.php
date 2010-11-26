@@ -1,13 +1,13 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\Photo;
 
 /**
  * Photo service
  *
  * @author Jan Marek
  */
-class PhotogalleryService extends Service
+class GalleryService extends \Neuron\Model\Service
 {
 	private $photoService;
 
@@ -15,7 +15,7 @@ class PhotogalleryService extends Service
 
 	public function __construct($em)
 	{
-		parent::__construct($em, "Neuron\Model\Photogallery");
+		parent::__construct($em, __NAMESPACE__ . "\Gallery");
 		$this->photoService = new PhotoService($em);
 	}
 

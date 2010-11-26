@@ -28,10 +28,12 @@ class CacheSubscriber implements \Doctrine\Common\EventSubscriber
 		$tags = array();
 
 		foreach ($uow->getScheduledEntityDeletions() as $entity) {
+			$tags[] = get_class($entity);
 			$tags[] = $entity->getCacheKey();
 		}
 		
 		foreach ($uow->getScheduledEntityUpdates() as $entity) {
+			$tags[] = get_class($entity);
 			$tags[] = $entity->getCacheKey();
 		}
 

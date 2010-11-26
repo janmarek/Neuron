@@ -13,7 +13,7 @@ use Gridito\DoctrineModel;
  *
  * @property-read Neuron\Model\EntityFinder $finder
  */
-class Service extends \Nette\Object
+abstract class Service extends \Nette\Object
 {
 	/** @var \Doctrine\ORM\EntityManager */
 	private $entityManager;
@@ -40,7 +40,7 @@ class Service extends \Nette\Object
 	/**
 	 * @return \Doctrine\ORM\EntityManager
 	 */
-	final protected function getEntityManager()
+	public function getEntityManager()
 	{
 		return $this->entityManager;
 	}
@@ -50,30 +50,9 @@ class Service extends \Nette\Object
 	/**
 	 * @return string
 	 */
-	protected function getEntityName()
+	public function getEntityName()
 	{
 		return $this->entityName;
-	}
-
-
-
-	/**
-	 * @return \Doctrine\ORM\QueryBuilder
-	 */
-	protected function createQueryBuilder($alias = "e")
-	{
-		return $this->entityManager->getRepository($this->getEntityName())->createQueryBuilder($alias);
-	}
-
-
-
-	/**
-	 * Find all entities
-	 * @return Neuron\Model\EntityFinder
-	 */
-	public function getFinder()
-	{
-		return new EntityFinder($this->createQueryBuilder());
 	}
 
 
@@ -125,14 +104,6 @@ class Service extends \Nette\Object
 	}
 
 
-	public function save($entity)
-	{
-		$this->entityManager->persist($entity);
-		$this->entityManager->flush();
-		return $entity;
-	}
-
-
 
 	/**
 	 * Update entity and flush
@@ -143,6 +114,20 @@ class Service extends \Nette\Object
 	{
 		$this->setData($entity, $values);
 		$this->save($entity);
+		return $entity;
+	}
+
+
+
+	/**
+	 * Persist entity and flush
+	 * @param BaseEntity $entity
+	 * @return BaseEntity
+	 */
+	public function save($entity)
+	{
+		$this->entityManager->persist($entity);
+		$this->entityManager->flush();
 		return $entity;
 	}
 

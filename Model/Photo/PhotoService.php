@@ -1,13 +1,13 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\Photo;
 
 /**
- * PhotoService
+ * Photo service
  *
  * @author Jan Marek
  */
-class PhotoService extends Service
+class PhotoService extends \Neuron\Model\Service
 {
 	protected $maxWidth = 800;
 
@@ -15,12 +15,12 @@ class PhotoService extends Service
 
 	public function __construct($em)
 	{
-		parent::__construct($em, "Neuron\Model\Photo");
+		parent::__construct($em, __NAMESPACE__ . "\Photo");
 	}
 
 
 
-	public function createAndUploadPhoto(Photogallery $gallery, array $values, \Nette\Web\HttpUploadedFile $file)
+	public function createAndUploadPhoto(Gallery $gallery, array $values, \Nette\Web\HttpUploadedFile $file)
 	{
 		if (!$file->isImage()) {
 			throw new ValidationException("Soubor není obrázek.");
@@ -36,20 +36,9 @@ class PhotoService extends Service
 
 
 
-	protected function createQueryBuilder($alias = "e")
-	{
-		$repository = $this->getEntityManager()->getRepository($this->getEntityName());
-		return $repository->createQueryBuilder($alias)->leftJoin("e.gallery", "g");
-	}
-
-
-
-	/**
-	 * @return PhotoFinder
-	 */
 	public function getFinder()
 	{
-		return new PhotoFinder($this->createQueryBuilder());
+		return new PhotoFinder($this);
 	}
 
 }

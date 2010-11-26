@@ -38,14 +38,14 @@ abstract class DictionaryPresenter extends AdminPresenter
 		$service = $this->service;
 
 		$grid->addButton("edit", "Upravit", array(
-			"icon" => "pencil",
+			"icon" => "ui-icon-pencil",
 			"link" => function ($item) use ($presenter) {
 				return $presenter->link("edit", array("id" => $item->id));
 			},
 		));
 
 		$grid->addButton("delete", "Smazat", array(
-			"icon" => "closethick",
+			"icon" => "ui-icon-closethick",
 			"handler" => function ($item) use ($service, $presenter) {
 				$service->delete($item);
 				$presenter->flashMessage("Položka byla úspěšně smazána.");
@@ -59,7 +59,7 @@ abstract class DictionaryPresenter extends AdminPresenter
 		// toolbar
 
 		$grid->addToolbarButton("new", "Nová položka", array(
-			"icon" => "plusthick",
+			"icon" => "ui-icon-plusthick",
 			"link" => $this->link("add"),
 		));
 	}

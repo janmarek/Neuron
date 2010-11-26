@@ -13,7 +13,7 @@ use Gridito\Grid;
  */
 class MenuPresenter extends AdminPresenter
 {
-	/** @var \Neuron\Model\MenuService */
+	/** @var \Neuron\Model\Menu\Service */
 	private $service;
 
 

@@ -7,7 +7,7 @@ use Neuron\Form\UserForm;
 
 class UsersPresenter extends AdminPresenter
 {
-	/** @var Neuron\Model\UserService */
+	/** @var Neuron\Model\User\Service */
 	private $service;
 
 
@@ -73,14 +73,14 @@ class UsersPresenter extends AdminPresenter
 		$service = $this->service;
 
 		$grid->addButton("edit", "Upravit", array(
-			"icon" => "pencil",
+			"icon" => "ui-icon-pencil",
 			"link" => function ($entity) use ($presenter) {
 				return $presenter->link("edit", array("id" => $entity->id));
 			},
 		));
 
 		$grid->addButton("delete", "Smazat", array(
-			"icon" => "closethick",
+			"icon" => "ui-icon-closethick",
 			"handler" => function ($entity) use ($service, $presenter) {
 				$service->delete($entity);
 				$presenter->flashMessage("Uživatel byl úspěšně smazán.");
@@ -94,7 +94,7 @@ class UsersPresenter extends AdminPresenter
 		// toolbar
 
 		$grid->addToolbarButton("newuser", "Nový uživatel", array(
-			"icon" => "plusthick",
+			"icon" => "ui-icon-plusthick",
 			"link" => $this->link("add"),
 		));
 	}

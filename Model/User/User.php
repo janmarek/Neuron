@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Model\User;
 
 /**
  * User entity
@@ -14,7 +14,7 @@ namespace Neuron\Model;
  * @property string $mail
  * @property string $surname
  */
-class User extends BaseEntity
+class User extends \Neuron\Model\BaseEntity
 {
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
