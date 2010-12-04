@@ -19,14 +19,14 @@ class GenerateModel extends AbstractCommand
 			->setDescription("Generate entity, service and finder stubs.")
 			->setHelp("Generate entity, service and finder stubs.")
 			->setDefinition(array(
-				new InputOption("output", "o", InputOption::PARAMETER_OPTIONAL, "Output directory"),
-				new InputOption("name", "m", InputOption::PARAMETER_REQUIRED, "Model name"),
-				new InputOption("application", "p", InputOption::PARAMETER_OPTIONAL, "Application namespace", "Neuron"),
+				new InputOption("output", "o", InputOption::VALUE_OPTIONAL, "Output directory"),
+				new InputOption("name", "m", InputOption::VALUE_REQUIRED, "Model name"),
+				new InputOption("application", "p", InputOption::VALUE_OPTIONAL, "Application namespace", "Neuron"),
 			));
 	}
 
-	
-	
+
+
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$name = ucfirst($input->getOption("name"));

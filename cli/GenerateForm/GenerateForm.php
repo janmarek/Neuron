@@ -24,13 +24,13 @@ class GenerateForm extends \Symfony\Component\Console\Command\Command
 			->setDescription("Generate Neuron\Form\EntityForm class and latte template.")
 			->setHelp("Generate Neuron\Form\EntityForm class and latte template.")
 			->setDefinition(array(
-				new InputOption("output", "o", InputOption::PARAMETER_OPTIONAL, "Output directory"),
-				new InputOption("entity", "e", InputOption::PARAMETER_REQUIRED, "Entity name"),
+				new InputOption("output", "o", InputOption::VALUE_OPTIONAL, "Output directory"),
+				new InputOption("entity", "e", InputOption::VALUE_REQUIRED, "Entity name"),
 			));
 	}
 
-	
-	
+
+
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$name = ClassReflection::from($input->getOption("entity"))->getShortName();
@@ -84,8 +84,8 @@ class GenerateForm extends \Symfony\Component\Console\Command\Command
 		$this->tryWriteFile($dir . '/' . $name . 'Form.phtml', $template, $output);
 	}
 
-	
-	
+
+
 	protected function createTemplate()
 	{
 		$template = new FileTemplate;
@@ -100,7 +100,7 @@ class GenerateForm extends \Symfony\Component\Console\Command\Command
 	{
 		if (!file_exists($path)) {
 			$dir = pathinfo($path, PATHINFO_DIRNAME);
-			
+
 			if (!file_exists($dir)) {
 				mkdir($dir);
 				$output->write("Directory $dir created." . PHP_EOL);

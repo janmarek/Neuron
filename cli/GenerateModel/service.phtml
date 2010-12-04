@@ -18,7 +18,7 @@ class Service extends \Neuron\Model\Service
 
 	public function getFinder()
 	{
-		return new Finder($this->createQueryBuilder());
+		return new Finder($this);
 	}
 
 }

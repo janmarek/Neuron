@@ -9,18 +9,22 @@ namespace Neuron\Model\Page;
  */
 class Finder extends \Neuron\Model\EntityFinder
 {
+	protected $alias = "p";
 
-	public function whereArticle()
+
+
+	public function whereAllowed()
 	{
-		$this->qb->andWhere("e.allowed = :allowed")->setParameter("allowed", true);
+		$this->qb->andWhere("p.allowed = :allowed")->setParameter("allowed", true);
 		return $this;
 	}
+
 
 
 	public function whereUrl($url)
 	{
-		$this->qb->andWhere("e.url = :url")->setParameter("url", $url);
+		$this->qb->andWhere("p.url = :url")->setParameter("url", $url);
 		return $this;
 	}
-	
+
 }

@@ -17,6 +17,7 @@ class AbstractCommand extends \Symfony\Component\Console\Command\Command
 		$template = new FileTemplate;
 		$template->setFile($file);
 		$template->registerHelperLoader("Nette\Templates\TemplateHelpers::loader");
+		$template->registerHelper('substr', 'substr');
 		$filter = new LatteFilter;
 		$template->registerFilter($filter);
 		return $template;
