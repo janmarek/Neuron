@@ -21,7 +21,7 @@ Nette\Security\IAuthenticator:
   arguments: [%UserService]
 
 UserService:
-  class: Neuron\Model\UserService
+  class: Neuron\Model\User\Service
   arguments: [%Doctrine\ORM\EntityManager]
 
 PhotogalleryService:

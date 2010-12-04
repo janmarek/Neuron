@@ -17,7 +17,7 @@ abstract class BasePresenter extends \Nette\Application\Presenter
 	 */
 	public function getContext()
 	{
-		return $this->getApplication()->getContext();
+		return Environment::getContext();
 	}
 
 
