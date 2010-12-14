@@ -1,0 +1,32 @@
+{!='<?php'}
+
+namespace {$testNamespace};
+
+use {$namespace}\Finder;
+
+/**
+ * {$name} service test
+ */
+class FinderTest extends \Neuron\Testing\FinderTestCase
+{
+	/**
+	 * @var {$namespace}\Finder
+	 */
+	protected $object;
+
+
+
+	protected function setUp()
+	{
+		$serviceMock = $this->getServiceMock('{$namespace}\Service', '{$namespace}\{$name}');
+		$this->object = new Finder($serviceMock);
+	}
+
+
+
+	protected function tearDown()
+	{
+
+	}
+
+}

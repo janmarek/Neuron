@@ -1,0 +1,31 @@
+{!='<?php'}
+
+namespace {$testNamespace};
+
+use {$namespace}\{$name};
+
+/**
+ * {$name} entity test
+ */
+class {$name}Test extends \Neuron\Testing\TestCase
+{
+	/**
+	 * @var {$namespace}\{$name}
+	 */
+	protected $object;
+
+
+
+	protected function setUp()
+	{
+		$this->object = new {$name};
+	}
+
+
+
+	protected function tearDown()
+	{
+
+	}
+
+}
