@@ -4,7 +4,7 @@ namespace Neuron\Texy;
 
 use Nette\Environment, Nette\String;
 use TexyHeadingModule;
-use Nette\Templates\Template, Nette\Templates\LatteFilter;
+use Nette\Templates\FileTemplate, Nette\Templates\LatteFilter;
 
 /**
  * My Texy
@@ -53,7 +53,7 @@ class Texy extends \Texy {
 		$this->addHandler('image', array($this, 'flashHandler'));
 		$this->addHandler("phrase", array($this, "netteLink"));
 	}
-	
+
 
 
 	/**
@@ -95,7 +95,7 @@ class Texy extends \Texy {
 	 */
 	private function createTemplate()
 	{
-		$template = new Template;
+		$template = new FileTemplate;
 		$template->registerFilter(new LatteFilter);
 		return $template;
 	}
