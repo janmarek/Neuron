@@ -1,8 +1,10 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Tests\Model\Menu;
 
-class MenuItemTest extends \PHPUnit_Framework_TestCase
+use Neuron\Model\Menu\MenuItem;
+
+class MenuItemTest extends \Neuron\Testing\TestCase
 {
 
 	/**

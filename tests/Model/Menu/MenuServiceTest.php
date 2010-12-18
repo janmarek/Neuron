@@ -1,13 +1,15 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\Tests\Model\Menu;
 
 use Nette\Environment;
+use Neuron\Model\Menu\Service;
+use Neuron\Model\Menu\MenuItem;
 
-class MenuServiceTest extends \PHPUnit_Framework_TestCase
+class MenuServiceTest extends \Neuron\Testing\TestCase
 {
 	/**
-	 * @var Neuron\Model\MenuService
+	 * @var Neuron\Model\Menu\Service
 	 */
 	protected $object;
 
@@ -19,12 +21,12 @@ class MenuServiceTest extends \PHPUnit_Framework_TestCase
 		$em->getConnection()->executeQuery("DELETE FROM menuitem");
 	}
 
-	
+
 
 	protected function setUp()
 	{
-		$em = Environment::getService("Doctrine\ORM\EntityManager");		
-		$this->object = new MenuService($em);
+		$em = Environment::getService("Doctrine\ORM\EntityManager");
+		$this->object = new Service($em);
 	}
 
 
@@ -49,9 +51,9 @@ class MenuServiceTest extends \PHPUnit_Framework_TestCase
 			"name" => "Name",
 			"url" => "/",
 		));
-		
+
 		$tree = $this->object->fetchTree();
-		
+
 		$this->assertType("DoctrineExtensions\NestedSet\NodeWrapper", $tree);
 		$this->assertSame("Name", $tree->getNode()->getName());
 		$this->assertSame(array(), $tree->getChildren());
