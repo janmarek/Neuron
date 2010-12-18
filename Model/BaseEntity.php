@@ -42,4 +42,13 @@ abstract class BaseEntity extends \Nette\Object
 		return get_class($this) . "#" . $this->id;
 	}
 
+
+
+	public function __construct(array $values = array())
+	{
+		foreach ($values as $k => $v) {
+			$this->{"set$k"}($v);
+		}
+	}
+
 }
