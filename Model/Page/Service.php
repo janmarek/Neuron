@@ -7,18 +7,10 @@ namespace Neuron\Model\Page;
  *
  * @author Jan Marek
  */
-class Service extends \Neuron\Model\Service
+abstract class Service extends \Neuron\Model\Service
 {
-	public function __construct($em)
+	public function __construct($em, $class)
 	{
-		parent::__construct($em, __NAMESPACE__ . "\Page");
+		parent::__construct($em, $class);
 	}
-
-
-
-	public function getFinder()
-	{
-		return new Finder($this);
-	}
-
 }

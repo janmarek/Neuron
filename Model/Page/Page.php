@@ -19,41 +19,34 @@ abstract class Page extends \Neuron\Model\BaseEntity
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
 	/**
-	 * @var string
-	 * @Column(unique=true)
+	 * @Column
 	 * @validation:NotBlank
 	 */
 	private $name;
 
 	/**
-	 * @var string
 	 * @Column(unique=true)
 	 * @validation:NotBlank
 	 */
 	private $url;
 
 	/**
-	 * @var string
 	 * @Column
-	 * @validation:NotBlank
 	 */
 	private $description;
 
 	/**
-	 * @var string
 	 * @Column(type="text")
-	 * @validation:NotBlank
 	 */
 	private $text;
 
 	/**
-	 * @var bool
 	 * @Column(type="boolean")
 	 */
 	private $allowed;
 
 	// </editor-fold>
-	
+
 	// <editor-fold defaultstate="collapsed" desc="getters & setters">
 
 	public function getName()

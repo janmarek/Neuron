@@ -19,9 +19,10 @@ class Gallery extends \Neuron\Model\BaseEntity
 	private $photos;
 
 
-	
-	public function __construct()
+
+	public function __construct(array $values = array())
 	{
+		parent::__construct($values);
 		$this->photos = new \Doctrine\Common\Collections\ArrayCollection;
 	}
 

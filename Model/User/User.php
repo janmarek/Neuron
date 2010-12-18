@@ -62,12 +62,6 @@ class User extends \Neuron\Model\BaseEntity
 	 */
 	private $password;
 
-	/**
-	 * @var string
-	 * @Column
-	 */
-	private $salt;
-
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="getters & setters">
@@ -130,15 +124,17 @@ class User extends \Neuron\Model\BaseEntity
 
 	public function verifyPassword($password)
 	{
-		return $this->password === sha1($this->salt . $password);
+		list($salt, $hash, $hashFunction) = explode('$', $this->password);
+		return $hash === $hashFunction($salt . $password);
 	}
 
 
 
-	public function setPassword($password)
+	public function setPassword($password, $hashFunction = "sha1")
 	{
-		$this->salt = md5(uniqid("", true));
-		$this->password = sha1($this->salt . $password);
+		$salt = md5(uniqid("", true));
+		$hash = $hashFunction($salt . $password);
+		$this->password = $salt . '$' . $hash . '$' . $hashFunction;
 	}
 
 

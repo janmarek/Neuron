@@ -7,7 +7,7 @@ namespace Neuron\Model\Photo;
  *
  * @author Jan Marek
  */
-class PhotoFinder extends EntityFinder
+class PhotoFinder extends \Neuron\Model\EntityFinder
 {
 	protected $alias = "p";
 

@@ -31,7 +31,7 @@ class ServiceFactories
 	}
 
 
-	
+
 	public static function createEntityManager($database)
 	{
 		$config = new Doctrine\ORM\Configuration;
@@ -61,6 +61,10 @@ class ServiceFactories
 		$evm->addEventSubscriber(new Doctrine\DBAL\Event\Listeners\MysqlSessionInit("utf8", "utf8_czech_ci"));
 		$evm->addEventSubscriber(new ValidationSubscriber);
 		$evm->addEventSubscriber(new CacheSubscriber);
+
+		$neonParser = new \Nette\NeonParser();
+		$aliases = $neonParser->parse(file_get_contents(APP_DIR . "/entityClassAliases.neon"));
+		$evm->addEventSubscriber(new \Neuron\Model\Doctrine\EntityClassAliasesSubscriber($aliases));
 
 		return $em;
 	}
