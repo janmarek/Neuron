@@ -19,7 +19,7 @@ abstract class EntityFinder extends \Nette\Object implements \Countable
 	protected $alias = "e";
 
 
-	
+
 	public function __construct($service)
 	{
 		$this->qb = $service->getEntityManager()->getRepository($service->getEntityName())->createQueryBuilder($this->alias);
@@ -75,6 +75,26 @@ abstract class EntityFinder extends \Nette\Object implements \Countable
 
 
 	/**
+	 * @return array
+	 */
+	public function fetchPairs($key, $value)
+	{
+		$qb = clone $this->qb;
+		$qb->select('partial ' . $this->alias . '.{' . $key . ', ' . $value. '}');
+		$res = $qb->getQuery()->getScalarResult();
+
+		$arr = array();
+
+		foreach ($res as $item) {
+			$arr[$item[$this->alias . '_' . $key]] = $item[$this->alias . '_' . $value];
+		}
+
+		return $arr;
+	}
+
+
+
+	/**
 	 * @return int
 	 */
 	public function count()
@@ -93,19 +113,6 @@ abstract class EntityFinder extends \Nette\Object implements \Countable
 	{
 		$this->qb->andWhere("$this->alias.id = :id");
 		$this->qb->setParameter("id", $id);
-		return $this;
-	}
-
-
-
-	/**
-	 * @param string field
-	 * @param string type
-	 * @return EntityFinder
-	 */
-	public function orderBy($field, $type = "asc")
-	{
-		$this->qb->orderBy($this->alias . "." . $field, $type);
 		return $this;
 	}
 
