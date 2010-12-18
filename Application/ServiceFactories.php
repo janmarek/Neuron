@@ -77,8 +77,14 @@ class ServiceFactories
 		$perm->addRole("guest");
 		$perm->addRole("user", "guest");
 		$perm->addRole("admin", "user");
+
+		$perm->addResource('clip');
+
 		$perm->deny();
 		$perm->allow("admin");
+
+
+
 		return $perm;
 	}
 
