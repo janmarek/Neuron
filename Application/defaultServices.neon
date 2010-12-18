@@ -36,6 +36,10 @@ MenuService:
   class: Neuron\Model\Menu\Service
   arguments: [%Doctrine\ORM\EntityManager]
 
+ClipService:
+  class: Neuron\Model\Clip\Service
+  arguments: [%Doctrine\ORM\EntityManager]
+
 # webloader
 
 AdminCss:

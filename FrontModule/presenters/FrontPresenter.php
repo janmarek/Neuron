@@ -29,6 +29,13 @@ abstract class FrontPresenter extends \Neuron\Application\BasePresenter
 
 
 
+	protected function createComponentClip($name)
+	{
+		return new \Neuron\Control\Clip($this, $name);
+	}
+
+
+
 	protected function createComponentJs()
 	{
 		return $this->getService("FrontJs");

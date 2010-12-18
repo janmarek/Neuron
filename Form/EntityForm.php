@@ -17,11 +17,11 @@ abstract class EntityForm extends BaseForm
 	private $entityService;
 
 
-	
+
 	public function bindEntity($entity)
 	{
 		$this->entity = $entity;
-		
+
 		foreach ($this->getComponents() as $name => $input) {
 			$method = "get" . ucfirst($name);
 
@@ -32,7 +32,7 @@ abstract class EntityForm extends BaseForm
 					$value = $value->getId();
 				} elseif ($value instanceof ArrayCollection || $value instanceof PersistentCollection) {
 					$value = array_map(function (BaseEntity $entity) {
-						return $value->getId();
+						return $entity->getId();
 					}, $value->toArray());
 				}
 
