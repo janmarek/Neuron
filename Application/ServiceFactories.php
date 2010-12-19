@@ -79,6 +79,7 @@ class ServiceFactories
 		$perm->addRole("admin", "user");
 
 		$perm->addResource('clip');
+		$perm->addResource('comment');
 
 		$perm->deny();
 		$perm->allow("admin");

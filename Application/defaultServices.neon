@@ -40,6 +40,10 @@ ClipService:
   class: Neuron\Model\Clip\Service
   arguments: [%Doctrine\ORM\EntityManager]
 
+CommentService:
+  class: Neuron\Model\Comment\Service
+  arguments: [%Doctrine\ORM\EntityManager]
+
 # webloader
 
 AdminCss:

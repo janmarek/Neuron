@@ -1,0 +1,13 @@
+{form $form}
+
+<fieldset>
+	<legend>Přidat komentář</legend>
+
+	<div class="error" n:foreach="$formErrors as $error">{$error}</div>
+
+	<div>{input text}</div>
+
+	<p>{input s value => "Přidat komentář"}</p>
+</fieldset>
+
+{/form}

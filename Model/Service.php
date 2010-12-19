@@ -2,16 +2,10 @@
 
 namespace Neuron\Model;
 
-use Nette\Caching\Cache;
-use Doctrine\ORM\Query;
-use Gridito\DoctrineModel;
-
 /**
  * Simple service
  *
  * @author Jan Marek
- *
- * @property-read Neuron\Model\EntityFinder $finder
  */
 abstract class Service extends \Nette\Object
 {
@@ -22,7 +16,7 @@ abstract class Service extends \Nette\Object
 	private $entityName;
 
 
-	
+
 	/**
 	 * Construct
 	 * @param \Doctrine\ORM\EntityManager entity manager

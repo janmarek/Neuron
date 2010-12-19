@@ -1,0 +1,17 @@
+{if $showAddForm}
+	{control addForm}
+{/if}
+
+{foreach $comments as $comment}
+	<div class="comment">
+		{cache $comment->cacheKey, tags => array($comment->cacheKey)}
+		{!$comment->text|texy}
+		{/cache}
+
+		<p class="detail">
+			datum: {$comment->created|date:'j.n.Y G:i'},
+			autor: <a href="{plink User:profile $comment->author->id}">{$comment->author->name}</a>
+			 {$comment->author->mail|gravatar:20}
+		</p>
+	</div>
+{/foreach}
