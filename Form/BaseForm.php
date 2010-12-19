@@ -30,7 +30,7 @@ abstract class BaseForm extends \Nette\Application\AppForm
 	}
 
 
-	
+
 	protected function init()
 	{
 
@@ -127,9 +127,9 @@ abstract class BaseForm extends \Nette\Application\AppForm
 			if ($this->redirect) {
 				call_user_func_array(array($presenter, "redirect"), $this->redirect);
 			}
-			
+
 		} catch (\Neuron\Model\ValidationException $e) {
-			if ($e->getPropertyPath()) {
+			if ($e->getPropertyPath() && isset($this[$e->getPropertyPath()])) {
 				$this[$e->getPropertyPath()]->addError($e->getMessage());
 			} else {
 				$this->addError($e->getMessage());
@@ -149,7 +149,7 @@ abstract class BaseForm extends \Nette\Application\AppForm
 	}
 
 
-	
+
 	protected function handler($values)
 	{
 		if (!$this->handler) {
@@ -182,7 +182,7 @@ abstract class BaseForm extends \Nette\Application\AppForm
 	}
 
 
-	
+
 	public function getService($name)
 	{
 		return $this->getContext()->getService($name);
