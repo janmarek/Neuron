@@ -1,5 +1,7 @@
 <?php
 
+namespace Neuron\Control;
+
 use Nette\Caching\Cache, Nette\Tools, Nette\String, Nette\SafeStream, Nette\Web\Html, Nette\Environment;
 
 /**
@@ -7,7 +9,7 @@ use Nette\Caching\Cache, Nette\Tools, Nette\String, Nette\SafeStream, Nette\Web\
  *
  * @author Honza
  */
-class Feed extends Nette\Application\Control
+class Feed extends \Nette\Application\Control
 {
 	/** @var array */
 	private $properties;
@@ -69,7 +71,7 @@ class Feed extends Nette\Application\Control
 
 		// check
 		if (empty($this->properties["title"]) || empty($this->properties["description"]) || empty($this->properties["link"])) {
-			throw new InvalidStateException("At least one of mandatory properties title, description or link was not set.");
+			throw new \InvalidStateException("At least one of mandatory properties title, description or link was not set.");
 		}
 
 		// render template
@@ -87,7 +89,7 @@ class Feed extends Nette\Application\Control
 	public function render()
 	{
 		$cache = self::getCache();
-		$uri = $this->folderUri . $this->fileName;
+		$uri = $this->getHref();
 
 		if (!isset($cache[$uri])) {
 			$this->generateFile();
@@ -95,6 +97,15 @@ class Feed extends Nette\Application\Control
 		}
 
 		echo $this->getElement($uri, $this->getLinkTitle());
+	}
+
+	/**
+	 * Get feed url
+	 * @return string
+	 */
+	public function getHref()
+	{
+		return $this->folderUri . $this->fileName;
 	}
 
 	/**
@@ -122,7 +133,7 @@ class Feed extends Nette\Application\Control
 	 */
 	public static function prepareDate($date)
 	{
-		if ($date instanceof DateTime) {
+		if ($date instanceof \DateTime) {
 			$date = $date->getTimestamp();
 		}
 
@@ -150,7 +161,7 @@ class Feed extends Nette\Application\Control
 		$item = (array) $item;
 
 		if (empty($item["title"]) && empty($item["description"])) {
-			throw new InvalidArgumentException("One of title or description has to be set.");
+			throw new \InvalidArgumentException("One of title or description has to be set.");
 		}
 
 		// remove not allowed tags
@@ -223,7 +234,7 @@ class Feed extends Nette\Application\Control
 	public function setChannelProperty($name, $value)
 	{
 		if (!in_array($name, $this->propertyElements)) {
-			throw new InvalidArgumentException("Element '$name' is not valid!");
+			throw new \InvalidArgumentException("Element '$name' is not valid!");
 		}
 
 		if ($name === "pubDate" || $name === "lastBuildDate") {
