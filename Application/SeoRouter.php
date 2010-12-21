@@ -76,10 +76,10 @@ class SeoRouter extends \Nette\Object implements \Nette\Application\IRouter
 	}
 
 
-	
+
 	public function match(IHttpRequest $httpRequest)
 	{
-		$path = substr($httpRequest->getUri()->getAbsoluteUri(), strlen(Environment::getVariable("baseUri")));
+		$path = substr($httpRequest->getUri()->getPath(), strlen($httpRequest->getUri()->getBasePath()));
 
 		foreach ($this->getData() as $id => $url) {
 			if ($this->prefix . $url == $path || $this->prefix . $url . "/" == $path) {
