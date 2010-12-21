@@ -11,6 +11,7 @@ class TemplateHelperLoader
 {
 	protected $helpers = array(
 		'texy' => 'Neuron\Texy\TemplateHelper::process',
+		'safetexy' => 'Neuron\Texy\TemplateHelper::safeProcess',
 		'thumbnail' => 'Neuron\Image\ThumbnailHelper::createThumbnail',
 		'gravatar' => 'Neuron\Helper\Gravatar::getImageTag',
 	);

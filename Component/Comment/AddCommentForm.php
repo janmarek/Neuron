@@ -17,7 +17,7 @@ class AddCommentForm extends BaseForm
 
 	protected function addFields()
 	{
-		$this->addTexyla('text');
+		$this->addTexyla('text')->setRequired('Vyplňte text komentáře.');
 	}
 
 

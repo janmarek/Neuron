@@ -19,5 +19,14 @@ class TemplateHelper extends \Nette\Object
 	{
 		return Environment::getService("Texy")->process($text);
 	}
-	
+
+	/**
+	 * @param string texy source
+	 * @return string html code
+	 */
+	public static function safeProcess($text)
+	{
+		return Environment::getService("SafeTexy")->process($text);
+	}
+
 }

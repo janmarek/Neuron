@@ -11,11 +11,13 @@ use Nette\Templates\FileTemplate, Nette\Templates\LatteFilter;
  *
  * @author Honza
  */
-class Texy extends \Texy {
+class Texy extends \Texy
+{
 
 	public static $advertisingNotice = false;
 
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 
 		// output
@@ -163,7 +165,8 @@ class Texy extends \Texy {
 	 * @param  TexyModifier
 	 * @return void
 	 */
-	function afterTable($parser, $element, $modifier) {
+	function afterTable($parser, $element, $modifier)
+	{
 		$element->attrs['class'] = 'table';
 	}
 }

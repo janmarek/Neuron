@@ -1,11 +1,16 @@
 {if $showAddForm}
 	{control addForm}
+	<hr>
+{/if}
+
+{if count($comments) === 0}
+	<p>Zatím tu nejsou žádné komentáře.</p>
 {/if}
 
 {foreach $comments as $comment}
 	<div class="comment">
 		{cache $comment->cacheKey, tags => array($comment->cacheKey)}
-		{!$comment->text|texy}
+		{!$comment->text|safetexy}
 		{/cache}
 
 		<p class="detail">

@@ -4,6 +4,9 @@ TemplateHelperLoader:
 Texy:
   class: Neuron\Texy\Texy
 
+SafeTexy:
+  class: Neuron\Texy\SafeTexy
+
 # model
 
 Nette\Security\IAuthorizator:
