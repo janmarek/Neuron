@@ -1,5 +1,13 @@
 TemplateHelperLoader:
-  class: Neuron\TemplateHelperLoader
+  factory: Neuron\ServiceFactories::createHelperLoader
+
+ThumbnailRepository:
+  class: Neuron\IO\FileRepository
+  arguments: [$thumbnailsDir]
+
+ThumbnailHelper:
+  class: Neuron\Helper\Thumbnail
+  arguments: [%ThumbnailRepository]
 
 Texy:
   class: Neuron\Texy\Texy
@@ -30,6 +38,14 @@ UserService:
 PhotogalleryService:
   class: Neuron\Model\Photo\GalleryService
   arguments: [%Doctrine\ORM\EntityManager]
+
+PhotoService:
+  class: Neuron\Model\Photo\PhotoService
+  arguments: [%Doctrine\ORM\EntityManager, %PhotoRepository]
+
+PhotoRepository:
+  class: Neuron\IO\FileRepository
+  arguments: [$photosDir, jpg]
 
 PageService:
   class: Neuron\Model\Page\Service

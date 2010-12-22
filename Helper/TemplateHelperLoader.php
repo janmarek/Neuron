@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuron;
+namespace Neuron\Helper;
 
 /**
  * TemplateHelperLoader
@@ -9,12 +9,7 @@ namespace Neuron;
  */
 class TemplateHelperLoader
 {
-	protected $helpers = array(
-		'texy' => 'Neuron\Texy\TemplateHelper::process',
-		'safetexy' => 'Neuron\Texy\TemplateHelper::safeProcess',
-		'thumbnail' => 'Neuron\Image\ThumbnailHelper::createThumbnail',
-		'gravatar' => 'Neuron\Helper\Gravatar::getImageTag',
-	);
+	protected $helpers = array();
 
 
 

@@ -84,9 +84,24 @@ class ServiceFactories
 		$perm->deny();
 		$perm->allow("admin");
 
-
-
 		return $perm;
+	}
+
+
+
+	public static function createHelperLoader()
+	{
+		$loader = new \Neuron\Helper\TemplateHelperLoader;
+		$loader->setHelper('texy', 'Neuron\Texy\TemplateHelper::process');
+		$loader->setHelper('safetexy', 'Neuron\Texy\TemplateHelper::safeProcess');
+		$loader->setHelper('thumbnail', array(Environment::getService('ThumbnailHelper'), 'createThumbnail'));
+		$loader->setHelper('gravatar', 'Neuron\Helper\Gravatar::getImageTag');
+		$loader->setHelper('imagehtml', 'Neuron\Helper\ImageHtml::getHtml');
+		$loader->setHelper('webpath', 'Neuron\Helper\WebPath::getSrc');
+		$loader->setHelper('imagepath', function ($image) {
+			return Environment::getService('PhotoService')->getImagePath($image);
+		});
+		return $loader;
 	}
 
 }
