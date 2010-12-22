@@ -11,11 +11,15 @@ class PhotoFinder extends \Neuron\Model\EntityFinder
 {
 	protected $alias = "p";
 
+
+
 	public function __construct($service)
 	{
 		parent::__construct($service);
-		$this->qb->leftJoin("p.gallery", "g");
+		$this->qb->join("p.gallery", "g");
 	}
+
+
 
 	public function whereGallery(Gallery $gallery)
 	{

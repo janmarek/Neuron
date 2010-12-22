@@ -13,25 +13,41 @@ class PhotoService extends \Neuron\Model\Service
 
 	protected $maxHeight = 600;
 
-	public function __construct($em)
+	protected $repository;
+
+
+
+	public function __construct($em, $repository)
 	{
 		parent::__construct($em, __NAMESPACE__ . "\Photo");
+		$this->repository = $repository;
 	}
 
 
 
-	public function createAndUploadPhoto(Gallery $gallery, array $values, \Nette\Web\HttpUploadedFile $file)
+	public function uploadPhoto(Gallery $gallery, array $values, \Nette\Web\HttpUploadedFile $file)
 	{
 		if (!$file->isImage()) {
-			throw new ValidationException("Soubor není obrázek.");
+			throw new \Neuron\Model\ValidationException("File is not image.");
 		}
 
-		$photo = $this->createBlank();
-		$this->update($photo, $values);
+		// save image
+		$image = $file->toImage()->resize($this->maxWidth, $this->maxHeight);
+		$values['hash'] = $this->repository->save((string) $image);
+
+		// save entity
+		$em = $this->getEntityManager();
+		$photo = new Photo($values);
+		$em->persist($photo);
 		$gallery->addPhoto($photo);
-		@mkdir(pathinfo($photo->getFilePath(), PATHINFO_DIRNAME), 0777, true);
-		$file->toImage()->resize($this->maxWidth, $this->maxHeight)->save($photo->getFilePath());
-		$this->save($gallery);
+		$em->flush();
+	}
+
+
+
+	public function getImagePath($image)
+	{
+		return $this->repository->getPath($image->getHash());
 	}
 
 

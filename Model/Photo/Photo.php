@@ -22,14 +22,15 @@ class Photo extends \Neuron\Model\BaseEntity
 	 */
 	private $gallery;
 
+	/** @Column(type="integer") */
+	private $itemOrder;
 
-	
-	public function getFilePath()
-	{
-		return WWW_DIR . "/data/photos/" . $this->getGallery()->getId() . "/" . $this->getId() . ".jpg";
-	}
+	/**
+	 * @Column
+	 */
+	private $hash;
 
-	
+
 
 	public function getGallery()
 	{
@@ -44,13 +45,6 @@ class Photo extends \Neuron\Model\BaseEntity
 	}
 
 
-
-	public function getImage()
-	{
-		return new \Neuron\Image\HtmlImage($this->getFilePath());
-	}
-
-
 	public function getDescription()
 	{
 		return $this->description;
@@ -61,6 +55,34 @@ class Photo extends \Neuron\Model\BaseEntity
 	public function setDescription($description)
 	{
 		$this->description = $description;
+	}
+
+
+
+	public function setHash($hash)
+	{
+		$this->hash = $hash;
+	}
+
+
+
+	public function getHash()
+	{
+		return $this->hash;
+	}
+
+
+
+	public function setItemOrder($itemOrder)
+	{
+		$this->itemOrder = $itemOrder;
+	}
+
+
+
+	public function getItemOrder()
+	{
+		return $this->itemOrder;
 	}
 
 }

@@ -12,25 +12,8 @@ use Neuron\Image\ThumbnailHelper;
  */
 class PhotogalleryAdmin extends BaseControl
 {
-	/** @var \Neuron\Model\Photo\GalleryService */
-	private $service;
-
 	/** @var \Neuron\Model\Photo\Gallery */
 	private $gallery;
-
-
-
-	public function setPhotogalleryService($service)
-	{
-		$this->service = $service;
-	}
-
-
-
-	public function getPhotogalleryService()
-	{
-		return $this->service;
-	}
 
 
 
@@ -63,17 +46,17 @@ class PhotogalleryAdmin extends BaseControl
 		$upload = new UploadControl($this, $name);
 
 		$gallery = $this->getGallery();
-		$service = $this->getPhotogalleryService()->getPhotoService();
+		$service = $this->getService('PhotoService');
 
 		$upload->setHandler(function (HttpUploadedFile $file) use ($gallery, $service) {
 			try {
-				$service->createAndUploadPhoto($gallery, array(), $file);
+				$service->uploadPhoto($gallery, array(), $file);
 			} catch (\Neuron\Model\ValidationException $e) {
 				// todo
 			}
 		});
 
-		$upload->setRedirectUri($this->link("this"));
+		//$upload->setRedirectUri($this->link("this"));
 	}
 
 
@@ -82,27 +65,29 @@ class PhotogalleryAdmin extends BaseControl
 	{
 		$grid = new Grid($this, $name);
 
-		$photoService = $this->getPhotogalleryService()->getPhotoService();
+		$photoService = $this->getService('PhotoService');
 		$model = $photoService->getFinder()->whereGallery($this->getGallery())->getGriditoModel();
 
 		$grid->setModel($model);
 
 		// columns
 
-		$grid->addColumn("image", "Náhled")->setRenderer(function ($photo) {
-			$thumb = ThumbnailHelper::createThumbnail($photo->getImage(), 80, 80);
-			echo Html::el("a")->href($photo->image->src)->target("_blank")->add($thumb->getHtml());
+		$template = $this->createTemplate()->setFile(__DIR__ . "/thumb.phtml");
+
+		$grid->addColumn("image", "Náhled")->setRenderer(function ($photo) use ($template) {
+			$template->image = $photo;
+			//echo $template->imagehtml($template->thumbnail($template->imagepath($photo), 80, 80));
+			$template->render();
 		});
 		$grid->addColumn("description", "Popis")->setSortable(true);
 
 		// buttons
 
 		$presenter = $this;
-		$service = $this->service;
 
 		$grid->addButton("delete", "Smazat", array(
-			"handler" => function ($entity) use ($service, $presenter, $grid) {
-				$service->delete($entity);
+			"handler" => function ($entity) use ($photoService, $presenter, $grid) {
+				$photoService->delete($entity);
 				$galleryId = $entity->getGallery()->getId();
 				$presenter->flashMessage("Fotografie byl úspěšně smazána.");
 				$grid->redirect("this");
