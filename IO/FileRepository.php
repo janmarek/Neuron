@@ -1,13 +1,13 @@
 <?php
 
-namespace Neuron\Model;
+namespace Neuron\IO;
 
 /**
  * File repository
  *
  * @author Jan Marek
  */
-class FileRepository
+class FileRepository implements IRepository
 {
 	private $root;
 
@@ -27,23 +27,39 @@ class FileRepository
 	{
 		$name = $name ?: md5($content);
 		$path = $this->getPath($name);
-		@mkdir(dirname($path), 0777);
+		@mkdir(dirname($path), 0777, true);
 		file_put_contents($path, $content);
 		return $name;
 	}
 
 
 
-	public function load($hash)
+	public function load($name)
 	{
-		return file_get_contents($this->getPath($hash));
+		return file_get_contents("safe://" . $this->getPath($name));
+	}
+
+
+
+	public function exist($name)
+	{
+		return file_exists($this->getPath($name));
+	}
+
+
+
+	public function remove($name)
+	{
+		return @unlink($this->getPath($name));
 	}
 
 
 
 	public function getPath($hash)
 	{
-		return $this->root . "/" . substr($hash, 0, 2) . "/" . substr($hash, 2, 2) . "." . $this->fileExtension;
+		// todo validate hash
+		$ext = $this->fileExtension ? "." . $this->fileExtension : "";
+		return $this->root . "/" . substr($hash, 0, 2) . "/" . substr($hash, 2, 2) . "/" . $hash . $ext;
 	}
 
 }
