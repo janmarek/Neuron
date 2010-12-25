@@ -51,6 +51,8 @@ class DefaultAdminJs extends JsLoader
 			NEURON_DIR . "/js/neuron.logged.js",
 			NEURON_DIR . "/js/nette.forms.js",
 			NEURON_DIR . "/vendor/Gridito/js/gridito.js",
+
+			NEURON_DIR . "/js/admin.js",
 		));
 	}
 }

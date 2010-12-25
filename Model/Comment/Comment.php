@@ -17,7 +17,6 @@ class Comment extends \Neuron\Model\BaseEntity
 	/**
 	 * @Column(type="text")
 	 * @validation:NotBlank
-	 * @validation:MaxLength(4000)
 	 */
 	private $text;
 

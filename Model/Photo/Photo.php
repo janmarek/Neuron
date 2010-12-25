@@ -30,6 +30,17 @@ class Photo extends \Neuron\Model\BaseEntity
 	 */
 	private $hash;
 
+	/** @OneToOne(targetEntity="Neuron\Model\Comment\CommentGroup", cascade={"all"}) */
+	private $comments;
+
+
+
+	public function __construct(array $values = array())
+	{
+		parent::__construct($values);
+		$this->comments = new \Neuron\Model\Comment\CommentGroup;
+	}
+
 
 
 	public function getGallery()
@@ -83,6 +94,31 @@ class Photo extends \Neuron\Model\BaseEntity
 	public function getItemOrder()
 	{
 		return $this->itemOrder;
+	}
+
+
+
+	public function getNextPhoto()
+	{
+		$photos = $this->gallery->getPhotos();
+		$index = $photos->indexOf($this);
+		return isset($photos[$index + 1]) ? $photos[$index + 1] : null;
+	}
+
+
+
+	public function getPrevPhoto()
+	{
+		$photos = $this->gallery->getPhotos();
+		$index = $photos->indexOf($this);
+		return $index > 0 ? $photos[$index - 1] : null;
+	}
+
+
+
+	public function getComments()
+	{
+		return $this->comments;
 	}
 
 }

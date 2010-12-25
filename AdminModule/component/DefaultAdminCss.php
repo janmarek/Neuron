@@ -20,6 +20,8 @@ class DefaultAdminCss extends CssLoader
 			NEURON_DIR . "/css/blueprint/typography.css",
 			NEURON_DIR . "/css/blueprint/forms.css",
 
+			NEURON_DIR . "/css/admin.less",
+
 			NEURON_DIR . "/vendor/Gridito/css/gridito.css",
 			WWW_DIR . "/js/texyla/css/style.css",
 		));

@@ -1,0 +1,25 @@
+{block content}
+<h1>{$title}</h1>
+
+<style>
+
+</style>
+
+<div class="sortPhotos clearfix">
+{foreach $photos as $photo}
+<div class="left photo" id="photo_{$photo->id}">{$photo|imagepath|thumbnail:80:80|imagehtml}</div>
+{/foreach}
+</div>
+
+<form>
+<p><button id="savebtn">Uložit</button></p>
+</form>
+
+<script type="text/javascript">
+var photos = $("div.sortPhotos").sortable();
+$('#savebtn').click(function (e) {
+	e.preventDefault();
+	window.location = {link saveSort! $control->getParam('id')} + '&' + photos.sortable("serialize");
+
+})
+</script>

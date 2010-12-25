@@ -23,12 +23,17 @@ class Thumbnail
 
 
 
-	public function createThumbnail($path, $width, $height, $flags = Image::FIT)
+	public function createThumbnail($path, $width, $height, $type = 'normal')
 	{
-		$key = md5($path . "|" . filemtime($path) . "|" . $width . "|" . $height . "|" . $flags) . ".jpg";
+		$key = md5($path . "|" . filemtime($path) . "|" . $width . "|" . $height . "|" . $type) . ".jpg";
 
 		if (!$this->repository->exist($key)) {
-			$image = Image::fromFile($path)->resize($width, $height, $flags);
+			$image = Image::fromFile($path);
+			if ($type == 'normal') {
+				$image = $image->resize($width, $height);
+			} else {
+				$image = $image->resize($width, $height, Image::FILL)->crop("50%", "25%", $width, $height);
+			}
 			$this->repository->save((string) $image, $key);
 		}
 

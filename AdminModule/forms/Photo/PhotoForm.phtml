@@ -1,0 +1,25 @@
+{form $form}
+
+<fieldset>
+	<div class="error" n:foreach="$formErrors as $error">{$error}</div>
+
+	<p>{$form->entity|imagepath|thumbnail:400:300|imagehtml}</p>
+
+	<p>
+		{label description}Popis{/label}<br>
+		{input description style => 'height:100px'}
+	</p>
+
+	<p>
+		<a href="{plink editPhoto $form->entity->prevPhoto->id}" n:if="$form->entity->prevPhoto">Předchozí</a>
+		{input s value => "Uložit"}
+		{if $form->entity->nextPhoto}
+		{input saveAndNext value => "Uložit a upravit další"}
+		<a href="{plink editPhoto $form->entity->nextPhoto->id}">Další</a>
+		{/if}
+	</p>
+</fieldset>
+
+{/form}
+
+<p><a href="{plink default $form->entity->gallery->id}">Zpět na galerii</a></p>

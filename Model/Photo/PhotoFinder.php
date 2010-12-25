@@ -27,4 +27,11 @@ class PhotoFinder extends \Neuron\Model\EntityFinder
 		return $this;
 	}
 
+
+	public function orderByOrder()
+	{
+		$this->qb->orderBy("p.itemOrder", "asc");
+		return $this;
+	}
+
 }

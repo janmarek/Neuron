@@ -9,7 +9,6 @@ namespace Neuron\Model\Photo;
  *
  * @Entity
  * @Table(name = "photogallery")
- * @HasLifecycleCallbacks
  */
 class Gallery extends \Neuron\Model\BaseEntity
 {
@@ -19,6 +18,9 @@ class Gallery extends \Neuron\Model\BaseEntity
 	 * @OrderBy({"itemOrder" = "ASC"})
 	 */
 	private $photos;
+
+	/** @Column(nullable=true) */
+	private $name;
 
 
 
@@ -62,6 +64,20 @@ class Gallery extends \Neuron\Model\BaseEntity
 		foreach ($this->photos as $key => $photo) {
 			$photo->setItemOrder($key + 1);
 		}
+	}
+
+
+
+	public function setName($name)
+	{
+		$this->name = $name ?: null;
+	}
+
+
+
+	public function getName()
+	{
+		return $this->name;
 	}
 
 }
