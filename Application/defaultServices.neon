@@ -9,6 +9,10 @@ ThumbnailHelper:
   class: Neuron\Helper\Thumbnail
   arguments: [%ThumbnailRepository]
 
+TagService:
+  class: Neuron\Model\Tag\Service
+  arguments: [%Doctrine\ORM\EntityManager]
+
 Texy:
   class: Neuron\Texy\Texy
 

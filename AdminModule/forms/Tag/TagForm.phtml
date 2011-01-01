@@ -1,0 +1,14 @@
+{form $form}
+
+<fieldset>
+	<div class="error" n:foreach="$formErrors as $error">{$error}</div>
+
+	<p>
+		{label name}Název{/label}<br>
+		{input name}
+	</p>
+
+	<p>{input s value => "Save"}</p>
+</fieldset>
+
+{/form}
