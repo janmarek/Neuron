@@ -16,7 +16,7 @@ class Comment extends \Neuron\Model\BaseEntity
 {
 	/**
 	 * @Column(type="text")
-	 * @validation:NotBlank
+	 * @validation:NotBlank(message="Text není vyplněn.")
 	 */
 	private $text;
 

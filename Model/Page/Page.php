@@ -8,25 +8,19 @@ use Nette\String;
  * Page entity
  *
  * @MappedSuperClass
- *
- * @property string $name
- * @property string $url
- * @property string $description
- * @property string $text
  */
 abstract class Page extends \Neuron\Model\BaseEntity
 {
-	// <editor-fold defaultstate="collapsed" desc="variables">
-
 	/**
 	 * @Column
-	 * @validation:NotBlank
+	 * @validation:NotBlank(message="Jméno není vyplněné.")
 	 */
 	private $name;
 
 	/**
 	 * @Column(unique=true)
-	 * @validation:NotBlank
+	 * @validation:NotBlank(message="URL není vyplněna.")
+	 * @validation:Unique(message="URL není unikátní.")
 	 */
 	private $url;
 
@@ -45,9 +39,7 @@ abstract class Page extends \Neuron\Model\BaseEntity
 	 */
 	private $allowed;
 
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="getters & setters">
 
 	public function getName()
 	{
@@ -116,7 +108,5 @@ abstract class Page extends \Neuron\Model\BaseEntity
 	{
 		$this->allowed = (bool) $allowed;
 	}
-
-	// </editor-fold>
 
 }

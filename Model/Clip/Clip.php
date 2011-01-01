@@ -15,10 +15,17 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Clip extends \Neuron\Model\BaseEntity
 {
-	/** @Column(unique=true) */
+	/**
+	 * @Column(unique=true)
+	 * @validation:NotBlank(message="Klíč pro vložení výstřižku není vyplněn.")
+	 * @validation:Unique(message="Klíč pro vložení není unikátní.")
+	 */
 	private $insertKey;
 
-	/** @Column(type="text") */
+	/**
+	 * @Column(type="text")
+	 * @validation:NotBlank(message="Text není vyplněn.")
+	 */
 	private $text;
 
 

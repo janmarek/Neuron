@@ -21,7 +21,7 @@ class ServiceFactories
 {
 	public static function createValidator()
 	{
-		$loader = new Validator\Mapping\Loader\AnnotationLoader;
+		$loader = new Validator\Mapping\Loader\AnnotationLoader();
 		$cache = Environment::isProduction() ? new ValidatorCache(Environment::getCache("SymfonyValidator")) : null;
 		$metadataFactory = new Validator\Mapping\ClassMetadataFactory($loader, $cache);
 		$validatorFactory = new Validator\ConstraintValidatorFactory;

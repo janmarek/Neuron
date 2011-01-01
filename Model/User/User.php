@@ -9,43 +9,36 @@ namespace Neuron\Model\User;
  * @Table(name="user")
  *
  * @author Jan Marek
- *
- * @property string $name
- * @property string $mail
- * @property string $surname
  */
 class User extends \Neuron\Model\BaseEntity
 {
-	// <editor-fold defaultstate="collapsed" desc="variables">
-
 	/**
 	 * @var string
 	 * @Column
-	 * @validation:NotBlank
+	 * @validation:NotBlank(message="Jméno není vyplněné.")
 	 */
 	private $name;
 
 	/**
 	 * @var string
 	 * @Column
-	 * @validation:NotBlank
+	 * @validation:NotBlank(message="Uživatelské jméno není vyplněné.")
 	 */
 	private $surname;
 
 	/**
 	 * @var string
 	 * @Column(unique=true)
-	 * @validation:Validation({
-	 *   @validation:NotBlank,
-	 *   @validation:Email
-	 * })
+	 * @validation:NotBlank(message="E-mail není vyplněn.")
+	 * @validation:Email(message="E-mail nemá správný formát.")
+	 * @validation:Unique(message="Jméno není unikátní.")
 	 */
 	private $mail;
 
 	/**
 	 * @var string
 	 * @Column(unique=true)
-	 * @validation:NotBlank
+	 * @validation:NotBlank(message="Uživatelské jméno není vyplněné.")
 	 */
 	private $username;
 
@@ -58,13 +51,11 @@ class User extends \Neuron\Model\BaseEntity
 	/**
 	 * @var string
 	 * @Column
-	 * @validation:NotBlank
+	 * @validation:NotBlank(message="Heslo není vyplněné.")
 	 */
 	private $password;
 
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="getters & setters">
 
 	public function getName()
 	{
@@ -150,7 +141,5 @@ class User extends \Neuron\Model\BaseEntity
 	{
 		return $this->phone;
 	}
-
-	// </editor-fold>
 
 }
