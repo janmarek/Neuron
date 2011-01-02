@@ -30,6 +30,12 @@ class Photo extends \Neuron\Model\BaseEntity
 	 */
 	private $hash;
 
+	/** @Column(type="float", nullable=true) */
+	private $lat;
+
+	/** @Column(type="float", nullable=true) */
+	private $lng;
+
 	/** @OneToOne(targetEntity="Neuron\Model\Comment\CommentGroup", cascade={"all"}) */
 	private $comments;
 
@@ -119,6 +125,34 @@ class Photo extends \Neuron\Model\BaseEntity
 	public function getComments()
 	{
 		return $this->comments;
+	}
+
+
+
+	public function setLat($lat)
+	{
+		$this->lat = $lat ?: null;
+	}
+
+
+
+	public function getLat()
+	{
+		return $this->lat;
+	}
+
+
+
+	public function setLng($lng)
+	{
+		$this->lng = $lng ?: null;
+	}
+
+
+
+	public function getLng()
+	{
+		return $this->lng;
 	}
 
 }
