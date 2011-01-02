@@ -23,21 +23,25 @@ abstract class EntityForm extends BaseForm
 		$this->entity = $entity;
 
 		foreach ($this->getComponents() as $name => $input) {
-			$method = "get" . ucfirst($name);
-
-			if (method_exists($entity, $method)) {
-				$value = $entity->$method();
-
-				if ($value instanceof BaseEntity) {
-					$value = $value->getId();
-				} elseif ($value instanceof ArrayCollection || $value instanceof PersistentCollection) {
-					$value = array_map(function (BaseEntity $entity) {
-						return $entity->getId();
-					}, $value->toArray());
-				}
-
-				$input->setDefaultValue($value);
+			if (method_exists($entity, "get$name")) {
+				$method = "get$name";
+			} elseif (method_exists($entity, "is$name")) {
+				$method = "is$name";
+			} else {
+				continue;
 			}
+
+			$value = $entity->$method();
+
+			if ($value instanceof BaseEntity) {
+				$value = $value->getId();
+			} elseif ($value instanceof ArrayCollection || $value instanceof PersistentCollection) {
+				$value = array_map(function (BaseEntity $entity) {
+					return $entity->getId();
+				}, $value->toArray());
+			}
+
+			$input->setDefaultValue($value);
 		}
 	}
 
