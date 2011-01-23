@@ -83,6 +83,7 @@ class ServiceFactories
 
 		$perm->deny();
 		$perm->allow("admin");
+		$perm->allow("user", "comment", "add");
 
 		return $perm;
 	}
