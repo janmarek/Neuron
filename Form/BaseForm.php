@@ -70,6 +70,18 @@ abstract class BaseForm extends \Nette\Application\AppForm
 	}
 
 
+	public function addEntitySelect($name, $label = null, array $items = null, $idKey = 'id', $nameKey = 'name')
+	{
+		return $this[$name] = new EntitySelect($label, $items, $idKey, $nameKey);
+	}
+
+
+	public function addEntityMultiSelect($name, $label = null, array $items = null, $size = null, $idKey = 'id', $nameKey = 'name')
+	{
+		return $this[$name] = new EntityMultiSelect($label, $items, $size, $idKey, $nameKey);
+	}
+
+
 
 	protected function getTemplateFile()
 	{
