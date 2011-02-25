@@ -85,6 +85,13 @@ class User extends \Neuron\Model\BaseEntity
 
 
 
+	public function getFullName()
+	{
+		return $this->getName() . ' ' . $this->getSurname();
+	}
+
+
+
 	public function getMail()
 	{
 		return $this->mail;
