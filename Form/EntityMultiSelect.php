@@ -38,32 +38,54 @@ class EntityMultiSelect extends \Nette\Forms\MultiSelectBox
 
 		parent::setItems($arrItems);
 	}
-
-
-
-	public function setValue($value)
+	
+	
+	private function prepareItems($value)
 	{
 		if ($value === NULL) {
-			$value = array();
+			return array();
 		}
 
 		$arr = array();
 
 		foreach ($value as $item) {
-			if ($value instanceof \Neuron\Model\BaseEntity) {
+			if (is_object($item)) {
 				$arr[] = $item->{'get' . $this->idKey}();
 			} else {
 				$arr[] = $item;
 			}
 		}
+		
+		//dump($arr);
+		
+		return $arr;
+	}
 
-		parent::setValue($value);
+
+
+	public function setValue($value)
+	{
+		parent::setValue($this->prepareItems($value));
+	}
+
+
+
+	public function setDefaultValue($value)
+	{
+		$v = $this->prepareItems($value);
+		//dump($v);
+		parent::setDefaultValue($v);
 	}
 
 
 
 	public function getValue()
 	{
+		$back = debug_backtrace();
+		if (isset($back[1]["function"]) && isset($back[1]["class"]) && $back[1]["function"] === "getControl" && $back[1]["class"] === "Nette\Forms\SelectBox") {
+			return parent::getValue();
+		}
+		
 		$keys = parent::getValue();
 		$arr = array();
 
