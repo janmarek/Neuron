@@ -14,12 +14,18 @@ abstract class BaseForm extends \Nette\Application\AppForm
 	private $redirect;
 
 	private $handler;
+	
+	protected $csrfProtection = TRUE;
+	
 
 
 	public function __construct(\Nette\IComponentContainer $parent = NULL, $name = NULL)
 	{
 		parent::__construct($parent, $name);
-		$this->addProtection("Prosím odešlete formulář znovu, vypršel bezpečnostní token.");
+		
+		if ($this->csrfProtection) {
+			$this->addProtection("Prosím odešlete formulář znovu, vypršel bezpečnostní token.");
+		}
 
 		$this->addFields();
 		$this->addSubmitButtons();
