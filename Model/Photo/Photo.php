@@ -30,23 +30,6 @@ class Photo extends \Neuron\Model\BaseEntity
 	 */
 	private $hash;
 
-	/** @Column(type="float", nullable=true) */
-	private $lat;
-
-	/** @Column(type="float", nullable=true) */
-	private $lng;
-
-	/** @OneToOne(targetEntity="Neuron\Model\Comment\CommentGroup", cascade={"all"}) */
-	private $comments;
-
-
-
-	public function __construct(array $values = array())
-	{
-		parent::__construct($values);
-		$this->comments = new \Neuron\Model\Comment\CommentGroup;
-	}
-
 
 
 	public function getGallery()
@@ -118,41 +101,6 @@ class Photo extends \Neuron\Model\BaseEntity
 		$photos = $this->gallery->getPhotos();
 		$index = $photos->indexOf($this);
 		return $index > 0 ? $photos[$index - 1] : null;
-	}
-
-
-
-	public function getComments()
-	{
-		return $this->comments;
-	}
-
-
-
-	public function setLat($lat)
-	{
-		$this->lat = $lat ?: null;
-	}
-
-
-
-	public function getLat()
-	{
-		return $this->lat;
-	}
-
-
-
-	public function setLng($lng)
-	{
-		$this->lng = $lng ?: null;
-	}
-
-
-
-	public function getLng()
-	{
-		return $this->lng;
 	}
 
 }

@@ -1,50 +1,8 @@
 {control uploadForm begin}
 <fieldset>
 	<p>
-		<input type="file" multiple="multiple" id="{$control->getUniqueId()}-uploadfield" name="file">
-		<input type="submit" value="Upload" class="hide" id="{$control->getUniqueId()}-submit">
+		<input type="file" id="{$control->getUniqueId()}-uploadfield" name="file">
+		<input type="submit" value="Upload" id="{$control->getUniqueId()}-submit">
 	</p>
-
-<div id="{$control->getUniqueId()}-queue">
-
-</div>
-
-<script type="text/javascript">
-$(function() {
-	$("#" + {$control->getUniqueId()} + "-uploadfield").html5_upload({
-		url: {link upload!},
-		sendBoundary: window.FormData || $.browser.mozilla,
-		onStartOne: function(event, name, number, total) {
-			$("#" + {$control->getUniqueId()} + "-queue").append(
-				"<div class='upload" + number + "'>" +
-				"<p>" + name + " (" + (number + 1) + "/" + total + ")</p>" +
-				"<div class='progress'></div>"
-			);
-
-			$("#" + {$control->getUniqueId()} + "-queue .upload" + number + " .progress").progressbar({
-				value: 0
-			});
-
-			return true;
-		},
-		onProgress: function(event, progress, name, number, total) {
-			$("#" + {$control->getUniqueId()} + "-queue .upload" + number + " .progress").progressbar("value", progress);
-		},
-		onFinishOne: function(event, response, name, number, total) {
-			$("#" + {$control->getUniqueId()} + "-queue .upload" + number + " .progress").progressbar("value", 100);
-		},
-		{if isset($redirectUri)}
-		onFinish: function(event, total) {
-			window.location = {$redirectUri};
-		},
-		{/if}
-		onBrowserIncompatible: function() {
-			$({$control->getUniqueId()} + "-submit").show();
-		},
-		autostart: true
-	});
-});
-</script>
-
 </fieldset>
 {control uploadForm end}

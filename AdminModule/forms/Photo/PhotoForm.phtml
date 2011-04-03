@@ -10,13 +10,9 @@
 		{input description style => 'height:100px'}
 	</p>
 
-	<p><label>Mapa</label></p>
-	<div id="map" style="width:600px; height: 300px;"></div>
-	<p><a href="#" id="cancelMap">Zrušit umístění</a></p>
-
 	<p>
 		<a href="{plink editPhoto $form->entity->prevPhoto->id}" n:if="$form->entity->prevPhoto">Předchozí</a>
-		{input s value => "Uložit"}
+		{input s value => "Uložit a přejít zpět do galerie"}
 		{if $form->entity->nextPhoto}
 		{input saveAndNext value => "Uložit a upravit další"}
 		<a href="{plink editPhoto $form->entity->nextPhoto->id}">Další</a>
@@ -27,51 +23,3 @@
 {/form}
 
 <p><a href="{plink default $form->entity->gallery->id}">Zpět na galerii</a></p>
-
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript">
-var map, marker;
-
-var latInput = $("#" + {$form->elementPrototype->id}).find("input[name=lat]");
-var lngInput = $("#" + {$form->elementPrototype->id}).find("input[name=lng]");
-var lat = latInput.val();
-var lng = lngInput.val();
-
-var point = null, center;
-
-if (lat && lng) {
-	point = new google.maps.LatLng(lat, lng);
-	center = point;
-} else {
-	center = new google.maps.LatLng(50.142861, 14.098549);
-}
-
-map = new google.maps.Map(document.getElementById("map"), {
-	zoom: 13,
-	center: center,
-	mapTypeId: google.maps.MapTypeId.ROADMAP
-});
-
-marker = new google.maps.Marker({
-
-});
-
-if (point) {
-	marker.setMap(map);
-	marker.setPosition(point);
-}
-
-google.maps.event.addListener(map, "click", function (e) {
-	marker.setMap(map);
-	marker.setPosition(e.latLng);
-	latInput.val(e.latLng.lat());
-	lngInput.val(e.latLng.lng());
-});
-
-$("#cancelMap").click(function (e) {
-	e.preventDefault();
-	marker.setMap(null);
-	latInput.val("");
-	lngInput.val("");
-});
-</script>

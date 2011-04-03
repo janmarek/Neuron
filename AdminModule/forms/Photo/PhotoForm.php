@@ -12,8 +12,6 @@ class PhotoForm extends EntityForm
 	protected function addFields()
 	{
 		$this->addTextArea("description");
-		$this->addHidden("lat");
-		$this->addHidden("lng");
 	}
 
 
